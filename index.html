@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OmniKhata POS — Dashboard & Workflow Hub</title>
+<title>OmniKhata POS Cloud — Multi-Store SaaS Platform</title>
 <style>
   :root {
     --primary: #0f172a;       /* Slate 900 */
@@ -23,7 +23,7 @@
     background: var(--bg-page); color: #0f172a; font-size: 13.5px;
   }
 
-  /* TOP APP BAR */
+  /* TOP MASTER APP BAR */
   .topbar {
     background: var(--primary); color: white; height: 56px;
     display: flex; align-items: center; justify-content: space-between;
@@ -38,38 +38,58 @@
   }
   .app-name { font-size: 17px; font-weight: 800; }
   .app-name span { color: #60a5fa; }
-  .shop-selector-pill {
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
-    padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
-    color: #e2e8f0; display: flex; align-items: center; gap: 8px; cursor: pointer;
-  }
-  .shop-selector-pill:hover { background: rgba(255,255,255,0.18); border-color: #60a5fa; }
-  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
 
-  /* TOP NAVIGATION TABS */
+  /* STORE CONTEXT SWITCHER */
+  .store-select-wrap {
+    display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08);
+    padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+  }
+  .store-select-wrap select {
+    background: transparent; color: white; border: none; font-size: 13px;
+    font-weight: 700; outline: none; cursor: pointer;
+  }
+  .store-select-wrap select option { background: #1e293b; color: white; }
+  .status-tag {
+    font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;
+    text-transform: uppercase;
+  }
+  .tag-active { background: #dcfce7; color: #15803d; }
+  .tag-trial { background: #fef3c7; color: #b45309; }
+  .tag-expired { background: #fee2e2; color: #b91c1c; }
+
+  .time-info { text-align: right; }
+  .time-info .time { font-size: 17px; font-weight: 800; color: #f59e0b; }
+  .time-info .date { font-size: 11px; color: #94a3b8; }
+
+  /* NAVIGATION TABS */
   .nav-tabs {
     background: var(--top-nav); display: flex; padding: 0 16px; gap: 4px;
     border-bottom: 1px solid #334155;
   }
   .tab-link {
-    padding: 11px 20px; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: 700;
-    border-bottom: 3px solid transparent; transition: all .15s; display: flex; align-items: center; gap: 7px;
+    padding: 11px 18px; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: 700;
+    border-bottom: 3px solid transparent; transition: all .15s; display: flex; align-items: center; gap: 6px;
   }
   .tab-link:hover { color: #f8fafc; }
   .tab-link.active { color: white; border-bottom-color: #38bdf8; background: rgba(255,255,255,0.04); }
+  .tab-link.admin-tab { color: #facc15; }
+  .tab-link.admin-tab.active { border-bottom-color: #facc15; }
 
-  /* HOME WORKFLOW DIAGRAM CONTAINER */
-  .workflow-view {
-    padding: 20px 24px; max-width: 1400px; margin: 0 auto;
+  /* VIEW CONTAINERS */
+  .view-container { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+  .panel-box {
+    background: white; border-radius: 12px; border: 1.5px solid var(--border);
+    padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); margin-bottom: 20px;
   }
-  .dashboard-grid {
-    display: grid; grid-template-columns: 1fr 320px; gap: 20px;
+  .panel-box h3 {
+    font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between;
   }
 
-  /* QUICKBOOKS STYLE WORKFLOW LANES */
+  /* WORKFLOW LANES */
   .flow-lane {
     background: white; border-radius: 12px; border: 1.5px solid var(--border);
-    margin-bottom: 18px; position: relative; padding: 18px 20px 20px 20px;
+    margin-bottom: 18px; position: relative; padding: 18px 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   }
   .flow-lane-title {
@@ -78,31 +98,20 @@
     font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
     border: 1px solid #c7d2fe;
   }
-
-  /* WORKFLOW NODES & CONNECTIONS */
   .workflow-row {
-    display: flex; align-items: center; justify-content: space-around;
-    padding: 10px 0; position: relative;
+    display: flex; align-items: center; justify-content: space-around; padding: 8px 0;
   }
   .flow-node {
     display: flex; flex-direction: column; align-items: center; text-align: center;
-    cursor: pointer; padding: 12px 16px; border-radius: 10px; width: 150px;
+    cursor: pointer; padding: 12px 16px; border-radius: 10px; width: 155px;
     background: #f8fafc; border: 1.5px solid #cbd5e1; transition: all .2s;
-    position: relative; z-index: 2;
   }
   .flow-node:hover {
     background: #eff6ff; border-color: var(--accent); transform: translateY(-3px);
-    box-shadow: 0 8px 18px rgba(37,99,235,0.15);
+    box-shadow: 0 6px 16px rgba(37,99,235,0.12);
   }
-  .flow-node.highlight-main {
-    border-color: #3b82f6; background: #f0f7ff;
-    box-shadow: 0 3px 10px rgba(59,130,246,0.15);
-  }
-  .flow-node.highlight-pay {
-    border-color: #10b981; background: #f0fdf4;
-  }
-  .node-icon { font-size: 32px; margin-bottom: 6px; }
-  .node-title { font-weight: 800; font-size: 13px; color: #1e293b; line-height: 1.2; }
+  .node-icon { font-size: 32px; margin-bottom: 4px; }
+  .node-title { font-weight: 800; font-size: 13px; color: #1e293b; }
   .node-badge {
     font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 10px;
     margin-top: 5px; text-transform: uppercase;
@@ -110,49 +119,30 @@
   .badge-blue { background: #dbeafe; color: #1e40af; }
   .badge-green { background: #dcfce7; color: #15803d; }
   .badge-amber { background: #fef3c7; color: #b45309; }
-  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+  .flow-arrow { color: #94a3b8; font-size: 22px; font-weight: 900; }
 
-  /* ARROW CONNECTOR */
-  .flow-arrow {
-    display: flex; align-items: center; justify-content: center;
-    color: #94a3b8; font-size: 22px; font-weight: 900;
-  }
-
-  /* SIDEBAR PANELS */
-  .side-panel {
-    display: flex; flex-direction: column; gap: 16px;
-  }
+  /* DASHBOARD GRID */
+  .dashboard-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
   .side-card {
     background: white; border-radius: 12px; border: 1.5px solid var(--border);
-    padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); margin-bottom: 16px;
   }
   .side-card h4 {
     font-size: 13px; font-weight: 800; color: #475569; text-transform: uppercase;
-    letter-spacing: .5px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+    letter-spacing: .5px; margin-bottom: 10px;
   }
   .quick-stat {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px;
+    padding: 7px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px;
   }
   .quick-stat:last-child { border-bottom: none; }
-  .quick-stat .val { font-weight: 800; font-size: 15px; }
+  .quick-stat .val { font-weight: 800; font-size: 14.5px; }
 
-  /* POS BILLING LAYOUT */
-  .pos-main-layout {
-    display: flex; height: calc(100vh - 100px); overflow: hidden;
-  }
-  .pos-left {
-    width: 60%; background: white; border-right: 1px solid var(--border);
-    display: flex; flex-direction: column;
-  }
-  .pos-right {
-    width: 40%; background: #ffffff; display: flex; flex-direction: column;
-  }
-
-  /* SEARCH & CATALOG GRID */
-  .pos-catalog-head {
-    padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid var(--border);
-  }
+  /* POS LAYOUT */
+  .pos-main-layout { display: flex; height: calc(100vh - 100px); overflow: hidden; }
+  .pos-left { width: 60%; background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  .pos-right { width: 40%; background: #ffffff; display: flex; flex-direction: column; }
+  .pos-catalog-head { padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid var(--border); }
   .scan-input-box {
     width: 100%; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 8px;
     font-size: 14px; font-weight: 700; outline: none; margin-bottom: 8px;
@@ -178,10 +168,8 @@
   }
   .item-card .ic-cat { font-size: 9.5px; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 4px; }
   .item-card .ic-name { font-weight: 700; font-size: 13px; line-height: 1.3; margin-bottom: 4px; }
-  .item-card .ic-variant { font-size: 11px; color: #64748b; margin-bottom: 6px; }
   .item-card .ic-foot { display: flex; justify-content: space-between; align-items: baseline; margin-top: auto; }
   .item-card .ic-price { font-size: 15px; font-weight: 900; color: var(--accent-red); }
-  .item-card .ic-stock { font-size: 10.5px; font-weight: 700; }
 
   /* CART ITEMS */
   .cart-header-strip {
@@ -189,22 +177,14 @@
     display: flex; justify-content: space-between; align-items: center; font-weight: 800;
   }
   .cart-rows-box { flex: 1; overflow-y: auto; padding: 8px 12px; }
-  .cart-line {
-    display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--border);
-  }
+  .cart-line { display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--border); }
   .cart-line-info { flex: 1; min-width: 0; }
-  .cart-line-name { font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .cart-line-sub { font-size: 11px; color: #64748b; font-family: monospace; }
+  .cart-line-name { font-weight: 700; font-size: 13px; }
   .qty-ctrl { display: flex; align-items: center; gap: 4px; }
-  .qty-ctrl button {
-    width: 22px; height: 22px; border: 1px solid #cbd5e1; border-radius: 4px;
-    cursor: pointer; background: white; font-weight: 800;
-  }
+  .qty-ctrl button { width: 22px; height: 22px; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; background: white; font-weight: 800; }
   .cart-line-total { font-weight: 800; min-width: 70px; text-align: right; color: var(--primary); }
 
-  .cart-footer-box {
-    padding: 12px 16px; background: #f8fafc; border-top: 2px solid var(--border);
-  }
+  .cart-footer-box { padding: 12px 16px; background: #f8fafc; border-top: 2px solid var(--border); }
   .cf-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
   .cf-row.grand { font-size: 19px; font-weight: 900; color: var(--primary); border-top: 1px dashed #cbd5e1; padding-top: 8px; }
   .cf-row.grand .v { color: var(--accent-red); font-size: 22px; }
@@ -212,14 +192,15 @@
   .btn-checkout {
     width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer;
     background: var(--accent-green); color: white; font-size: 16px; font-weight: 800;
-    margin-top: 10px; transition: opacity .15s;
+    margin-top: 10px;
   }
   .btn-checkout:disabled { background: #cbd5e1; cursor: not-allowed; }
 
-  /* COMMON BUTTONS */
+  /* BUTTONS */
   .btn {
     padding: 8px 14px; border-radius: 6px; font-weight: 700; font-size: 13px;
-    border: none; cursor: pointer; transition: all .15s;
+    border: none; cursor: pointer; transition: all .15s; display: inline-flex;
+    align-items: center; justify-content: center; gap: 6px;
   }
   .btn-primary { background: var(--accent); color: white; }
   .btn-dark { background: var(--primary); color: white; }
@@ -227,16 +208,22 @@
   .btn-success { background: var(--accent-green); color: white; }
   .btn-danger { background: var(--accent-red); color: white; }
 
-  /* FULL SCREEN PANELS (INVENTORY, VENDORS, AUDIT) */
-  .full-panel-container { padding: 24px; max-width: 1300px; margin: 0 auto; }
-  .panel-box {
-    background: white; border-radius: 12px; border: 1.5px solid var(--border);
-    padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); margin-bottom: 20px;
+  /* TABLES */
+  .nice-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .nice-table th { background: #1e293b; color: white; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 700; }
+  .nice-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .nice-table tr:hover td { background: #f8fafc; }
+
+  /* SUPER ADMIN CARDS */
+  .admin-metric-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .admin-metric {
+    background: white; border-radius: 10px; padding: 16px; border: 1.5px solid var(--border);
+    border-left: 4px solid var(--accent);
   }
-  .panel-box h3 {
-    font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 14px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .admin-metric.gold { border-left-color: var(--accent-gold); }
+  .admin-metric.green { border-left-color: var(--accent-green); }
+  .admin-metric .lbl { font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+  .admin-metric .val { font-size: 26px; font-weight: 900; margin-top: 4px; }
 
   /* MODALS */
   .modal-shade {
@@ -257,11 +244,12 @@
   }
   .m-row input:focus, .m-row select:focus { border-color: var(--accent); }
 
-  /* TABLE */
-  .nice-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-  .nice-table th { background: #1e293b; color: white; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 700; }
-  .nice-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
-  .nice-table tr:hover td { background: #f8fafc; }
+  /* SUBSCRIPTION LOCK SCREEN */
+  .locked-banner {
+    background: #fee2e2; border: 2px solid #ef4444; color: #991b1b;
+    padding: 16px 20px; border-radius: 10px; margin-bottom: 16px;
+    display: none; align-items: center; justify-content: space-between;
+  }
 
   /* THERMAL RECEIPT PRINT */
   @media print {
@@ -276,143 +264,152 @@
 </head>
 <body>
 
-<!-- 1. TOP HEADER -->
+<!-- 1. TOP APP BAR (SaaS Header) -->
 <div class="topbar">
   <div class="brand-area">
     <div class="logo-box">Ω</div>
     <div>
-      <div class="app-name">OmniKhata <span>POS</span></div>
-      <div style="font-size:11px;color:#94a3b8">Universal Retail & Workflow Hub</div>
+      <div class="app-name">OmniKhata <span>SaaS POS</span></div>
+      <div style="font-size:11px;color:#94a3b8">Cloud Retail & Multi-Shop Manager</div>
     </div>
   </div>
 
-  <!-- Configurable Store Name -->
-  <div class="shop-selector-pill" onclick="openStoreConfig()" title="Change Store Configuration">
-    <div class="pulse-dot"></div>
-    <span>🏪 <strong id="top-store-name">JS Auto Parts</strong> (<span id="top-store-city">Rawalpindi</span>)</span>
-    <span style="font-size:11px;color:#93c5fd">⚙️ Configure</span>
+  <!-- Active Shop Switcher -->
+  <div class="store-select-wrap">
+    <span>🏪</span>
+    <select id="active-store-dropdown" onchange="switchActiveStore(this.value)"></select>
+    <span class="status-tag tag-active" id="active-store-badge">Active</span>
   </div>
 
-  <div style="text-align:right">
-    <div id="live-time" style="font-size:17px;font-weight:800;color:#f59e0b">--:--:--</div>
-    <div id="live-date" style="font-size:11px;color:#94a3b8">---</div>
+  <div class="time-info">
+    <div class="time" id="live-time">--:--:--</div>
+    <div class="date" id="live-date">---</div>
   </div>
 </div>
 
-<!-- 2. WORKFLOW NAVIGATION BAR -->
+<!-- 2. NAVIGATION BAR -->
 <div class="nav-tabs">
-  <div class="tab-link active" onclick="switchView('home')">🏠 Home Workflow</div>
-  <div class="tab-link" onclick="switchView('billing')">🧾 Counter Billing (POS)</div>
-  <div class="tab-link" onclick="switchView('cust-pay')">💳 Customer Pay Bills (Udhaar)</div>
-  <div class="tab-link" onclick="switchView('stock-rec')">📦 Receive Stock (GRN)</div>
-  <div class="tab-link" onclick="switchView('stock-pay')">💸 Stock Pay Bills (Vendors)</div>
-  <div class="tab-link" onclick="switchView('inventory')">📊 Inventory & Items</div>
-  <div class="tab-link" onclick="switchView('summary')">📋 Daily Z-Report</div>
+  <div class="tab-link active" onclick="switchNavTab('home')">🏠 Home Workflow</div>
+  <div class="tab-link" onclick="switchNavTab('billing')">🧾 Counter Billing (POS)</div>
+  <div class="tab-link" onclick="switchNavTab('cust-pay')">💳 Customer Pay Bills (Udhaar)</div>
+  <div class="tab-link" onclick="switchNavTab('stock-rec')">📦 Receive Stock (GRN)</div>
+  <div class="tab-link" onclick="switchNavTab('stock-pay')">💸 Stock Pay Bills (Vendors)</div>
+  <div class="tab-link" onclick="switchNavTab('inventory')">📊 Inventory & Catalog</div>
+  <div class="tab-link" onclick="switchNavTab('summary')">📋 Daily Z-Report</div>
+  <div class="tab-link admin-tab" onclick="switchNavTab('admin')">👑 Super Admin Console</div>
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 1: HOME WORKFLOW DIAGRAM (QuickBooks Style as in User Images)       -->
+<!-- VIEW 1: HOME WORKFLOW (QuickBooks Style)                                 -->
 <!-- ========================================================================= -->
-<div id="view-home" class="workflow-view">
-  <div class="dashboard-grid">
-    <!-- LEFT: WORKFLOW LANES -->
+<div id="view-home" class="view-container">
+  <!-- License Expiry Alert if needed -->
+  <div class="locked-banner" id="license-alert-banner">
     <div>
-      <!-- LANE 1: VENDORS / SUPPLIERS WORKFLOW -->
+      <strong>⚠️ Subscription Renewal Notice:</strong>
+      <span id="license-alert-msg">This shop license will expire soon. Please contact Super Admin.</span>
+    </div>
+    <button class="btn btn-danger" onclick="switchNavTab('admin')">Manage Plan</button>
+  </div>
+
+  <div class="dashboard-grid">
+    <div>
+      <!-- VENDORS LANE -->
       <div class="flow-lane">
         <div class="flow-lane-title">🚚 Vendors & Inventory Flow</div>
         <div class="workflow-row">
           <div class="flow-node" onclick="openReceiveStockModal()">
             <div class="node-icon">📦</div>
             <div class="node-title">Receive Stock</div>
-            <div style="font-size:11px;color:#64748b">Increase Inventory</div>
+            <div style="font-size:11px;color:#64748b">Add To Inventory</div>
             <span class="node-badge badge-blue">Action 1</span>
           </div>
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node" onclick="openEnterVendorBillModal()">
+          <div class="flow-node" onclick="openVendorBillModal()">
             <div class="node-icon">📑</div>
             <div class="node-title">Enter Vendor Bills</div>
-            <div style="font-size:11px;color:#64748b">Record Khata / Udhaar</div>
+            <div style="font-size:11px;color:#64748b">Supplier Khata</div>
             <span class="node-badge badge-amber">Action 2</span>
           </div>
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node highlight-pay" onclick="switchView('stock-pay')">
+          <div class="flow-node" onclick="switchNavTab('stock-pay')">
             <div class="node-icon">💸</div>
             <div class="node-title">Stock Pay Bills</div>
-            <div style="font-size:11px;color:#16a34a">Pay Vendor Outstandings</div>
+            <div style="font-size:11px;color:#16a34a">Pay Outstandings</div>
             <span class="node-badge badge-green">Action 3</span>
           </div>
         </div>
       </div>
 
-      <!-- LANE 2: CUSTOMERS & SALES BILLING WORKFLOW -->
+      <!-- CUSTOMERS LANE -->
       <div class="flow-lane">
         <div class="flow-lane-title">👥 Customers & Sales Flow</div>
         <div class="workflow-row">
-          <div class="flow-node highlight-main" onclick="switchView('billing')">
+          <div class="flow-node" style="border-color:#2563eb;background:#f0f7ff" onclick="switchNavTab('billing')">
             <div class="node-icon">🧾</div>
             <div class="node-title">Counter Billing</div>
-            <div style="font-size:11px;color:#2563eb">Barcode POS Sales</div>
+            <div style="font-size:11px;color:#2563eb">Barcode Checkout</div>
             <span class="node-badge badge-blue">POS Active</span>
           </div>
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node" onclick="openNewCustomerCreditModal()">
+          <div class="flow-node" onclick="openCustomerCreditModal()">
             <div class="node-icon">📄</div>
             <div class="node-title">Create Invoices</div>
-            <div style="font-size:11px;color:#64748b">Credit / Walk-in Sale</div>
+            <div style="font-size:11px;color:#64748b">Credit / Udhaar</div>
             <span class="node-badge badge-amber">Credit Sale</span>
           </div>
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node highlight-pay" onclick="switchView('cust-pay')">
+          <div class="flow-node" onclick="switchNavTab('cust-pay')">
             <div class="node-icon">💳</div>
             <div class="node-title">Customer Pay Bills</div>
-            <div style="font-size:11px;color:#16a34a">Collect Khata / Dues</div>
+            <div style="font-size:11px;color:#16a34a">Collect Khata</div>
             <span class="node-badge badge-green">Receive Cash</span>
           </div>
         </div>
       </div>
 
-      <!-- LANE 3: BANKING & CASH SUMMARY -->
+      <!-- BANKING & REPORTS LANE -->
       <div class="flow-lane">
         <div class="flow-lane-title">🏦 Cash Register & Summary</div>
         <div class="workflow-row">
-          <div class="flow-node" onclick="switchView('summary')">
+          <div class="flow-node" onclick="switchNavTab('summary')">
             <div class="node-icon">📊</div>
             <div class="node-title">Daily Z-Report</div>
-            <div style="font-size:11px;color:#64748b">Today's Sales & Cash</div>
-            <span class="node-badge badge-purple">Reports</span>
+            <div style="font-size:11px;color:#64748b">Sales Audit</div>
+            <span class="node-badge badge-amber">Daily Close</span>
           </div>
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node" onclick="switchView('inventory')">
+          <div class="flow-node" onclick="switchNavTab('inventory')">
             <div class="node-icon">🏷️</div>
             <div class="node-title">Stock Audit</div>
-            <div style="font-size:11px;color:#64748b">Low Stock & Valuation</div>
-            <span class="node-badge badge-amber">Stock Status</span>
+            <div style="font-size:11px;color:#64748b">Low Stock Alerts</div>
+            <span class="node-badge badge-blue">Catalog</span>
           </div>
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node" onclick="openStoreConfig()">
+          <div class="flow-node" onclick="openStoreConfigModal()">
             <div class="node-icon">⚙️</div>
-            <div class="node-title">Store Profile</div>
-            <div style="font-size:11px;color:#64748b">Presets & Hardware</div>
-            <span class="node-badge badge-blue">Settings</span>
+            <div class="node-title">Store Settings</div>
+            <div style="font-size:11px;color:#64748b">Receipts & Slips</div>
+            <span class="node-badge badge-green">Configure</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT: QUICK STATUS SUMMARY SIDEBAR -->
-    <div class="side-panel">
+    <!-- SIDEBAR OVERVIEW -->
+    <div>
       <div class="side-card">
         <h4>⚡ Today's Counter Overview</h4>
         <div class="quick-stat">
@@ -424,15 +421,15 @@
           <span class="val" id="side-today-bills">0</span>
         </div>
         <div class="quick-stat">
-          <span style="color:#64748b">Est. Gross Profit:</span>
+          <span style="color:#64748b">Est. Profit:</span>
           <span class="val" style="color:var(--accent)" id="side-today-profit">Rs. 0</span>
         </div>
       </div>
 
       <div class="side-card">
-        <h4>📦 Stock & Payables Status</h4>
+        <h4>📦 Shop Balances</h4>
         <div class="quick-stat">
-          <span style="color:#64748b">Low Stock Alerts:</span>
+          <span style="color:#64748b">Low Stock Items:</span>
           <span class="val" style="color:var(--accent-red)" id="side-low-stock">0</span>
         </div>
         <div class="quick-stat">
@@ -446,13 +443,11 @@
       </div>
 
       <div class="side-card" style="background:#f8fafc">
-        <h4 style="margin-bottom:8px">1-Click Industry Templates</h4>
-        <p style="font-size:11px;color:#64748b;margin-bottom:10px">Switch catalog for any shop type:</p>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <button class="btn btn-secondary" style="font-size:12px;text-align:left" onclick="loadPreset('auto')">🚗 Auto Parts & Oils</button>
-          <button class="btn btn-secondary" style="font-size:12px;text-align:left" onclick="loadPreset('shoes')">👞 Footwear & Shoe Shop</button>
-          <button class="btn btn-secondary" style="font-size:12px;text-align:left" onclick="loadPreset('grocery')">🛒 Grocery & Supermarket</button>
-        </div>
+        <h4>👑 Multi-Shop SaaS</h4>
+        <p style="font-size:12px;color:#64748b;margin-bottom:10px">
+          Manage, create, or lock client shops from the central console.
+        </p>
+        <button class="btn btn-dark" style="width:100%" onclick="switchNavTab('admin')">Go To Admin Console</button>
       </div>
     </div>
   </div>
@@ -463,22 +458,20 @@
 <!-- ========================================================================= -->
 <div id="view-billing" class="hidden">
   <div class="pos-main-layout">
-    <!-- LEFT: CATALOG -->
     <div class="pos-left">
       <div class="pos-catalog-head">
         <input type="text" id="pos-barcode-input" class="scan-input-box"
-          placeholder="Scan barcode or type item / SKU / variant and press Enter..."
+          placeholder="Scan barcode or type item / SKU and press Enter..."
           onkeydown="handlePosEnter(event)" oninput="filterPosCatalog(this.value)" autocomplete="off">
         <div class="cat-pills-row" id="pos-cat-pills"></div>
       </div>
       <div class="pos-grid" id="pos-grid-container"></div>
     </div>
 
-    <!-- RIGHT: CART -->
     <div class="pos-right">
       <div class="cart-header-strip">
         <span>🛒 Counter Bill</span>
-        <button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="clearCart()">Clear Cart</button>
+        <button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="clearCart()">Clear</button>
       </div>
 
       <div style="padding:8px 12px;background:#f1f5f9;border-bottom:1px solid var(--border);display:flex;gap:6px">
@@ -512,24 +505,20 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 3: CUSTOMER PAY BILLS (UDHAAR KHATA)                                -->
+<!-- VIEW 3: CUSTOMER PAY BILLS (UDHAAR)                                       -->
 <!-- ========================================================================= -->
-<div id="view-cust-pay" class="hidden full-panel-container">
+<div id="view-cust-pay" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>💳 Customer Pay Bills (Receive Udhaar / Khata Dues)</span>
-      <button class="btn btn-success" onclick="openNewCustomerCreditModal()">➕ New Credit / Udhaar Invoice</button>
+      <span>💳 Customer Pay Bills (Receive Udhaar / Khata)</span>
+      <button class="btn btn-success" onclick="openCustomerCreditModal()">➕ New Credit Invoice</button>
     </h3>
-    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
-      Customers who purchased on credit / udhaar and are now paying their outstanding bills.
-    </p>
-
     <table class="nice-table">
       <thead>
         <tr>
           <th>Customer Name</th>
           <th>Phone</th>
-          <th>Reference / Bill #</th>
+          <th>Reference #</th>
           <th>Total Credit (Rs.)</th>
           <th>Balance Due (Rs.)</th>
           <th>Status</th>
@@ -542,18 +531,14 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 4: RECEIVE STOCK (INVENTORY GRN)                                    -->
+<!-- VIEW 4: RECEIVE STOCK (GRN)                                               -->
 <!-- ========================================================================= -->
-<div id="view-stock-rec" class="hidden full-panel-container">
+<div id="view-stock-rec" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>📦 Receive Stock (Goods Received / Inventory Restock)</span>
-      <button class="btn btn-primary" onclick="openReceiveStockModal()">➕ Receive New Stock</button>
+      <span>📦 Receive Stock (GRN Inventory Inward)</span>
+      <button class="btn btn-primary" onclick="openReceiveStockModal()">➕ Inward New Stock</button>
     </h3>
-    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
-      Add stock quantities directly into inventory when new boxes arrive from suppliers.
-    </p>
-
     <table class="nice-table">
       <thead>
         <tr>
@@ -572,18 +557,14 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 5: STOCK PAY BILLS (VENDOR PAYABLES)                                -->
+<!-- VIEW 5: STOCK PAY BILLS (VENDORS)                                         -->
 <!-- ========================================================================= -->
-<div id="view-stock-pay" class="hidden full-panel-container">
+<div id="view-stock-pay" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>💸 Stock Pay Bills (Vendor Khata & Outstandings)</span>
-      <button class="btn btn-primary" onclick="openEnterVendorBillModal()">➕ Enter Vendor Bill</button>
+      <span>💸 Stock Pay Bills (Vendor Outstandings)</span>
+      <button class="btn btn-primary" onclick="openVendorBillModal()">➕ Enter Vendor Bill</button>
     </h3>
-    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
-      Pay your suppliers and wholesalers for stock purchased on credit.
-    </p>
-
     <table class="nice-table">
       <thead>
         <tr>
@@ -591,7 +572,7 @@
           <th>Invoice #</th>
           <th>Date</th>
           <th>Bill Amount (Rs.)</th>
-          <th>Paid So Far (Rs.)</th>
+          <th>Paid (Rs.)</th>
           <th>Balance Due (Rs.)</th>
           <th>Action</th>
         </tr>
@@ -602,34 +583,27 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 6: INVENTORY & ITEMS                                                -->
+<!-- VIEW 6: INVENTORY & CATALOG                                               -->
 <!-- ========================================================================= -->
-<div id="view-inventory" class="hidden full-panel-container">
+<div id="view-inventory" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>📊 Complete Inventory & Stock Catalog</span>
+      <span>📊 Current Store Inventory Catalog</span>
       <div>
         <button class="btn btn-success" onclick="openAddProductModal()">➕ Add Product</button>
         <button class="btn btn-secondary" onclick="exportInventoryCSV()">⬇ Export CSV</button>
       </div>
     </h3>
-    <div style="display:flex;gap:10px;margin-bottom:12px">
-      <input type="text" id="inv-search-input" placeholder="Search by name, SKU, or category..."
-        style="flex:1;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:6px" oninput="renderInventoryTable()">
-      <select id="inv-cat-filter" style="padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:6px" onchange="renderInventoryTable()">
-        <option value="ALL">All Categories</option>
-      </select>
-    </div>
     <table class="nice-table">
       <thead>
         <tr>
           <th>SKU / Code</th>
-          <th>Item Name</th>
+          <th>Product Name</th>
           <th>Category</th>
           <th>Variant / Specs</th>
           <th>Sale Price (Rs.)</th>
-          <th>Cost Price (Rs.)</th>
-          <th>Stock In Hand</th>
+          <th>Cost (Rs.)</th>
+          <th>In Stock</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -639,9 +613,9 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 7: DAILY Z-REPORT SUMMARY                                           -->
+<!-- VIEW 7: DAILY Z-REPORT                                                    -->
 <!-- ========================================================================= -->
-<div id="view-summary" class="hidden full-panel-container">
+<div id="view-summary" class="hidden view-container">
   <div class="panel-box">
     <h3>
       <span>📋 Daily Z-Report & Sales Ledger</span>
@@ -654,8 +628,8 @@
           <th>Time</th>
           <th>Customer</th>
           <th>Items Sold</th>
-          <th>Net Total (Rs.)</th>
-          <th>Tendered / Change</th>
+          <th>Total (Rs.)</th>
+          <th>Cash / Change</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -665,113 +639,196 @@
 </div>
 
 <!-- ========================================================================= -->
+<!-- VIEW 8: SUPER ADMIN CONSOLE (MULTI-SHOP SAAS MANAGER)                     -->
+<!-- ========================================================================= -->
+<div id="view-admin" class="hidden view-container">
+  <div class="admin-metric-grid">
+    <div class="admin-metric">
+      <div class="lbl">Registered Stores</div>
+      <div class="val" id="adm-store-count">0</div>
+    </div>
+    <div class="admin-metric green">
+      <div class="lbl">Active Paid Subscriptions</div>
+      <div class="val" id="adm-active-subs" style="color:var(--accent-green)">0</div>
+    </div>
+    <div class="admin-metric gold">
+      <div class="lbl">Monthly SaaS Revenue</div>
+      <div class="val" id="adm-mrr" style="color:var(--accent-gold)">Rs. 0</div>
+    </div>
+  </div>
+
+  <div class="panel-box">
+    <h3>
+      <span>👑 Registered Client Shops & Licensing Control</span>
+      <button class="btn btn-success" onclick="openCreateShopModal()">➕ Add New Client Shop</button>
+    </h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
+      Super Admin can deploy new shops, adjust monthly subscription fees, and lock/unlock access remotely.
+    </p>
+
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>Shop ID / Slug</th>
+          <th>Store Name</th>
+          <th>Industry</th>
+          <th>City / Phone</th>
+          <th>Monthly Fee</th>
+          <th>Plan & Status</th>
+          <th>License Valid Till</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="admin-stores-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="panel-box">
+    <h3>💾 Platform Cloud Data Backup</h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:12px">
+      Export all client shops, inventory databases, and transaction ledgers in a single encrypted backup file.
+    </p>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-dark" onclick="exportSaaSDatabase()">⬇ Export Full Database (JSON)</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('import-saas-file').click()">⬆ Restore Database (JSON)</button>
+      <input type="file" id="import-saas-file" style="display:none" accept=".json" onchange="importSaaSDatabase(event)">
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
 <!-- MODALS                                                                    -->
 <!-- ========================================================================= -->
 
-<!-- 1. RECEIVE STOCK MODAL -->
+<!-- 1. CREATE NEW CLIENT SHOP (SUPER ADMIN) -->
+<div class="modal-shade" id="modal-create-shop">
+  <div class="modal-box">
+    <h2>🏪 Provision New Client Shop</h2>
+    <div class="m-row">
+      <label>Store ID / Slug (Unique, e.g. apex-shoes) *</label>
+      <input type="text" id="ns-slug" placeholder="e.g. apex-shoes or madina-mart">
+    </div>
+    <div class="m-row">
+      <label>Shop / Business Name *</label>
+      <input type="text" id="ns-name" placeholder="e.g. Apex Footwear Hub">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row">
+        <label>Industry Template *</label>
+        <select id="ns-industry">
+          <option value="auto">🚗 Auto Parts & Oils</option>
+          <option value="shoes">👞 Footwear & Shoe Shop</option>
+          <option value="grocery">🛒 Grocery & Supermarket</option>
+          <option value="general">🏬 General Retail</option>
+        </select>
+      </div>
+      <div class="m-row">
+        <label>Monthly Subscription Fee (Rs.)</label>
+        <input type="number" id="ns-fee" value="2500">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row">
+        <label>City / Location *</label>
+        <input type="text" id="ns-city" placeholder="Rawalpindi">
+      </div>
+      <div class="m-row">
+        <label>Owner Phone / WhatsApp *</label>
+        <input type="text" id="ns-phone" placeholder="0300-1234567">
+      </div>
+    </div>
+    <div class="m-row">
+      <label>Plan Status</label>
+      <select id="ns-status">
+        <option value="ACTIVE">Paid / Active (30 Days)</option>
+        <option value="TRIAL">Free Trial (7 Days)</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-create-shop')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveNewClientShop()">🚀 Provision & Launch Store</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. STORE CONFIG MODAL -->
+<div class="modal-shade" id="modal-store-config">
+  <div class="modal-box">
+    <h2>⚙️ Store Profile Configuration</h2>
+    <div class="m-row">
+      <label>Store Name *</label>
+      <input type="text" id="cfg-name">
+    </div>
+    <div class="m-row">
+      <label>Tagline / Location *</label>
+      <input type="text" id="cfg-city">
+    </div>
+    <div class="m-row">
+      <label>Phone / WhatsApp *</label>
+      <input type="text" id="cfg-phone">
+    </div>
+    <div class="m-row">
+      <label>Thermal Receipt Footer Note</label>
+      <textarea id="cfg-policy" rows="2"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-store-config')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveActiveStoreConfig()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. RECEIVE STOCK MODAL -->
 <div class="modal-shade" id="modal-receive-stock">
   <div class="modal-box">
-    <h2>📦 Receive Stock (Restock Item)</h2>
+    <h2>📦 Receive Stock (GRN)</h2>
     <div class="m-row">
-      <label>Select Product to Restock *</label>
+      <label>Product to Restock *</label>
       <select id="rs-product-select"></select>
     </div>
     <div class="m-row">
       <label>Supplier / Vendor Name *</label>
-      <input type="text" id="rs-vendor-name" placeholder="e.g. Sakura Official Distributor / Master Bros">
+      <input type="text" id="rs-vendor-name" placeholder="Distributor Name">
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row">
-        <label>Quantity Received *</label>
+        <label>Quantity *</label>
         <input type="number" id="rs-qty" value="10" min="1">
       </div>
       <div class="m-row">
-        <label>Cost Price Per Unit (Rs.) *</label>
-        <input type="number" id="rs-cost" placeholder="250">
+        <label>Cost Per Unit (Rs.) *</label>
+        <input type="number" id="rs-cost" placeholder="0">
       </div>
     </div>
     <div class="m-row">
-      <label>Payment Method *</label>
-      <select id="rs-pay-status">
-        <option value="PAID">Paid in Cash Immediately</option>
-        <option value="CREDIT">Buy on Credit (Enter into Vendor Khata)</option>
+      <label>Payment Method</label>
+      <select id="rs-pay-type">
+        <option value="PAID">Paid Cash Now</option>
+        <option value="CREDIT">Buy on Credit (Vendor Khata)</option>
       </select>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-receive-stock')">Cancel</button>
-      <button class="btn btn-primary" style="flex:2" onclick="saveReceivedStock()">✅ Confirm & Add to Inventory</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveReceivedStock()">✅ Add to Stock</button>
     </div>
   </div>
 </div>
 
-<!-- 2. VENDOR BILL MODAL -->
+<!-- 4. VENDOR BILL MODAL -->
 <div class="modal-shade" id="modal-vendor-bill">
   <div class="modal-box">
-    <h2>📑 Enter Vendor Bill (Purchase on Khata)</h2>
-    <div class="m-row">
-      <label>Vendor / Supplier Name *</label>
-      <input type="text" id="vb-vendor-name" placeholder="e.g. Castrol Regional Hub">
-    </div>
-    <div class="m-row">
-      <label>Vendor Invoice / Reference Number *</label>
-      <input type="text" id="vb-invoice-no" placeholder="e.g. INV-9901">
-    </div>
-    <div class="m-row">
-      <label>Total Bill Amount (Rs.) *</label>
-      <input type="number" id="vb-amount" placeholder="e.g. 25000">
-    </div>
-    <div class="m-row">
-      <label>Notes / Goods Description</label>
-      <textarea id="vb-notes" rows="2" placeholder="e.g. 10 cartons engine oil"></textarea>
-    </div>
+    <h2>📑 Enter Vendor Bill (Khata)</h2>
+    <div class="m-row"><label>Vendor Name *</label><input type="text" id="vb-name"></div>
+    <div class="m-row"><label>Invoice / Ref # *</label><input type="text" id="vb-ref"></div>
+    <div class="m-row"><label>Bill Amount (Rs.) *</label><input type="number" id="vb-amount"></div>
     <div style="display:flex;gap:10px;margin-top:16px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-vendor-bill')">Cancel</button>
-      <button class="btn btn-primary" style="flex:2" onclick="saveVendorBill()">💾 Save to Vendor Khata</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveVendorBill()">💾 Save Bill</button>
     </div>
   </div>
 </div>
 
-<!-- 3. PAY VENDOR MODAL -->
-<div class="modal-shade" id="modal-pay-vendor">
-  <div class="modal-box">
-    <h2>💸 Pay Vendor Bill</h2>
-    <input type="hidden" id="pv-bill-id">
-    <div style="background:#f1f5f9;padding:12px;border-radius:6px;margin-bottom:12px">
-      <div>Vendor: <strong id="pv-vendor-name">---</strong></div>
-      <div>Balance Remaining: <strong id="pv-balance" style="color:var(--accent-red)">Rs. 0</strong></div>
-    </div>
-    <div class="m-row">
-      <label>Amount Paying Now (Rs.) *</label>
-      <input type="number" id="pv-amount" placeholder="Enter amount">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-pay-vendor')">Cancel</button>
-      <button class="btn btn-success" style="flex:2" onclick="confirmVendorPayment()">✅ Submit Payment</button>
-    </div>
-  </div>
-</div>
-
-<!-- 4. CUSTOMER RECEIVE PAYMENT MODAL -->
-<div class="modal-shade" id="modal-receive-cust-pay">
-  <div class="modal-box">
-    <h2>💳 Customer Pay Bill (Receive Cash)</h2>
-    <input type="hidden" id="rcp-cust-id">
-    <div style="background:#f1f5f9;padding:12px;border-radius:6px;margin-bottom:12px">
-      <div>Customer: <strong id="rcp-cust-name">---</strong></div>
-      <div>Outstanding Balance: <strong id="rcp-balance" style="color:var(--accent-red)">Rs. 0</strong></div>
-    </div>
-    <div class="m-row">
-      <label>Cash Received (Rs.) *</label>
-      <input type="number" id="rcp-amount" placeholder="Enter amount">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-receive-cust-pay')">Cancel</button>
-      <button class="btn btn-success" style="flex:2" onclick="confirmCustomerPayment()">✅ Record Payment Received</button>
-    </div>
-  </div>
-</div>
-
-<!-- 5. POS CASH PAYMENT MODAL -->
+<!-- 5. CASH PAYMENT MODAL -->
 <div class="modal-shade" id="modal-cash-payment">
   <div class="modal-box">
     <h2>💰 Collect Cash Payment</h2>
@@ -780,7 +837,7 @@
       <div id="modal-pay-total" style="font-size:32px;font-weight:900;color:var(--accent-red)">Rs. 0</div>
     </div>
     <div class="m-row">
-      <label>Cash Given by Customer (Rs.)</label>
+      <label>Cash Tendered by Customer (Rs.)</label>
       <input type="number" id="pos-cash-tendered" placeholder="Enter cash" style="font-size:22px;font-weight:800;text-align:center" oninput="calculateChange()">
     </div>
     <div id="pos-change-box" style="padding:12px;border-radius:6px;text-align:center;font-size:16px;font-weight:800;background:#f1f5f9;margin-bottom:12px">
@@ -788,92 +845,169 @@
     </div>
     <div style="display:flex;gap:10px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-cash-payment')">Cancel</button>
-      <button class="btn btn-success" id="btn-complete-pos-sale" style="flex:2" onclick="completePosSale()" disabled>
-        ✅ Complete Sale & Print Receipt
+      <button class="btn btn-success" id="btn-finish-pos-sale" style="flex:2" onclick="finishPosSale()" disabled>
+        ✅ Complete Sale & Print Slip
       </button>
     </div>
   </div>
 </div>
 
-<!-- 6. STORE SETTINGS CONFIG MODAL -->
-<div class="modal-shade" id="modal-store-config">
+<!-- 6. ADD PRODUCT MODAL -->
+<div class="modal-shade" id="modal-product">
   <div class="modal-box">
-    <h2>🏪 Configure Shop Profile</h2>
-    <div class="m-row">
-      <label>Shop Name *</label>
-      <input type="text" id="cfg-shop-name" placeholder="e.g. JS Auto Parts or Apex Shoes">
+    <h2>➕ Add Product</h2>
+    <div class="m-row"><label>Product Name *</label><input type="text" id="np-name"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Category *</label><input type="text" id="np-cat"></div>
+      <div class="m-row"><label>Variant / Specs</label><input type="text" id="np-variant"></div>
     </div>
-    <div class="m-row">
-      <label>Tagline / Location *</label>
-      <input type="text" id="cfg-shop-city" placeholder="e.g. Filters & Oils — Rawalpindi">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Sale Price (Rs.) *</label><input type="number" id="np-price"></div>
+      <div class="m-row"><label>Cost Price (Rs.)</label><input type="number" id="np-cost"></div>
     </div>
-    <div class="m-row">
-      <label>Phone / WhatsApp *</label>
-      <input type="text" id="cfg-shop-phone" placeholder="e.g. 0336-5804080">
-    </div>
-    <div class="m-row">
-      <label>Currency Symbol</label>
-      <input type="text" id="cfg-shop-curr" value="Rs.">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Opening Stock</label><input type="number" id="np-stock" value="10"></div>
+      <div class="m-row"><label>SKU / Barcode</label><input type="text" id="np-sku"></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-store-config')">Cancel</button>
-      <button class="btn btn-primary" style="flex:2" onclick="saveStoreConfig()">💾 Save Changes</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-product')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveNewProduct()">Save Item</button>
     </div>
   </div>
 </div>
 
-<!-- THERMAL RECEIPT SLIP -->
+<!-- THERMAL RECEIPT CONTAINER -->
 <div id="thermal-slip"></div>
 
 <script>
 // =========================================================================
-// DATA REPOSITORIES (Persistent LocalStorage)
+// 1. MULTI-STORE DATABASE (SaaS Architecture)
 // =========================================================================
-let storeConfig = JSON.parse(localStorage.getItem('omni_config')) || {
-  name: "JS Auto Parts",
-  city: "Rawalpindi",
-  phone: "0336-5804080",
-  currency: "Rs."
-};
 
-let catalog = JSON.parse(localStorage.getItem('omni_catalog')) || [
-  { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
-  { id: 2, sku: 'JSA-OF-002', name: 'Sakura Oil Filter C-1005', cat: 'Oil Filters', variant: 'Civic / City', price: 380, cost: 270, stock: 25, low: 10 },
-  { id: 3, sku: 'JSA-OF-004', name: 'Bosch Premium Oil Filter', cat: 'Oil Filters', variant: 'Universal', price: 650, cost: 480, stock: 15, low: 5 },
-  { id: 4, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 },
-  { id: 5, sku: 'JSA-EO-002', name: 'Mobil Super 3000 (4L)', cat: 'Engine Oils', variant: '5W-30 Full Synth', price: 4600, cost: 3400, stock: 12, low: 4 },
-  { id: 6, sku: 'JSA-CO-001', name: 'Toyota Coolant Ready-Mix', cat: 'Coolants', variant: '1 Liter Can', price: 1200, cost: 850, stock: 22, low: 6 }
+const INITIAL_STORES = [
+  {
+    id: "js-auto",
+    name: "JS Auto Parts",
+    city: "Rawalpindi",
+    phone: "0336-5804080",
+    currency: "Rs.",
+    industry: "auto",
+    fee: 2500,
+    status: "ACTIVE",
+    expiry: "2026-12-31",
+    policy: "No exchange or return after 24 hours. Electrical items non-returnable.",
+    catalog: [
+      { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
+      { id: 2, sku: 'JSA-OF-002', name: 'Sakura Oil Filter C-1005', cat: 'Oil Filters', variant: 'Civic / City', price: 380, cost: 270, stock: 25, low: 10 },
+      { id: 3, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 },
+      { id: 4, sku: 'JSA-CO-001', name: 'Toyota Coolant Ready-Mix', cat: 'Coolants', variant: '1 Liter Can', price: 1200, cost: 850, stock: 22, low: 6 }
+    ],
+    transactions: [],
+    stockLogs: [
+      { id: 1, date: new Date().toLocaleDateString(), vendor: 'Sakura Distributor', item: 'Sakura Oil Filter C-1004', qty: 20, cost: 250, total: 5000, type: 'PAID' }
+    ],
+    vendorBills: [
+      { id: 1, vendor: 'Castrol Regional Hub', invoice: 'INV-4011', date: new Date().toLocaleDateString(), amount: 15000, paid: 5000, balance: 10000 }
+    ],
+    customerDues: [
+      { id: 1, name: 'Malik Auto Workshop', phone: '0300-5544332', ref: 'CREDIT-101', total: 6800, balance: 3500 }
+    ]
+  },
+  {
+    id: "apex-shoes",
+    name: "Apex Footwear Hub",
+    city: "Mall Road",
+    phone: "0300-1122334",
+    currency: "Rs.",
+    industry: "shoes",
+    fee: 3000,
+    status: "ACTIVE",
+    expiry: "2026-11-30",
+    policy: "Exchange allowed within 7 days with original box and invoice.",
+    catalog: [
+      { id: 101, sku: 'SHO-01', name: 'Oxford Formal Leather Shoes', cat: 'Formal Shoes', variant: 'Size 41 | Black', price: 4200, cost: 2600, stock: 15, low: 3 },
+      { id: 102, sku: 'SHO-02', name: 'Air Mesh Sports Sneakers', cat: 'Sports', variant: 'Size 42 | White', price: 3400, cost: 2000, stock: 20, low: 4 },
+      { id: 103, sku: 'SHO-03', name: 'Peshawari Chappal Handcrafted', cat: 'Traditional', variant: 'Size 40 | Brown', price: 2800, cost: 1700, stock: 25, low: 5 }
+    ],
+    transactions: [],
+    stockLogs: [],
+    vendorBills: [],
+    customerDues: []
+  },
+  {
+    id: "madina-mart",
+    name: "Al-Madina Super Mart",
+    city: "Commercial Market",
+    phone: "0311-9988776",
+    currency: "Rs.",
+    industry: "grocery",
+    fee: 2000,
+    status: "TRIAL",
+    expiry: "2026-11-10",
+    policy: "Thank you for shopping at Al-Madina! Open 7 days a week.",
+    catalog: [
+      { id: 201, sku: 'GRO-01', name: 'Dalda Cooking Oil 5L Tin', cat: 'Oils', variant: '5 Liters', price: 2650, cost: 2450, stock: 30, low: 5 },
+      { id: 202, sku: 'GRO-02', name: 'Tapal Danedar Family Pack', cat: 'Tea', variant: '900 grams', price: 1450, cost: 1300, stock: 25, low: 4 }
+    ],
+    transactions: [],
+    stockLogs: [],
+    vendorBills: [],
+    customerDues: []
+  }
 ];
 
-let transactions = JSON.parse(localStorage.getItem('omni_txs')) || [];
-let stockLogs = JSON.parse(localStorage.getItem('omni_stock_logs')) || [
-  { id: 1, date: new Date().toLocaleDateString(), vendor: 'Sakura Distributor', item: 'Sakura Oil Filter C-1004', qty: 20, cost: 250, total: 5000, type: 'PAID' }
-];
-let vendorBills = JSON.parse(localStorage.getItem('omni_vendor_bills')) || [
-  { id: 1, vendor: 'Castrol Regional Hub', invoice: 'INV-4011', date: new Date().toLocaleDateString(), amount: 15000, paid: 5000, balance: 10000, notes: 'Engine oils delivery' }
-];
-let customerDues = JSON.parse(localStorage.getItem('omni_cust_dues')) || [
-  { id: 1, name: 'Malik Auto Workshop', phone: '0300-5544332', ref: 'CREDIT-101', total: 6800, balance: 3500 }
-];
-
+let multiStoreDB = JSON.parse(localStorage.getItem('omni_multi_stores')) || INITIAL_STORES;
+let activeStoreId = localStorage.getItem('omni_active_store_id') || "js-auto";
 let cart = [];
 let currentPosCat = 'ALL';
 let posSearch = '';
 
-function persist() {
-  localStorage.setItem('omni_config', JSON.stringify(storeConfig));
-  localStorage.setItem('omni_catalog', JSON.stringify(catalog));
-  localStorage.setItem('omni_txs', JSON.stringify(transactions));
-  localStorage.setItem('omni_stock_logs', JSON.stringify(stockLogs));
-  localStorage.setItem('omni_vendor_bills', JSON.stringify(vendorBills));
-  localStorage.setItem('omni_cust_dues', JSON.stringify(customerDues));
+function getActiveStore() {
+  return multiStoreDB.find(s => s.id === activeStoreId) || multiStoreDB[0];
+}
+
+function persistSaaS() {
+  localStorage.setItem('omni_multi_stores', JSON.stringify(multiStoreDB));
+  localStorage.setItem('omni_active_store_id', activeStoreId);
+  renderStoreDropdown();
   updateTopHeader();
   updateSidebarStats();
 }
 
 // =========================================================================
-// CLOCK & HEADER
+// 2. STORE SWITCHER & TOP BAR
 // =========================================================================
+function renderStoreDropdown() {
+  const sel = document.getElementById('active-store-dropdown');
+  sel.innerHTML = multiStoreDB.map(s => `
+    <option value="${s.id}" ${s.id === activeStoreId ? 'selected' : ''}>
+      ${s.name} (${s.city})
+    </option>
+  `).join('');
+
+  const store = getActiveStore();
+  const badge = document.getElementById('active-store-badge');
+  badge.textContent = store.status;
+  badge.className = `status-tag ${store.status === 'ACTIVE' ? 'tag-active' : (store.status === 'TRIAL' ? 'tag-trial' : 'tag-expired')}`;
+
+  // Check Expiry Alert
+  const alertBanner = document.getElementById('license-alert-banner');
+  if (store.status === 'EXPIRED') {
+    alertBanner.style.display = 'flex';
+    document.getElementById('license-alert-msg').textContent = `The subscription for "${store.name}" has EXPIRED. Please renew.`;
+  } else {
+    alertBanner.style.display = 'none';
+  }
+}
+
+function switchActiveStore(newId) {
+  activeStoreId = newId;
+  cart = [];
+  persistSaaS();
+  renderPosCatalog();
+  renderInventoryTable();
+}
+
 function updateClock() {
   const d = new Date();
   document.getElementById('live-time').textContent = d.toLocaleTimeString('en-PK', { hour12: true });
@@ -883,39 +1017,41 @@ setInterval(updateClock, 1000);
 updateClock();
 
 function updateTopHeader() {
-  document.getElementById('top-store-name').textContent = storeConfig.name;
-  document.getElementById('top-store-city').textContent = storeConfig.city;
+  const s = getActiveStore();
+  document.title = `${s.name} — OmniKhata SaaS`;
 }
 
 // =========================================================================
-// VIEW SWITCHING
+// 3. NAVIGATION
 // =========================================================================
-function switchView(viewName) {
-  const views = ['home', 'billing', 'cust-pay', 'stock-rec', 'stock-pay', 'inventory', 'summary'];
-  views.forEach(v => {
-    const el = document.getElementById(`view-${v}`);
-    if (el) el.classList.toggle('hidden', v !== viewName);
+function switchNavTab(tabName) {
+  const tabs = ['home', 'billing', 'cust-pay', 'stock-rec', 'stock-pay', 'inventory', 'summary', 'admin'];
+  tabs.forEach(t => {
+    const el = document.getElementById(`view-${t}`);
+    if (el) el.classList.toggle('hidden', t !== tabName);
   });
 
   document.querySelectorAll('.tab-link').forEach((tab, i) => {
-    tab.classList.toggle('active', views[i] === viewName);
+    tab.classList.toggle('active', tabs[i] === tabName);
   });
 
-  if (viewName === 'billing') { renderPosCatalog(); }
-  if (viewName === 'cust-pay') { renderCustomerDuesTable(); }
-  if (viewName === 'stock-rec') { renderStockReceivedTable(); }
-  if (viewName === 'stock-pay') { renderVendorPayablesTable(); }
-  if (viewName === 'inventory') { renderInventoryTable(); }
-  if (viewName === 'summary') { renderDailyZReport(); }
+  if (tabName === 'billing') renderPosCatalog();
+  if (tabName === 'cust-pay') renderCustomerDuesTable();
+  if (tabName === 'stock-rec') renderStockReceivedTable();
+  if (tabName === 'stock-pay') renderVendorPayablesTable();
+  if (tabName === 'inventory') renderInventoryTable();
+  if (tabName === 'summary') renderDailyZReport();
+  if (tabName === 'admin') renderAdminConsole();
 }
 
 // =========================================================================
-// SIDEBAR STATS
+// 4. SIDEBAR STATS
 // =========================================================================
 function updateSidebarStats() {
+  const s = getActiveStore();
   const today = new Date().toDateString();
-  const todayTxs = transactions.filter(t => new Date(t.date).toDateString() === today);
-  const sales = todayTxs.reduce((s, t) => s + t.total, 0);
+  const todayTxs = (s.transactions || []).filter(t => new Date(t.date).toDateString() === today);
+  const sales = todayTxs.reduce((acc, t) => acc + t.total, 0);
   let cost = 0;
   todayTxs.forEach(t => t.items.forEach(i => cost += (i.cost || 0) * i.qty));
   const profit = Math.max(0, sales - cost);
@@ -924,30 +1060,29 @@ function updateSidebarStats() {
   document.getElementById('side-today-bills').textContent = todayTxs.length;
   document.getElementById('side-today-profit').textContent = `Rs. ${profit.toLocaleString()}`;
 
-  const lowCount = catalog.filter(p => p.stock <= (p.low || 5)).length;
+  const lowCount = (s.catalog || []).filter(p => p.stock <= (p.low || 5)).length;
   document.getElementById('side-low-stock').textContent = lowCount;
 
-  const vendorTotal = vendorBills.reduce((s, b) => s + b.balance, 0);
+  const vendorTotal = (s.vendorBills || []).reduce((acc, b) => acc + b.balance, 0);
   document.getElementById('side-vendor-payables').textContent = `Rs. ${vendorTotal.toLocaleString()}`;
 
-  const custTotal = customerDues.reduce((s, c) => s + c.balance, 0);
+  const custTotal = (s.customerDues || []).reduce((acc, c) => acc + c.balance, 0);
   document.getElementById('side-cust-receivables').textContent = `Rs. ${custTotal.toLocaleString()}`;
 }
 
 // =========================================================================
-// POS BILLING ENGINE
+// 5. POS BILLING ENGINE
 // =========================================================================
 function renderPosCatalog() {
-  // Category pills
+  const s = getActiveStore();
   const pillsBox = document.getElementById('pos-cat-pills');
-  const distinctCats = ['ALL', ...new Set(catalog.map(p => p.cat))];
+  const distinctCats = ['ALL', ...new Set((s.catalog || []).map(p => p.cat))];
   pillsBox.innerHTML = distinctCats.map(c => `
     <div class="cp-pill ${c === currentPosCat ? 'active' : ''}" onclick="filterPosCat('${c}')">${c}</div>
   `).join('');
 
-  // Items grid
   const grid = document.getElementById('pos-grid-container');
-  const filtered = catalog.filter(p => {
+  const filtered = (s.catalog || []).filter(p => {
     const matchCat = currentPosCat === 'ALL' || p.cat === currentPosCat;
     const matchSearch = !posSearch || p.name.toLowerCase().includes(posSearch) || p.sku.toLowerCase().includes(posSearch);
     return matchCat && matchSearch;
@@ -962,30 +1097,24 @@ function renderPosCatalog() {
     <div class="item-card" onclick="addToCart(${p.id})">
       <div class="ic-cat">${p.cat}</div>
       <div class="ic-name">${p.name}</div>
-      <div class="ic-variant">${p.variant || '—'}</div>
+      <div style="font-size:11px;color:#64748b;margin-bottom:6px">${p.variant || '—'}</div>
       <div class="ic-foot">
         <div class="ic-price">Rs. ${p.price.toLocaleString()}</div>
-        <div class="ic-stock" style="color:${p.stock>0 ? '#16a34a':'#dc2626'}">Stock: ${p.stock}</div>
+        <div style="font-size:10.5px;font-weight:700;color:${p.stock>0?'#16a34a':'#dc2626'}">Stock: ${p.stock}</div>
       </div>
     </div>
   `).join('');
 }
 
-function filterPosCat(cat) {
-  currentPosCat = cat;
-  renderPosCatalog();
-}
-
-function filterPosCatalog(val) {
-  posSearch = val.trim().toLowerCase();
-  renderPosCatalog();
-}
+function filterPosCat(cat) { currentPosCat = cat; renderPosCatalog(); }
+function filterPosCatalog(val) { posSearch = val.trim().toLowerCase(); renderPosCatalog(); }
 
 function handlePosEnter(e) {
   if (e.key === 'Enter') {
+    const s = getActiveStore();
     const val = e.target.value.trim().toLowerCase();
     if (!val) return;
-    const match = catalog.find(p => p.sku.toLowerCase() === val || p.name.toLowerCase().includes(val));
+    const match = (s.catalog || []).find(p => p.sku.toLowerCase() === val || p.name.toLowerCase().includes(val));
     if (match) {
       addToCart(match.id);
       e.target.value = '';
@@ -996,7 +1125,8 @@ function handlePosEnter(e) {
 }
 
 function addToCart(prodId) {
-  const p = catalog.find(x => x.id === prodId);
+  const s = getActiveStore();
+  const p = (s.catalog || []).find(x => x.id === prodId);
   if (!p) return;
   if (p.stock <= 0) { alert('Out of stock!'); return; }
 
@@ -1031,7 +1161,7 @@ function renderCart() {
     <div class="cart-line">
       <div class="cart-line-info">
         <div class="cart-line-name">${c.name}</div>
-        <div class="cart-line-sub">Rs. ${c.price.toLocaleString()} each</div>
+        <div style="font-size:11px;color:#64748b">Rs. ${c.price.toLocaleString()} each</div>
       </div>
       <div class="qty-ctrl">
         <button onclick="adjustCartQty(${c.id}, -1)">−</button>
@@ -1056,17 +1186,14 @@ function updateBillTotals() {
   return grand;
 }
 
-function clearCart() {
-  cart = [];
-  renderCart();
-}
+function clearCart() { cart = []; renderCart(); }
 
 function openCashPaymentModal() {
   const total = updateBillTotals();
   document.getElementById('modal-pay-total').textContent = `Rs. ${total.toLocaleString()}`;
   document.getElementById('pos-cash-tendered').value = '';
   document.getElementById('pos-change-box').textContent = 'Enter cash above';
-  document.getElementById('btn-complete-pos-sale').disabled = true;
+  document.getElementById('btn-finish-pos-sale').disabled = true;
   openModal('modal-cash-payment');
   setTimeout(() => document.getElementById('pos-cash-tendered').focus(), 150);
 }
@@ -1076,7 +1203,7 @@ function calculateChange() {
   const cash = parseFloat(document.getElementById('pos-cash-tendered').value) || 0;
   const diff = cash - total;
   const box = document.getElementById('pos-change-box');
-  const btn = document.getElementById('btn-complete-pos-sale');
+  const btn = document.getElementById('btn-finish-pos-sale');
 
   if (cash <= 0) {
     box.style.background = '#f1f5f9'; box.style.color = '#000'; box.textContent = 'Enter cash above';
@@ -1090,20 +1217,21 @@ function calculateChange() {
   }
 }
 
-function completePosSale() {
+function finishPosSale() {
+  const s = getActiveStore();
   const total = updateBillTotals();
   const cash = parseFloat(document.getElementById('pos-cash-tendered').value) || 0;
   const change = cash - total;
   const cust = document.getElementById('cart-customer-name').value.trim() || 'Walk-in Customer';
 
-  // Deduct stock
+  // Deduct inventory
   cart.forEach(c => {
-    const p = catalog.find(x => x.id === c.id);
+    const p = (s.catalog || []).find(x => x.id === c.id);
     if (p) p.stock = Math.max(0, p.stock - c.qty);
   });
 
   const tx = {
-    id: transactions.length + 1,
+    id: (s.transactions || []).length + 1,
     date: new Date().toISOString(),
     customer: cust,
     items: [...cart],
@@ -1111,18 +1239,18 @@ function completePosSale() {
     cash,
     change
   };
-  transactions.push(tx);
-  persist();
+  s.transactions = s.transactions || [];
+  s.transactions.push(tx);
+  persistSaaS();
 
-  // Thermal print
-  buildReceiptSlip(tx);
+  buildReceiptSlip(tx, s);
   closeModal('modal-cash-payment');
   clearCart();
   renderPosCatalog();
   setTimeout(() => window.print(), 200);
 }
 
-function buildReceiptSlip(tx) {
+function buildReceiptSlip(tx, store) {
   const d = new Date(tx.date);
   const items = tx.items.map(i => `
     <div style="display:flex;justify-content:space-between"><span>${i.name}</span><span>Rs.${i.price*i.qty}</span></div>
@@ -1131,8 +1259,8 @@ function buildReceiptSlip(tx) {
 
   document.getElementById('thermal-slip').innerHTML = `
     <div style="text-align:center">
-      <div style="font-weight:900;font-size:15px">${storeConfig.name.toUpperCase()}</div>
-      <div>${storeConfig.city} • ${storeConfig.phone}</div>
+      <div style="font-weight:900;font-size:15px">${store.name.toUpperCase()}</div>
+      <div>${store.city} • ${store.phone}</div>
       <div>--------------------------------</div>
     </div>
     <div>Bill #: INV-${String(tx.id).padStart(4,'0')}</div>
@@ -1145,35 +1273,38 @@ function buildReceiptSlip(tx) {
     <div style="display:flex;justify-content:space-between"><span>Cash:</span><span>Rs. ${tx.cash}</span></div>
     <div style="display:flex;justify-content:space-between"><span>Change:</span><span>Rs. ${tx.change}</span></div>
     <div>--------------------------------</div>
-    <div style="text-align:center;font-size:10px">Thank you for visiting! Powered by OmniKhata</div>
+    <div style="text-align:center;font-size:10px">${store.policy || 'Thank you for visiting!'}</div>
   `;
   document.getElementById('thermal-slip').style.display = 'block';
 }
 
 // =========================================================================
-// RECEIVE STOCK & VENDOR PAY BILLS
+// 6. RECEIVE STOCK & VENDORS
 // =========================================================================
 function openReceiveStockModal() {
+  const s = getActiveStore();
   const sel = document.getElementById('rs-product-select');
-  sel.innerHTML = catalog.map(p => `<option value="${p.id}">${p.name} (Current: ${p.stock})</option>`).join('');
+  sel.innerHTML = (s.catalog || []).map(p => `<option value="${p.id}">${p.name} (In Hand: ${p.stock})</option>`).join('');
   openModal('modal-receive-stock');
 }
 
 function saveReceivedStock() {
+  const s = getActiveStore();
   const prodId = parseInt(document.getElementById('rs-product-select').value);
-  const vendor = document.getElementById('rs-vendor-name').value.trim() || 'General Supplier';
+  const vendor = document.getElementById('rs-vendor-name').value.trim() || 'Distributor';
   const qty = parseInt(document.getElementById('rs-qty').value) || 0;
   const cost = parseFloat(document.getElementById('rs-cost').value) || 0;
-  const payType = document.getElementById('rs-pay-status').value;
+  const payType = document.getElementById('rs-pay-type').value;
 
-  const p = catalog.find(x => x.id === prodId);
+  const p = (s.catalog || []).find(x => x.id === prodId);
   if (!p || qty <= 0) return;
 
   p.stock += qty;
   p.cost = cost;
 
-  stockLogs.push({
-    id: stockLogs.length + 1,
+  s.stockLogs = s.stockLogs || [];
+  s.stockLogs.push({
+    id: s.stockLogs.length + 1,
     date: new Date().toLocaleDateString(),
     vendor,
     item: p.name,
@@ -1184,27 +1315,28 @@ function saveReceivedStock() {
   });
 
   if (payType === 'CREDIT') {
-    vendorBills.push({
-      id: vendorBills.length + 1,
+    s.vendorBills = s.vendorBills || [];
+    s.vendorBills.push({
+      id: s.vendorBills.length + 1,
       vendor,
       invoice: `GRN-${Date.now().toString().slice(-4)}`,
       date: new Date().toLocaleDateString(),
       amount: qty * cost,
       paid: 0,
-      balance: qty * cost,
-      notes: `Received ${qty} x ${p.name}`
+      balance: qty * cost
     });
   }
 
-  persist();
+  persistSaaS();
   closeModal('modal-receive-stock');
   renderStockReceivedTable();
-  alert(`✅ Successfully added ${qty} units to ${p.name}!`);
+  alert(`Added ${qty} units to ${p.name}!`);
 }
 
 function renderStockReceivedTable() {
+  const s = getActiveStore();
   const tbody = document.getElementById('stock-received-log-tbody');
-  tbody.innerHTML = [...stockLogs].reverse().map(l => `
+  tbody.innerHTML = [...(s.stockLogs || [])].reverse().map(l => `
     <tr>
       <td>${l.date}</td>
       <td><strong>${l.vendor}</strong></td>
@@ -1217,38 +1349,35 @@ function renderStockReceivedTable() {
   `).join('');
 }
 
-function openEnterVendorBillModal() {
-  openModal('modal-vendor-bill');
-}
+function openVendorBillModal() { openModal('modal-vendor-bill'); }
 
 function saveVendorBill() {
-  const vendor = document.getElementById('vb-vendor-name').value.trim();
-  const invoice = document.getElementById('vb-invoice-no').value.trim();
+  const s = getActiveStore();
+  const vendor = document.getElementById('vb-name').value.trim();
+  const invoice = document.getElementById('vb-ref').value.trim();
   const amount = parseFloat(document.getElementById('vb-amount').value) || 0;
-  const notes = document.getElementById('vb-notes').value.trim();
+  if (!vendor || amount <= 0) return;
 
-  if (!vendor || amount <= 0) { alert('Enter vendor name and amount!'); return; }
-
-  vendorBills.push({
-    id: vendorBills.length + 1,
+  s.vendorBills = s.vendorBills || [];
+  s.vendorBills.push({
+    id: s.vendorBills.length + 1,
     vendor,
     invoice,
     date: new Date().toLocaleDateString(),
     amount,
     paid: 0,
-    balance: amount,
-    notes
+    balance: amount
   });
 
-  persist();
+  persistSaaS();
   closeModal('modal-vendor-bill');
   renderVendorPayablesTable();
-  alert('Vendor bill recorded in Khata!');
 }
 
 function renderVendorPayablesTable() {
+  const s = getActiveStore();
   const tbody = document.getElementById('vendor-payables-tbody');
-  tbody.innerHTML = vendorBills.map(b => `
+  tbody.innerHTML = (s.vendorBills || []).map(b => `
     <tr>
       <td><strong>${b.vendor}</strong></td>
       <td>${b.invoice}</td>
@@ -1257,42 +1386,32 @@ function renderVendorPayablesTable() {
       <td style="color:#16a34a">Rs. ${b.paid.toLocaleString()}</td>
       <td style="font-weight:800;color:${b.balance>0?'#dc2626':'#16a34a'}">Rs. ${b.balance.toLocaleString()}</td>
       <td>
-        ${b.balance > 0 ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px" onclick="openPayVendorModal(${b.id})">💸 Pay Bill</button>` : '✅ Fully Paid'}
+        ${b.balance > 0 ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px" onclick="payVendor(${b.id})">💸 Pay</button>` : '✅ Paid'}
       </td>
     </tr>
   `).join('');
 }
 
-function openPayVendorModal(billId) {
-  const b = vendorBills.find(x => x.id === billId);
+function payVendor(billId) {
+  const s = getActiveStore();
+  const b = (s.vendorBills || []).find(x => x.id === billId);
   if (!b) return;
-  document.getElementById('pv-bill-id').value = b.id;
-  document.getElementById('pv-vendor-name').textContent = b.vendor;
-  document.getElementById('pv-balance').textContent = `Rs. ${b.balance.toLocaleString()}`;
-  document.getElementById('pv-amount').value = b.balance;
-  openModal('modal-pay-vendor');
-}
-
-function confirmVendorPayment() {
-  const id = parseInt(document.getElementById('pv-bill-id').value);
-  const amt = parseFloat(document.getElementById('pv-amount').value) || 0;
-  const b = vendorBills.find(x => x.id === id);
-  if (!b || amt <= 0) return;
-
-  b.paid += amt;
-  b.balance = Math.max(0, b.amount - b.paid);
-  persist();
-  closeModal('modal-pay-vendor');
-  renderVendorPayablesTable();
-  alert('Payment recorded to vendor!');
+  const amt = parseFloat(prompt(`Enter amount to pay to ${b.vendor} (Balance: Rs. ${b.balance}):`, b.balance));
+  if (amt > 0) {
+    b.paid += amt;
+    b.balance = Math.max(0, b.amount - b.paid);
+    persistSaaS();
+    renderVendorPayablesTable();
+  }
 }
 
 // =========================================================================
-// CUSTOMER PAY BILLS (UDHAAR KHATA)
+// 7. CUSTOMER KHATA (UDHAAR)
 // =========================================================================
 function renderCustomerDuesTable() {
+  const s = getActiveStore();
   const tbody = document.getElementById('cust-dues-tbody');
-  tbody.innerHTML = customerDues.map(c => `
+  tbody.innerHTML = (s.customerDues || []).map(c => `
     <tr>
       <td><strong>${c.name}</strong></td>
       <td>${c.phone || '—'}</td>
@@ -1301,74 +1420,52 @@ function renderCustomerDuesTable() {
       <td style="font-weight:800;color:${c.balance>0?'#dc2626':'#16a34a'}">Rs. ${c.balance.toLocaleString()}</td>
       <td><span style="font-weight:800;color:${c.balance>0?'#d97706':'#16a34a'}">${c.balance>0?'Pending':'Paid'}</span></td>
       <td>
-        ${c.balance > 0 ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px" onclick="openReceiveCustPayModal(${c.id})">💳 Receive Cash</button>` : 'Cleared'}
+        ${c.balance > 0 ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px" onclick="receiveCustomerPay(${c.id})">💳 Receive Cash</button>` : 'Cleared'}
       </td>
     </tr>
   `).join('');
 }
 
-function openReceiveCustPayModal(custId) {
-  const c = customerDues.find(x => x.id === custId);
+function receiveCustomerPay(id) {
+  const s = getActiveStore();
+  const c = (s.customerDues || []).find(x => x.id === id);
   if (!c) return;
-  document.getElementById('rcp-cust-id').value = c.id;
-  document.getElementById('rcp-cust-name').textContent = c.name;
-  document.getElementById('rcp-balance').textContent = `Rs. ${c.balance.toLocaleString()}`;
-  document.getElementById('rcp-amount').value = c.balance;
-  openModal('modal-receive-cust-pay');
+  const amt = parseFloat(prompt(`Enter cash received from ${c.name} (Due: Rs. ${c.balance}):`, c.balance));
+  if (amt > 0) {
+    c.balance = Math.max(0, c.balance - amt);
+    persistSaaS();
+    renderCustomerDuesTable();
+  }
 }
 
-function confirmCustomerPayment() {
-  const id = parseInt(document.getElementById('rcp-cust-id').value);
-  const amt = parseFloat(document.getElementById('rcp-amount').value) || 0;
-  const c = customerDues.find(x => x.id === id);
-  if (!c || amt <= 0) return;
-
-  c.balance = Math.max(0, c.balance - amt);
-  persist();
-  closeModal('modal-receive-cust-pay');
-  renderCustomerDuesTable();
-  alert('Payment received from customer!');
-}
-
-function openNewCustomerCreditModal() {
-  const name = prompt('Enter Customer Name:');
+function openCustomerCreditModal() {
+  const s = getActiveStore();
+  const name = prompt('Customer Name:');
   if (!name) return;
-  const phone = prompt('Enter Customer Phone:');
-  const amount = parseFloat(prompt('Enter Credit/Bill Amount (Rs.):')) || 0;
+  const phone = prompt('Customer Phone:');
+  const amount = parseFloat(prompt('Credit Amount (Rs.):')) || 0;
   if (amount <= 0) return;
 
-  customerDues.push({
-    id: customerDues.length + 1,
+  s.customerDues = s.customerDues || [];
+  s.customerDues.push({
+    id: s.customerDues.length + 1,
     name,
     phone,
-    ref: `CREDIT-${Date.now().toString().slice(-4)}`,
+    ref: `CR-${Date.now().toString().slice(-4)}`,
     total: amount,
     balance: amount
   });
-  persist();
+  persistSaaS();
   renderCustomerDuesTable();
 }
 
 // =========================================================================
-// INVENTORY & DAILY SUMMARY TABLES
+// 8. INVENTORY & Z-REPORT
 // =========================================================================
 function renderInventoryTable() {
-  const search = (document.getElementById('inv-search-input')?.value || '').toLowerCase();
-  const catFilter = document.getElementById('inv-cat-filter')?.value || 'ALL';
-
-  const sel = document.getElementById('inv-cat-filter');
-  if (sel && sel.options.length <= 1) {
-    [...new Set(catalog.map(p => p.cat))].forEach(c => sel.appendChild(new Option(c, c)));
-  }
-
+  const s = getActiveStore();
   const tbody = document.getElementById('inventory-table-tbody');
-  const filtered = catalog.filter(p => {
-    const mc = catFilter === 'ALL' || p.cat === catFilter;
-    const ms = !search || p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search);
-    return mc && ms;
-  });
-
-  tbody.innerHTML = filtered.map(p => `
+  tbody.innerHTML = (s.catalog || []).map(p => `
     <tr>
       <td style="font-family:monospace;font-weight:700">${p.sku}</td>
       <td><strong>${p.name}</strong></td>
@@ -1383,26 +1480,69 @@ function renderInventoryTable() {
 }
 
 function updateStockInline(id, val) {
-  const p = catalog.find(x => x.id === id);
-  if (p) { p.stock = parseInt(val) || 0; persist(); }
+  const s = getActiveStore();
+  const p = (s.catalog || []).find(x => x.id === id);
+  if (p) { p.stock = parseInt(val) || 0; persistSaaS(); }
 }
 
 function deleteItem(id) {
+  const s = getActiveStore();
   if (confirm('Delete item?')) {
-    catalog = catalog.filter(x => x.id !== id);
-    persist();
+    s.catalog = (s.catalog || []).filter(x => x.id !== id);
+    persistSaaS();
     renderInventoryTable();
   }
 }
 
+function openAddProductModal() { openModal('modal-product'); }
+
+function saveNewProduct() {
+  const s = getActiveStore();
+  const name = document.getElementById('np-name').value.trim();
+  const cat = document.getElementById('np-cat').value.trim() || 'General';
+  const price = parseFloat(document.getElementById('np-price').value);
+  if (!name || isNaN(price)) return;
+
+  s.catalog = s.catalog || [];
+  s.catalog.push({
+    id: Date.now(),
+    sku: document.getElementById('np-sku').value.trim() || `SKU-${Date.now().toString().slice(-4)}`,
+    name,
+    cat,
+    variant: document.getElementById('np-variant').value.trim(),
+    price,
+    cost: parseFloat(document.getElementById('np-cost').value) || 0,
+    stock: parseInt(document.getElementById('np-stock').value) || 0,
+    low: 5
+  });
+
+  persistSaaS();
+  closeModal('modal-product');
+  renderInventoryTable();
+  renderPosCatalog();
+}
+
+function exportInventoryCSV() {
+  const s = getActiveStore();
+  const rows = [['SKU', 'Product Name', 'Category', 'Variant', 'Sale Price', 'Cost Price', 'In Stock']];
+  (s.catalog || []).forEach(p => rows.push([p.sku, `"${p.name}"`, `"${p.cat}"`, `"${p.variant||''}"`, p.price, p.cost||0, p.stock]));
+  const csvContent = rows.map(e => e.join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `inventory_${s.id}.csv`;
+  a.click();
+}
+
 function renderDailyZReport() {
+  const s = getActiveStore();
   const tbody = document.getElementById('daily-tx-tbody');
-  tbody.innerHTML = [...transactions].reverse().map(t => `
+  tbody.innerHTML = [...(s.transactions || [])].reverse().map(t => `
     <tr>
       <td><strong>#${String(t.id).padStart(4, '0')}</strong></td>
       <td>${new Date(t.date).toLocaleTimeString()}</td>
       <td>${t.customer}</td>
-      <td>${t.items.reduce((s, i) => s + i.qty, 0)} items</td>
+      <td>${t.items.reduce((sum, i) => sum + i.qty, 0)} items</td>
       <td style="font-weight:800;color:var(--accent-red)">Rs. ${t.total.toLocaleString()}</td>
       <td>Rs. ${t.cash} / ret Rs. ${t.change}</td>
       <td><button class="btn btn-secondary" style="padding:3px 6px;font-size:11px" onclick="reprintTx(${t.id})">🖨 Reprint</button></td>
@@ -1411,56 +1551,179 @@ function renderDailyZReport() {
 }
 
 function reprintTx(id) {
-  const t = transactions.find(x => x.id === id);
+  const s = getActiveStore();
+  const t = (s.transactions || []).find(x => x.id === id);
   if (!t) return;
-  buildReceiptSlip(t);
+  buildReceiptSlip(t, s);
   window.print();
 }
 
 // =========================================================================
-// PRESETS & STORE CONFIG
+// 9. SUPER ADMIN CONSOLE (SaaS Multi-Tenant Management)
 // =========================================================================
-function openStoreConfig() {
-  document.getElementById('cfg-shop-name').value = storeConfig.name;
-  document.getElementById('cfg-shop-city').value = storeConfig.city;
-  document.getElementById('cfg-shop-phone').value = storeConfig.phone;
-  document.getElementById('cfg-shop-curr').value = storeConfig.currency;
+function renderAdminConsole() {
+  document.getElementById('adm-store-count').textContent = multiStoreDB.length;
+  const activeCount = multiStoreDB.filter(s => s.status === 'ACTIVE').length;
+  document.getElementById('adm-active-subs').textContent = activeCount;
+  const totalMRR = multiStoreDB.filter(s => s.status === 'ACTIVE').reduce((sum, s) => sum + (s.fee || 0), 0);
+  document.getElementById('adm-mrr').textContent = `Rs. ${totalMRR.toLocaleString()}`;
+
+  const tbody = document.getElementById('admin-stores-tbody');
+  tbody.innerHTML = multiStoreDB.map(s => `
+    <tr>
+      <td style="font-family:monospace;font-weight:700">${s.id}</td>
+      <td><strong>${s.name}</strong></td>
+      <td><span class="status-tag" style="background:#e0f2fe;color:#0284c7">${s.industry.toUpperCase()}</span></td>
+      <td>${s.city} • ${s.phone}</td>
+      <td>Rs. ${(s.fee||0).toLocaleString()}/mo</td>
+      <td>
+        <span class="status-tag ${s.status === 'ACTIVE' ? 'tag-active' : (s.status === 'TRIAL' ? 'tag-trial' : 'tag-expired')}">${s.status}</span>
+      </td>
+      <td>${s.expiry || '—'}</td>
+      <td>
+        <button class="btn btn-primary" style="padding:4px 8px;font-size:11px" onclick="switchActiveStore('${s.id}'); switchNavTab('home');">⚡ Open</button>
+        <button class="btn btn-secondary" style="padding:4px 8px;font-size:11px" onclick="toggleStoreStatus('${s.id}')">Toggle Plan</button>
+        ${multiStoreDB.length > 1 ? `<button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteStore('${s.id}')">Delete</button>` : ''}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleStoreStatus(id) {
+  const s = multiStoreDB.find(x => x.id === id);
+  if (!s) return;
+  s.status = s.status === 'ACTIVE' ? 'EXPIRED' : 'ACTIVE';
+  persistSaaS();
+  renderAdminConsole();
+}
+
+function deleteStore(id) {
+  if (confirm(`Are you sure you want to delete store "${id}"?`)) {
+    multiStoreDB = multiStoreDB.filter(s => s.id !== id);
+    if (activeStoreId === id) activeStoreId = multiStoreDB[0].id;
+    persistSaaS();
+    renderAdminConsole();
+  }
+}
+
+function openCreateShopModal() {
+  document.getElementById('ns-slug').value = '';
+  document.getElementById('ns-name').value = '';
+  document.getElementById('ns-city').value = '';
+  document.getElementById('ns-phone').value = '';
+  openModal('modal-create-shop');
+}
+
+function saveNewClientShop() {
+  const slug = document.getElementById('ns-slug').value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  const name = document.getElementById('ns-name').value.trim();
+  const city = document.getElementById('ns-city').value.trim();
+  const phone = document.getElementById('ns-phone').value.trim();
+  const industry = document.getElementById('ns-industry').value;
+  const fee = parseFloat(document.getElementById('ns-fee').value) || 2000;
+  const status = document.getElementById('ns-status').value;
+
+  if (!slug || !name) { alert('Store ID and Name are required!'); return; }
+  if (multiStoreDB.some(s => s.id === slug)) { alert('Store ID already exists!'); return; }
+
+  // Industry presets
+  let defaultCatalog = [];
+  let defaultPolicy = "Thank you for your visit!";
+  if (industry === 'shoes') {
+    defaultPolicy = "Exchange within 7 days with original box.";
+    defaultCatalog = [
+      { id: 101, sku: 'SHO-01', name: 'Oxford Formal Leather Shoes', cat: 'Formal Shoes', variant: 'Size 41 | Black', price: 4200, cost: 2600, stock: 15, low: 3 },
+      { id: 102, sku: 'SHO-02', name: 'Air Mesh Sports Sneakers', cat: 'Sports', variant: 'Size 42 | White', price: 3400, cost: 2000, stock: 20, low: 4 }
+    ];
+  } else if (industry === 'grocery') {
+    defaultPolicy = "Goods once sold can be exchanged within 24 hours with receipt.";
+    defaultCatalog = [
+      { id: 201, sku: 'GRO-01', name: 'Cooking Oil 5L Tin', cat: 'Oils', variant: '5 Liters', price: 2650, cost: 2450, stock: 30, low: 5 },
+      { id: 202, sku: 'GRO-02', name: 'Premium Tea Pack', cat: 'Beverages', variant: '900 grams', price: 1450, cost: 1300, stock: 25, low: 4 }
+    ];
+  } else if (industry === 'auto') {
+    defaultPolicy = "No exchange or return on electrical components.";
+    defaultCatalog = [
+      { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
+      { id: 2, sku: 'JSA-EO-001', name: 'Engine Oil 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters Can', price: 3200, cost: 2350, stock: 18, low: 4 }
+    ];
+  }
+
+  const newStore = {
+    id: slug,
+    name,
+    city,
+    phone,
+    currency: "Rs.",
+    industry,
+    fee,
+    status,
+    expiry: "2026-12-31",
+    policy: defaultPolicy,
+    catalog: defaultCatalog,
+    transactions: [],
+    stockLogs: [],
+    vendorBills: [],
+    customerDues: []
+  };
+
+  multiStoreDB.push(newStore);
+  activeStoreId = slug;
+  persistSaaS();
+  closeModal('modal-create-shop');
+  renderAdminConsole();
+  alert(`Store "${name}" provisioned and activated successfully!`);
+}
+
+function openStoreConfigModal() {
+  const s = getActiveStore();
+  document.getElementById('cfg-name').value = s.name;
+  document.getElementById('cfg-city').value = s.city;
+  document.getElementById('cfg-phone').value = s.phone;
+  document.getElementById('cfg-policy').value = s.policy || '';
   openModal('modal-store-config');
 }
 
-function saveStoreConfig() {
-  storeConfig.name = document.getElementById('cfg-shop-name').value.trim() || 'My Shop';
-  storeConfig.city = document.getElementById('cfg-shop-city').value.trim() || 'City';
-  storeConfig.phone = document.getElementById('cfg-shop-phone').value.trim();
-  storeConfig.currency = document.getElementById('cfg-shop-curr').value.trim() || 'Rs.';
-  persist();
+function saveActiveStoreConfig() {
+  const s = getActiveStore();
+  s.name = document.getElementById('cfg-name').value.trim() || s.name;
+  s.city = document.getElementById('cfg-city').value.trim() || s.city;
+  s.phone = document.getElementById('cfg-phone').value.trim();
+  s.policy = document.getElementById('cfg-policy').value.trim();
+  persistSaaS();
   closeModal('modal-store-config');
+  alert('Store profile updated!');
 }
 
-function loadPreset(type) {
-  if (!confirm('Load demo template?')) return;
-  if (type === 'shoes') {
-    storeConfig = { name: "Apex Footwear Hub", city: "Mall Road", phone: "0300-1122334", currency: "Rs." };
-    catalog = [
-      { id: 101, sku: 'SHO-01', name: 'Oxford Formal Leather Shoes', cat: 'Formal Shoes', variant: 'Size 41 | Black', price: 4200, cost: 2600, stock: 15, low: 3 },
-      { id: 102, sku: 'SHO-02', name: 'Air Mesh Sports Sneakers', cat: 'Sports', variant: 'Size 42 | White', price: 3400, cost: 2000, stock: 20, low: 4 },
-      { id: 103, sku: 'SHO-03', name: 'Peshawari Chappal Handcrafted', cat: 'Traditional', variant: 'Size 40 | Brown', price: 2800, cost: 1700, stock: 25, low: 5 }
-    ];
-  } else if (type === 'grocery') {
-    storeConfig = { name: "Al-Madina Super Mart", city: "Commercial Market", phone: "0311-9988776", currency: "Rs." };
-    catalog = [
-      { id: 201, sku: 'GRO-01', name: 'Dalda Cooking Oil 5L Tin', cat: 'Oils', variant: '5 Liters', price: 2650, cost: 2450, stock: 30, low: 5 },
-      { id: 202, sku: 'GRO-02', name: 'Tapal Danedar Family Pack', cat: 'Tea', variant: '900 grams', price: 1450, cost: 1300, stock: 25, low: 4 },
-      { id: 203, sku: 'GRO-03', name: 'Basmati Rice Premium 5kg', cat: 'Rice', variant: '5 kg Bag', price: 1850, cost: 1550, stock: 40, low: 10 }
-    ];
-  } else {
-    storeConfig = { name: "JS Auto Parts", city: "Rawalpindi", phone: "0336-5804080", currency: "Rs." };
-  }
-  persist();
-  renderPosCatalog();
-  alert(`Loaded ${storeConfig.name} profile!`);
+function exportSaaSDatabase() {
+  const blob = new Blob([JSON.stringify(multiStoreDB, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `omnikhata_saas_backup_${Date.now()}.json`;
+  a.click();
 }
 
+function importSaaSDatabase(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (Array.isArray(data)) {
+        multiStoreDB = data;
+        persistSaaS();
+        renderAdminConsole();
+        alert('Platform database restored successfully!');
+      }
+    } catch(err) { alert('Invalid backup file'); }
+  };
+  reader.readAsText(file);
+}
+
+// =========================================================================
+// 10. UTILITIES
+// =========================================================================
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-shade').forEach(m => {
@@ -1468,8 +1731,7 @@ document.querySelectorAll('.modal-shade').forEach(m => {
 });
 
 // INITIAL BOOT
-updateTopHeader();
-updateSidebarStats();
+persistSaaS();
 renderPosCatalog();
 </script>
 </body>
