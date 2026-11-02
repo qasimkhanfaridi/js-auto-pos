@@ -23,7 +23,7 @@
     background: var(--bg-page); color: #0f172a; font-size: 13.5px;
   }
 
-  /* AUTH SCREENS OVERLAY (LOGIN / REGISTER) */
+  /* AUTH SCREENS OVERLAY (LOGIN / REGISTER) - ALWAYS VISIBLE INITIALLY */
   .auth-overlay {
     position: fixed; inset: 0; background: #0f172a; z-index: 9999;
     display: flex; align-items: center; justify-content: center;
@@ -90,7 +90,7 @@
   .role-tag {
     font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 8px; text-transform: uppercase;
   }
-  .role-super { background: #fef08a; color: #854d0e; }
+  .role-superadmin { background: #fef08a; color: #854d0e; }
   .role-owner { background: #bae6fd; color: #0369a1; }
   .role-cashier { background: #dcfce7; color: #15803d; }
   .role-manager { background: #f3e8ff; color: #6b21a8; }
@@ -292,7 +292,7 @@
 <body>
 
 <!-- ========================================================================= -->
-<!-- 0. AUTH OVERLAY: LOGIN & CLIENT REGISTRATION                             -->
+<!-- 0. AUTH OVERLAY: LOGIN & CLIENT REGISTRATION (SHOWN ON STARTUP)          -->
 <!-- ========================================================================= -->
 <div class="auth-overlay" id="auth-screen">
   <div class="auth-box">
@@ -311,7 +311,7 @@
     <div id="auth-form-login">
       <div class="auth-input-group">
         <label>Username or Email</label>
-        <input type="text" id="login-username" placeholder="e.g. admin or jsauto_owner">
+        <input type="text" id="login-username" placeholder="e.g. admin or jsauto or cashier1">
       </div>
       <div class="auth-input-group">
         <label>Password</label>
@@ -322,10 +322,10 @@
       </button>
 
       <div class="quick-demo-accounts">
-        <div style="font-weight:700;margin-bottom:4px">💡 Demo Credentials:</div>
-        <div>• <strong>admin</strong> / <strong>admin123</strong> (👑 Super Admin)</div>
-        <div>• <strong>jsauto</strong> / <strong>123456</strong> (🏪 Store Owner)</div>
-        <div>• <strong>cashier1</strong> / <strong>123456</strong> (💳 Counter Cashier)</div>
+        <div style="font-weight:700;margin-bottom:4px">💡 Demo Credentials (Preloaded):</div>
+        <div>• <strong>admin</strong> / <strong>admin123</strong> ➔ Opens 👑 <strong>Super Admin Console</strong></div>
+        <div>• <strong>jsauto</strong> / <strong>123456</strong> ➔ Opens 🏪 <strong>JS Auto Parts (Owner)</strong></div>
+        <div>• <strong>cashier1</strong> / <strong>123456</strong> ➔ Opens 💳 <strong>Counter POS (Cashier)</strong></div>
       </div>
     </div>
 
@@ -372,7 +372,7 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- 1. TOP HEADER (Logged In State)                                           -->
+<!-- 1. TOP HEADER (Visible Only After Successful Login)                       -->
 <!-- ========================================================================= -->
 <div class="topbar">
   <div class="brand-area">
@@ -383,17 +383,17 @@
     </div>
   </div>
 
-  <!-- User Profile Badge & Logout -->
+  <!-- User Profile Badge & Logout Button -->
   <div class="user-badge-wrap">
     <div class="user-profile-pill">
       <span>👤 <strong id="top-user-display">User</strong></span>
       <span class="role-tag role-owner" id="top-role-badge">Owner</span>
     </div>
-    <button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="performLogout()">Logout</button>
+    <button class="btn btn-danger" style="padding:5px 12px;font-size:11px" onclick="performLogout()">Logout</button>
   </div>
 </div>
 
-<!-- 2. NAVIGATION TABS (Permission Filtered) -->
+<!-- 2. NAVIGATION TABS (Strictly Filtered by User Role) -->
 <div class="nav-tabs" id="main-nav-tabs">
   <div class="tab-link active" id="nav-tab-home" onclick="switchNavTab('home')">🏠 Home Workflow</div>
   <div class="tab-link" id="nav-tab-billing" onclick="switchNavTab('billing')">🧾 Counter Billing (POS)</div>
@@ -407,7 +407,7 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 1: HOME WORKFLOW (QuickBooks Style)                                 -->
+<!-- VIEW 1: HOME WORKFLOW (For Store Owners & Managers)                      -->
 <!-- ========================================================================= -->
 <div id="view-home" class="view-container">
   <div class="dashboard-grid">
@@ -544,7 +544,7 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 2: COUNTER BILLING (POS)                                             -->
+<!-- VIEW 2: COUNTER BILLING (POS - Default for Cashiers)                     -->
 <!-- ========================================================================= -->
 <div id="view-billing" class="hidden">
   <div class="pos-main-layout">
@@ -757,7 +757,7 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 9: SUPER ADMIN CONSOLE                                              -->
+<!-- VIEW 9: SUPER ADMIN CONSOLE (Default for admin / admin123)               -->
 <!-- ========================================================================= -->
 <div id="view-admin" class="hidden view-container">
   <div class="admin-metric-grid">
@@ -805,18 +805,9 @@
 <div class="modal-shade" id="modal-add-staff">
   <div class="modal-box">
     <h2>👥 Add New Staff Member</h2>
-    <div class="m-row">
-      <label>Full Name *</label>
-      <input type="text" id="staff-name" placeholder="e.g. Ali Ahmed">
-    </div>
-    <div class="m-row">
-      <label>Username *</label>
-      <input type="text" id="staff-username" placeholder="ali_cashier">
-    </div>
-    <div class="m-row">
-      <label>Password *</label>
-      <input type="password" id="staff-password" placeholder="••••••••">
-    </div>
+    <div class="m-row"><label>Full Name *</label><input type="text" id="staff-name" placeholder="e.g. Ali Ahmed"></div>
+    <div class="m-row"><label>Username *</label><input type="text" id="staff-username" placeholder="ali_cashier"></div>
+    <div class="m-row"><label>Password *</label><input type="password" id="staff-password" placeholder="••••••••"></div>
     <div class="m-row">
       <label>Role / Permissions *</label>
       <select id="staff-role">
@@ -836,14 +827,8 @@
 <div class="modal-shade" id="modal-create-shop">
   <div class="modal-box">
     <h2>🏪 Provision New Client Shop</h2>
-    <div class="m-row">
-      <label>Store ID / Slug *</label>
-      <input type="text" id="ns-slug" placeholder="e.g. apex-shoes">
-    </div>
-    <div class="m-row">
-      <label>Shop / Business Name *</label>
-      <input type="text" id="ns-name" placeholder="e.g. Apex Footwear">
-    </div>
+    <div class="m-row"><label>Store ID / Slug *</label><input type="text" id="ns-slug" placeholder="e.g. apex-shoes"></div>
+    <div class="m-row"><label>Shop / Business Name *</label><input type="text" id="ns-name" placeholder="e.g. Apex Footwear"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row">
         <label>Industry Template *</label>
@@ -854,20 +839,11 @@
           <option value="general">🏬 General Retail</option>
         </select>
       </div>
-      <div class="m-row">
-        <label>Monthly Fee (Rs.)</label>
-        <input type="number" id="ns-fee" value="2500">
-      </div>
+      <div class="m-row"><label>Monthly Fee (Rs.)</label><input type="number" id="ns-fee" value="2500"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="m-row">
-        <label>Initial Owner Username *</label>
-        <input type="text" id="ns-owner-user" placeholder="owner_user">
-      </div>
-      <div class="m-row">
-        <label>Initial Password *</label>
-        <input type="password" id="ns-owner-pass" placeholder="••••••••">
-      </div>
+      <div class="m-row"><label>Initial Owner Username *</label><input type="text" id="ns-owner-user" placeholder="owner_user"></div>
+      <div class="m-row"><label>Initial Password *</label><input type="password" id="ns-owner-pass" placeholder="••••••••"></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-create-shop')">Cancel</button>
@@ -880,14 +856,8 @@
 <div class="modal-shade" id="modal-receive-stock">
   <div class="modal-box">
     <h2>📦 Receive Stock (GRN)</h2>
-    <div class="m-row">
-      <label>Product to Restock *</label>
-      <select id="rs-product-select"></select>
-    </div>
-    <div class="m-row">
-      <label>Supplier / Vendor Name *</label>
-      <input type="text" id="rs-vendor-name" placeholder="Distributor Name">
-    </div>
+    <div class="m-row"><label>Product to Restock *</label><select id="rs-product-select"></select></div>
+    <div class="m-row"><label>Supplier / Vendor Name *</label><input type="text" id="rs-vendor-name" placeholder="Distributor Name"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row"><label>Quantity *</label><input type="number" id="rs-qty" value="10" min="1"></div>
       <div class="m-row"><label>Cost Per Unit (Rs.) *</label><input type="number" id="rs-cost" placeholder="0"></div>
@@ -1007,7 +977,9 @@ const INITIAL_STORES = [
 
 let usersDB = JSON.parse(localStorage.getItem('omni_users_db')) || INITIAL_USERS;
 let multiStoreDB = JSON.parse(localStorage.getItem('omni_multi_stores')) || INITIAL_STORES;
-let currentSessionUser = JSON.parse(localStorage.getItem('omni_session_user')) || null;
+
+// *** CRITICAL REQUIREMENT: BY DEFAULT IT SHOULD BE LOGGED OUT ***
+let currentSessionUser = null; 
 
 let cart = [];
 let currentPosCat = 'ALL';
@@ -1016,7 +988,6 @@ let posSearch = '';
 function persist() {
   localStorage.setItem('omni_users_db', JSON.stringify(usersDB));
   localStorage.setItem('omni_multi_stores', JSON.stringify(multiStoreDB));
-  localStorage.setItem('omni_session_user', JSON.stringify(currentSessionUser));
 }
 
 function getActiveStore() {
@@ -1029,18 +1000,28 @@ function getActiveStore() {
 }
 
 // =========================================================================
-// 2. AUTHENTICATION & ACCESS CONTROL
+// 2. AUTHENTICATION & ROLE-BASED VIEW DECISION
 // =========================================================================
 function checkAuthStatus() {
   const authScreen = document.getElementById('auth-screen');
   if (!currentSessionUser) {
+    // Show login modal over everything by default
     authScreen.style.display = 'flex';
   } else {
+    // Hide login modal
     authScreen.style.display = 'none';
     setupUserPermissionsUI();
     renderTopHeader();
     updateSidebarStats();
-    switchNavTab('home');
+
+    // *** ROLE DECIDES THE DEFAULT VIEW ***
+    if (currentSessionUser.role === 'superadmin') {
+      switchNavTab('admin'); // Super admin goes straight to Super Admin Console
+    } else if (currentSessionUser.role === 'cashier') {
+      switchNavTab('billing'); // Cashier goes straight to Counter Billing
+    } else {
+      switchNavTab('home'); // Store Owners & Managers go to QuickBooks Home Workflow
+    }
   }
 }
 
@@ -1062,7 +1043,6 @@ function attemptLogin() {
   }
 
   currentSessionUser = found;
-  persist();
   checkAuthStatus();
 }
 
@@ -1086,7 +1066,6 @@ function attemptSelfRegister() {
 
   const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-3);
 
-  // 1. Create Store
   const newStore = {
     id: slug,
     name,
@@ -1098,7 +1077,7 @@ function attemptSelfRegister() {
     status: 'TRIAL',
     policy: 'Goods once sold can be exchanged within 24 hours with receipt.',
     catalog: [
-      { id: Date.now(), sku: 'GEN-01', name: 'Sample Item', cat: 'General', variant: 'Standard', price: 1000, cost: 700, stock: 20, low: 5 }
+      { id: Date.now(), sku: 'GEN-01', name: 'Starter Product', cat: 'General', variant: 'Standard', price: 1000, cost: 700, stock: 20, low: 5 }
     ],
     transactions: [],
     stockLogs: [],
@@ -1107,7 +1086,6 @@ function attemptSelfRegister() {
   };
   multiStoreDB.push(newStore);
 
-  // 2. Create Owner User
   const newUser = {
     id: 'usr-' + Date.now(),
     username,
@@ -1120,13 +1098,14 @@ function attemptSelfRegister() {
 
   currentSessionUser = newUser;
   persist();
-  alert(`Congratulations! Shop "${name}" registered successfully with 7-Day Free Trial.`);
+  alert(`Congratulations! Shop "${name}" registered successfully.`);
   checkAuthStatus();
 }
 
 function performLogout() {
   currentSessionUser = null;
-  persist();
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
   checkAuthStatus();
 }
 
@@ -1149,12 +1128,12 @@ function setupUserPermissionsUI() {
 
 function renderTopHeader() {
   const s = getActiveStore();
-  document.getElementById('top-store-label').textContent = `Store: ${s.name} (${s.city})`;
+  document.getElementById('top-store-label').textContent = currentSessionUser.role === 'superadmin' ? 'Master Admin Mode' : `Store: ${s.name} (${s.city})`;
   document.title = `${s.name} — OmniKhata POS`;
 }
 
 // =========================================================================
-// 3. STAFF & SUB-USER MANAGEMENT (Multiple users per client)
+// 3. STAFF & SUB-USER MANAGEMENT
 // =========================================================================
 function renderStaffTable() {
   const s = getActiveStore();
@@ -1233,7 +1212,6 @@ function renderAdminConsole() {
 
   const tbody = document.getElementById('admin-stores-tbody');
   tbody.innerHTML = multiStoreDB.map(s => {
-    const ownerUser = usersDB.find(u => u.storeId === s.id && u.role === 'owner');
     return `
       <tr>
         <td style="font-family:monospace;font-weight:700">${s.id}</td>
@@ -1845,7 +1823,7 @@ function reprintTx(id) {
 }
 
 // =========================================================================
-// 7. UTILITIES & BOOT
+// 7. UTILITIES & INITIAL BOOT
 // =========================================================================
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -1853,7 +1831,7 @@ document.querySelectorAll('.modal-shade').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
 });
 
-// INITIAL AUTH RUN
+// STARTUP: ALWAYS SHOW LOGIN SCREEN BY DEFAULT
 checkAuthStatus();
 </script>
 </body>
