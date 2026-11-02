@@ -23,6 +23,47 @@
     background: var(--bg-page); color: #0f172a; font-size: 13.5px;
   }
 
+  /* AUTH SCREENS OVERLAY (LOGIN / REGISTER) */
+  .auth-overlay {
+    position: fixed; inset: 0; background: #0f172a; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .auth-box {
+    background: white; border-radius: 14px; width: 100%; max-width: 440px;
+    padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .auth-header { text-align: center; margin-bottom: 22px; }
+  .auth-header .logo {
+    width: 44px; height: 44px; border-radius: 10px; margin: 0 auto 10px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white; font-size: 22px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .auth-header h2 { font-size: 20px; font-weight: 800; color: #0f172a; }
+  .auth-header p { font-size: 12.5px; color: #64748b; margin-top: 3px; }
+
+  .auth-tabs { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 18px; }
+  .auth-tab {
+    flex: 1; text-align: center; padding: 9px; cursor: pointer; font-weight: 700;
+    font-size: 13.5px; color: #64748b; border-bottom: 2px solid transparent; margin-bottom: -2px;
+  }
+  .auth-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .auth-input-group { margin-bottom: 14px; }
+  .auth-input-group label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; }
+  .auth-input-group input, .auth-input-group select {
+    width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px;
+    font-size: 13.5px; outline: none;
+  }
+  .auth-input-group input:focus, .auth-input-group select:focus { border-color: var(--accent); }
+
+  .quick-demo-accounts {
+    background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;
+    padding: 10px 12px; margin-top: 14px; font-size: 11.5px; color: #475569;
+  }
+  .quick-demo-accounts strong { color: #0f172a; }
+
   /* TOP MASTER APP BAR */
   .topbar {
     background: var(--primary); color: white; height: 56px;
@@ -39,27 +80,20 @@
   .app-name { font-size: 17px; font-weight: 800; }
   .app-name span { color: #60a5fa; }
 
-  /* STORE CONTEXT SWITCHER */
-  .store-select-wrap {
-    display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08);
-    padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+  .user-badge-wrap {
+    display: flex; align-items: center; gap: 12px;
   }
-  .store-select-wrap select {
-    background: transparent; color: white; border: none; font-size: 13px;
-    font-weight: 700; outline: none; cursor: pointer;
+  .user-profile-pill {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 8px;
   }
-  .store-select-wrap select option { background: #1e293b; color: white; }
-  .status-tag {
-    font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px;
-    text-transform: uppercase;
+  .role-tag {
+    font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 8px; text-transform: uppercase;
   }
-  .tag-active { background: #dcfce7; color: #15803d; }
-  .tag-trial { background: #fef3c7; color: #b45309; }
-  .tag-expired { background: #fee2e2; color: #b91c1c; }
-
-  .time-info { text-align: right; }
-  .time-info .time { font-size: 17px; font-weight: 800; color: #f59e0b; }
-  .time-info .date { font-size: 11px; color: #94a3b8; }
+  .role-super { background: #fef08a; color: #854d0e; }
+  .role-owner { background: #bae6fd; color: #0369a1; }
+  .role-cashier { background: #dcfce7; color: #15803d; }
+  .role-manager { background: #f3e8ff; color: #6b21a8; }
 
   /* NAVIGATION TABS */
   .nav-tabs {
@@ -244,13 +278,6 @@
   }
   .m-row input:focus, .m-row select:focus { border-color: var(--accent); }
 
-  /* SUBSCRIPTION LOCK SCREEN */
-  .locked-banner {
-    background: #fee2e2; border: 2px solid #ef4444; color: #991b1b;
-    padding: 16px 20px; border-radius: 10px; margin-bottom: 16px;
-    display: none; align-items: center; justify-content: space-between;
-  }
-
   /* THERMAL RECEIPT PRINT */
   @media print {
     body * { visibility: hidden; }
@@ -264,54 +291,125 @@
 </head>
 <body>
 
-<!-- 1. TOP APP BAR (SaaS Header) -->
+<!-- ========================================================================= -->
+<!-- 0. AUTH OVERLAY: LOGIN & CLIENT REGISTRATION                             -->
+<!-- ========================================================================= -->
+<div class="auth-overlay" id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-header">
+      <div class="logo">Ω</div>
+      <h2>OmniKhata POS Cloud</h2>
+      <p>Multi-Store Retail & Counter Management</p>
+    </div>
+
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-btn-login" onclick="switchAuthMode('login')">🔑 Sign In</div>
+      <div class="auth-tab" id="tab-btn-register" onclick="switchAuthMode('register')">🏪 Register Shop</div>
+    </div>
+
+    <!-- FORM: SIGN IN -->
+    <div id="auth-form-login">
+      <div class="auth-input-group">
+        <label>Username or Email</label>
+        <input type="text" id="login-username" placeholder="e.g. admin or jsauto_owner">
+      </div>
+      <div class="auth-input-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:11px;font-size:14px" onclick="attemptLogin()">
+        🚀 Login to Counter
+      </button>
+
+      <div class="quick-demo-accounts">
+        <div style="font-weight:700;margin-bottom:4px">💡 Demo Credentials:</div>
+        <div>• <strong>admin</strong> / <strong>admin123</strong> (👑 Super Admin)</div>
+        <div>• <strong>jsauto</strong> / <strong>123456</strong> (🏪 Store Owner)</div>
+        <div>• <strong>cashier1</strong> / <strong>123456</strong> (💳 Counter Cashier)</div>
+      </div>
+    </div>
+
+    <!-- FORM: SELF REGISTER SHOP -->
+    <div id="auth-form-register" class="hidden">
+      <div class="auth-input-group">
+        <label>Shop / Business Name *</label>
+        <input type="text" id="reg-shop-name" placeholder="e.g. Al-Madina Super Mart">
+      </div>
+      <div class="auth-input-group">
+        <label>Industry Template *</label>
+        <select id="reg-industry">
+          <option value="auto">🚗 Auto Spare Parts & Oils</option>
+          <option value="shoes">👞 Footwear & Shoe Shop</option>
+          <option value="grocery">🛒 Grocery & Supermarket</option>
+          <option value="general">🏬 General Retail</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="auth-input-group">
+          <label>City *</label>
+          <input type="text" id="reg-city" placeholder="Rawalpindi">
+        </div>
+        <div class="auth-input-group">
+          <label>Phone *</label>
+          <input type="text" id="reg-phone" placeholder="0300-XXXXXXX">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="auth-input-group">
+          <label>Create Username *</label>
+          <input type="text" id="reg-username" placeholder="myusername">
+        </div>
+        <div class="auth-input-group">
+          <label>Create Password *</label>
+          <input type="password" id="reg-password" placeholder="••••••••">
+        </div>
+      </div>
+      <button class="btn btn-success" style="width:100%;padding:11px;font-size:14px;margin-top:6px" onclick="attemptSelfRegister()">
+        ✨ Register & Start 7-Day Free Trial
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 1. TOP HEADER (Logged In State)                                           -->
+<!-- ========================================================================= -->
 <div class="topbar">
   <div class="brand-area">
     <div class="logo-box">Ω</div>
     <div>
-      <div class="app-name">OmniKhata <span>SaaS POS</span></div>
-      <div style="font-size:11px;color:#94a3b8">Cloud Retail & Multi-Shop Manager</div>
+      <div class="app-name">OmniKhata <span>POS</span></div>
+      <div style="font-size:11px;color:#94a3b8" id="top-store-label">Store: ---</div>
     </div>
   </div>
 
-  <!-- Active Shop Switcher -->
-  <div class="store-select-wrap">
-    <span>🏪</span>
-    <select id="active-store-dropdown" onchange="switchActiveStore(this.value)"></select>
-    <span class="status-tag tag-active" id="active-store-badge">Active</span>
-  </div>
-
-  <div class="time-info">
-    <div class="time" id="live-time">--:--:--</div>
-    <div class="date" id="live-date">---</div>
+  <!-- User Profile Badge & Logout -->
+  <div class="user-badge-wrap">
+    <div class="user-profile-pill">
+      <span>👤 <strong id="top-user-display">User</strong></span>
+      <span class="role-tag role-owner" id="top-role-badge">Owner</span>
+    </div>
+    <button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="performLogout()">Logout</button>
   </div>
 </div>
 
-<!-- 2. NAVIGATION BAR -->
-<div class="nav-tabs">
-  <div class="tab-link active" onclick="switchNavTab('home')">🏠 Home Workflow</div>
-  <div class="tab-link" onclick="switchNavTab('billing')">🧾 Counter Billing (POS)</div>
-  <div class="tab-link" onclick="switchNavTab('cust-pay')">💳 Customer Pay Bills (Udhaar)</div>
-  <div class="tab-link" onclick="switchNavTab('stock-rec')">📦 Receive Stock (GRN)</div>
-  <div class="tab-link" onclick="switchNavTab('stock-pay')">💸 Stock Pay Bills (Vendors)</div>
-  <div class="tab-link" onclick="switchNavTab('inventory')">📊 Inventory & Catalog</div>
-  <div class="tab-link" onclick="switchNavTab('summary')">📋 Daily Z-Report</div>
-  <div class="tab-link admin-tab" onclick="switchNavTab('admin')">👑 Super Admin Console</div>
+<!-- 2. NAVIGATION TABS (Permission Filtered) -->
+<div class="nav-tabs" id="main-nav-tabs">
+  <div class="tab-link active" id="nav-tab-home" onclick="switchNavTab('home')">🏠 Home Workflow</div>
+  <div class="tab-link" id="nav-tab-billing" onclick="switchNavTab('billing')">🧾 Counter Billing (POS)</div>
+  <div class="tab-link" id="nav-tab-cust-pay" onclick="switchNavTab('cust-pay')">💳 Customer Pay Bills (Udhaar)</div>
+  <div class="tab-link" id="nav-tab-stock-rec" onclick="switchNavTab('stock-rec')">📦 Receive Stock (GRN)</div>
+  <div class="tab-link" id="nav-tab-stock-pay" onclick="switchNavTab('stock-pay')">💸 Stock Pay Bills (Vendors)</div>
+  <div class="tab-link" id="nav-tab-inventory" onclick="switchNavTab('inventory')">📊 Inventory & Catalog</div>
+  <div class="tab-link" id="nav-tab-summary" onclick="switchNavTab('summary')">📋 Daily Z-Report</div>
+  <div class="tab-link" id="nav-tab-staff" onclick="switchNavTab('staff')">👥 Staff & Users</div>
+  <div class="tab-link admin-tab" id="nav-tab-admin" onclick="switchNavTab('admin')">👑 Super Admin Console</div>
 </div>
 
 <!-- ========================================================================= -->
 <!-- VIEW 1: HOME WORKFLOW (QuickBooks Style)                                 -->
 <!-- ========================================================================= -->
 <div id="view-home" class="view-container">
-  <!-- License Expiry Alert if needed -->
-  <div class="locked-banner" id="license-alert-banner">
-    <div>
-      <strong>⚠️ Subscription Renewal Notice:</strong>
-      <span id="license-alert-msg">This shop license will expire soon. Please contact Super Admin.</span>
-    </div>
-    <button class="btn btn-danger" onclick="switchNavTab('admin')">Manage Plan</button>
-  </div>
-
   <div class="dashboard-grid">
     <div>
       <!-- VENDORS LANE -->
@@ -321,7 +419,7 @@
           <div class="flow-node" onclick="openReceiveStockModal()">
             <div class="node-icon">📦</div>
             <div class="node-title">Receive Stock</div>
-            <div style="font-size:11px;color:#64748b">Add To Inventory</div>
+            <div style="font-size:11px;color:#64748b">Inward Items</div>
             <span class="node-badge badge-blue">Action 1</span>
           </div>
 
@@ -398,11 +496,11 @@
 
           <div class="flow-arrow">➔</div>
 
-          <div class="flow-node" onclick="openStoreConfigModal()">
-            <div class="node-icon">⚙️</div>
-            <div class="node-title">Store Settings</div>
-            <div style="font-size:11px;color:#64748b">Receipts & Slips</div>
-            <span class="node-badge badge-green">Configure</span>
+          <div class="flow-node" onclick="switchNavTab('staff')">
+            <div class="node-icon">👥</div>
+            <div class="node-title">Manage Staff</div>
+            <div style="font-size:11px;color:#64748b">Cashiers & Roles</div>
+            <span class="node-badge badge-green">Permissions</span>
           </div>
         </div>
       </div>
@@ -440,14 +538,6 @@
           <span style="color:#64748b">Customer Receivables:</span>
           <span class="val" style="color:var(--accent-gold)" id="side-cust-receivables">Rs. 0</span>
         </div>
-      </div>
-
-      <div class="side-card" style="background:#f8fafc">
-        <h4>👑 Multi-Shop SaaS</h4>
-        <p style="font-size:12px;color:#64748b;margin-bottom:10px">
-          Manage, create, or lock client shops from the central console.
-        </p>
-        <button class="btn btn-dark" style="width:100%" onclick="switchNavTab('admin')">Go To Admin Console</button>
       </div>
     </div>
   </div>
@@ -639,7 +729,35 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- VIEW 8: SUPER ADMIN CONSOLE (MULTI-SHOP SAAS MANAGER)                     -->
+<!-- VIEW 8: STAFF & USERS (Role-Based Access for Client Shop)                -->
+<!-- ========================================================================= -->
+<div id="view-staff" class="hidden view-container">
+  <div class="panel-box">
+    <h3>
+      <span>👥 Store Staff & User Accounts</span>
+      <button class="btn btn-success" onclick="openAddStaffModal()">➕ Add New Staff Member</button>
+    </h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
+      Create logins for your counter cashiers, sales boys, or branch managers with limited permissions.
+    </p>
+
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Username</th>
+          <th>Assigned Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="staff-table-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- VIEW 9: SUPER ADMIN CONSOLE                                              -->
 <!-- ========================================================================= -->
 <div id="view-admin" class="hidden view-container">
   <div class="admin-metric-grid">
@@ -648,7 +766,7 @@
       <div class="val" id="adm-store-count">0</div>
     </div>
     <div class="admin-metric green">
-      <div class="lbl">Active Paid Subscriptions</div>
+      <div class="lbl">Active Subscriptions</div>
       <div class="val" id="adm-active-subs" style="color:var(--accent-green)">0</div>
     </div>
     <div class="admin-metric gold">
@@ -662,37 +780,20 @@
       <span>👑 Registered Client Shops & Licensing Control</span>
       <button class="btn btn-success" onclick="openCreateShopModal()">➕ Add New Client Shop</button>
     </h3>
-    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
-      Super Admin can deploy new shops, adjust monthly subscription fees, and lock/unlock access remotely.
-    </p>
-
     <table class="nice-table">
       <thead>
         <tr>
-          <th>Shop ID / Slug</th>
+          <th>Store ID</th>
           <th>Store Name</th>
           <th>Industry</th>
           <th>City / Phone</th>
           <th>Monthly Fee</th>
-          <th>Plan & Status</th>
-          <th>License Valid Till</th>
+          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody id="admin-stores-tbody"></tbody>
     </table>
-  </div>
-
-  <div class="panel-box">
-    <h3>💾 Platform Cloud Data Backup</h3>
-    <p style="font-size:12.5px;color:#64748b;margin-bottom:12px">
-      Export all client shops, inventory databases, and transaction ledgers in a single encrypted backup file.
-    </p>
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-dark" onclick="exportSaaSDatabase()">⬇ Export Full Database (JSON)</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('import-saas-file').click()">⬆ Restore Database (JSON)</button>
-      <input type="file" id="import-saas-file" style="display:none" accept=".json" onchange="importSaaSDatabase(event)">
-    </div>
   </div>
 </div>
 
@@ -700,17 +801,48 @@
 <!-- MODALS                                                                    -->
 <!-- ========================================================================= -->
 
-<!-- 1. CREATE NEW CLIENT SHOP (SUPER ADMIN) -->
+<!-- 1. ADD STAFF USER MODAL -->
+<div class="modal-shade" id="modal-add-staff">
+  <div class="modal-box">
+    <h2>👥 Add New Staff Member</h2>
+    <div class="m-row">
+      <label>Full Name *</label>
+      <input type="text" id="staff-name" placeholder="e.g. Ali Ahmed">
+    </div>
+    <div class="m-row">
+      <label>Username *</label>
+      <input type="text" id="staff-username" placeholder="ali_cashier">
+    </div>
+    <div class="m-row">
+      <label>Password *</label>
+      <input type="password" id="staff-password" placeholder="••••••••">
+    </div>
+    <div class="m-row">
+      <label>Role / Permissions *</label>
+      <select id="staff-role">
+        <option value="cashier">Cashier (Only Counter Billing & Receive Cash)</option>
+        <option value="manager">Manager (Billing, Stock Receive & Inventory)</option>
+        <option value="owner">Co-Owner (Full Store Access)</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-add-staff')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveNewStaff()">Create Staff Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. CREATE CLIENT SHOP (SUPER ADMIN) -->
 <div class="modal-shade" id="modal-create-shop">
   <div class="modal-box">
     <h2>🏪 Provision New Client Shop</h2>
     <div class="m-row">
-      <label>Store ID / Slug (Unique, e.g. apex-shoes) *</label>
-      <input type="text" id="ns-slug" placeholder="e.g. apex-shoes or madina-mart">
+      <label>Store ID / Slug *</label>
+      <input type="text" id="ns-slug" placeholder="e.g. apex-shoes">
     </div>
     <div class="m-row">
       <label>Shop / Business Name *</label>
-      <input type="text" id="ns-name" placeholder="e.g. Apex Footwear Hub">
+      <input type="text" id="ns-name" placeholder="e.g. Apex Footwear">
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row">
@@ -723,57 +855,23 @@
         </select>
       </div>
       <div class="m-row">
-        <label>Monthly Subscription Fee (Rs.)</label>
+        <label>Monthly Fee (Rs.)</label>
         <input type="number" id="ns-fee" value="2500">
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row">
-        <label>City / Location *</label>
-        <input type="text" id="ns-city" placeholder="Rawalpindi">
+        <label>Initial Owner Username *</label>
+        <input type="text" id="ns-owner-user" placeholder="owner_user">
       </div>
       <div class="m-row">
-        <label>Owner Phone / WhatsApp *</label>
-        <input type="text" id="ns-phone" placeholder="0300-1234567">
+        <label>Initial Password *</label>
+        <input type="password" id="ns-owner-pass" placeholder="••••••••">
       </div>
-    </div>
-    <div class="m-row">
-      <label>Plan Status</label>
-      <select id="ns-status">
-        <option value="ACTIVE">Paid / Active (30 Days)</option>
-        <option value="TRIAL">Free Trial (7 Days)</option>
-      </select>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-create-shop')">Cancel</button>
-      <button class="btn btn-primary" style="flex:2" onclick="saveNewClientShop()">🚀 Provision & Launch Store</button>
-    </div>
-  </div>
-</div>
-
-<!-- 2. STORE CONFIG MODAL -->
-<div class="modal-shade" id="modal-store-config">
-  <div class="modal-box">
-    <h2>⚙️ Store Profile Configuration</h2>
-    <div class="m-row">
-      <label>Store Name *</label>
-      <input type="text" id="cfg-name">
-    </div>
-    <div class="m-row">
-      <label>Tagline / Location *</label>
-      <input type="text" id="cfg-city">
-    </div>
-    <div class="m-row">
-      <label>Phone / WhatsApp *</label>
-      <input type="text" id="cfg-phone">
-    </div>
-    <div class="m-row">
-      <label>Thermal Receipt Footer Note</label>
-      <textarea id="cfg-policy" rows="2"></textarea>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-store-config')">Cancel</button>
-      <button class="btn btn-primary" style="flex:2" onclick="saveActiveStoreConfig()">Save Changes</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveNewClientShopByAdmin()">🚀 Provision Store</button>
     </div>
   </div>
 </div>
@@ -791,14 +889,8 @@
       <input type="text" id="rs-vendor-name" placeholder="Distributor Name">
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="m-row">
-        <label>Quantity *</label>
-        <input type="number" id="rs-qty" value="10" min="1">
-      </div>
-      <div class="m-row">
-        <label>Cost Per Unit (Rs.) *</label>
-        <input type="number" id="rs-cost" placeholder="0">
-      </div>
+      <div class="m-row"><label>Quantity *</label><input type="number" id="rs-qty" value="10" min="1"></div>
+      <div class="m-row"><label>Cost Per Unit (Rs.) *</label><input type="number" id="rs-cost" placeholder="0"></div>
     </div>
     <div class="m-row">
       <label>Payment Method</label>
@@ -876,13 +968,19 @@
   </div>
 </div>
 
-<!-- THERMAL RECEIPT CONTAINER -->
+<!-- THERMAL RECEIPT SLIP -->
 <div id="thermal-slip"></div>
 
 <script>
 // =========================================================================
-// 1. MULTI-STORE DATABASE (SaaS Architecture)
+// 1. DATA REPOSITORIES: USERS & STORES
 // =========================================================================
+
+const INITIAL_USERS = [
+  { id: 'usr-admin', username: 'admin', pass: 'admin123', name: 'Master Admin', role: 'superadmin', storeId: null },
+  { id: 'usr-js-owner', username: 'jsauto', pass: '123456', name: 'JS Auto Owner', role: 'owner', storeId: 'js-auto' },
+  { id: 'usr-js-cashier', username: 'cashier1', pass: '123456', name: 'Counter Cashier', role: 'cashier', storeId: 'js-auto' }
+];
 
 const INITIAL_STORES = [
   {
@@ -894,60 +992,11 @@ const INITIAL_STORES = [
     industry: "auto",
     fee: 2500,
     status: "ACTIVE",
-    expiry: "2026-12-31",
     policy: "No exchange or return after 24 hours. Electrical items non-returnable.",
     catalog: [
       { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
       { id: 2, sku: 'JSA-OF-002', name: 'Sakura Oil Filter C-1005', cat: 'Oil Filters', variant: 'Civic / City', price: 380, cost: 270, stock: 25, low: 10 },
-      { id: 3, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 },
-      { id: 4, sku: 'JSA-CO-001', name: 'Toyota Coolant Ready-Mix', cat: 'Coolants', variant: '1 Liter Can', price: 1200, cost: 850, stock: 22, low: 6 }
-    ],
-    transactions: [],
-    stockLogs: [
-      { id: 1, date: new Date().toLocaleDateString(), vendor: 'Sakura Distributor', item: 'Sakura Oil Filter C-1004', qty: 20, cost: 250, total: 5000, type: 'PAID' }
-    ],
-    vendorBills: [
-      { id: 1, vendor: 'Castrol Regional Hub', invoice: 'INV-4011', date: new Date().toLocaleDateString(), amount: 15000, paid: 5000, balance: 10000 }
-    ],
-    customerDues: [
-      { id: 1, name: 'Malik Auto Workshop', phone: '0300-5544332', ref: 'CREDIT-101', total: 6800, balance: 3500 }
-    ]
-  },
-  {
-    id: "apex-shoes",
-    name: "Apex Footwear Hub",
-    city: "Mall Road",
-    phone: "0300-1122334",
-    currency: "Rs.",
-    industry: "shoes",
-    fee: 3000,
-    status: "ACTIVE",
-    expiry: "2026-11-30",
-    policy: "Exchange allowed within 7 days with original box and invoice.",
-    catalog: [
-      { id: 101, sku: 'SHO-01', name: 'Oxford Formal Leather Shoes', cat: 'Formal Shoes', variant: 'Size 41 | Black', price: 4200, cost: 2600, stock: 15, low: 3 },
-      { id: 102, sku: 'SHO-02', name: 'Air Mesh Sports Sneakers', cat: 'Sports', variant: 'Size 42 | White', price: 3400, cost: 2000, stock: 20, low: 4 },
-      { id: 103, sku: 'SHO-03', name: 'Peshawari Chappal Handcrafted', cat: 'Traditional', variant: 'Size 40 | Brown', price: 2800, cost: 1700, stock: 25, low: 5 }
-    ],
-    transactions: [],
-    stockLogs: [],
-    vendorBills: [],
-    customerDues: []
-  },
-  {
-    id: "madina-mart",
-    name: "Al-Madina Super Mart",
-    city: "Commercial Market",
-    phone: "0311-9988776",
-    currency: "Rs.",
-    industry: "grocery",
-    fee: 2000,
-    status: "TRIAL",
-    expiry: "2026-11-10",
-    policy: "Thank you for shopping at Al-Madina! Open 7 days a week.",
-    catalog: [
-      { id: 201, sku: 'GRO-01', name: 'Dalda Cooking Oil 5L Tin', cat: 'Oils', variant: '5 Liters', price: 2650, cost: 2450, stock: 30, low: 5 },
-      { id: 202, sku: 'GRO-02', name: 'Tapal Danedar Family Pack', cat: 'Tea', variant: '900 grams', price: 1450, cost: 1300, stock: 25, low: 4 }
+      { id: 3, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 }
     ],
     transactions: [],
     stockLogs: [],
@@ -956,83 +1005,324 @@ const INITIAL_STORES = [
   }
 ];
 
+let usersDB = JSON.parse(localStorage.getItem('omni_users_db')) || INITIAL_USERS;
 let multiStoreDB = JSON.parse(localStorage.getItem('omni_multi_stores')) || INITIAL_STORES;
-let activeStoreId = localStorage.getItem('omni_active_store_id') || "js-auto";
+let currentSessionUser = JSON.parse(localStorage.getItem('omni_session_user')) || null;
+
 let cart = [];
 let currentPosCat = 'ALL';
 let posSearch = '';
 
-function getActiveStore() {
-  return multiStoreDB.find(s => s.id === activeStoreId) || multiStoreDB[0];
-}
-
-function persistSaaS() {
+function persist() {
+  localStorage.setItem('omni_users_db', JSON.stringify(usersDB));
   localStorage.setItem('omni_multi_stores', JSON.stringify(multiStoreDB));
-  localStorage.setItem('omni_active_store_id', activeStoreId);
-  renderStoreDropdown();
-  updateTopHeader();
-  updateSidebarStats();
+  localStorage.setItem('omni_session_user', JSON.stringify(currentSessionUser));
+}
+
+function getActiveStore() {
+  if (!currentSessionUser) return multiStoreDB[0];
+  if (currentSessionUser.role === 'superadmin') {
+    const adminSelectedId = localStorage.getItem('omni_admin_target_store');
+    return multiStoreDB.find(s => s.id === adminSelectedId) || multiStoreDB[0];
+  }
+  return multiStoreDB.find(s => s.id === currentSessionUser.storeId) || multiStoreDB[0];
 }
 
 // =========================================================================
-// 2. STORE SWITCHER & TOP BAR
+// 2. AUTHENTICATION & ACCESS CONTROL
 // =========================================================================
-function renderStoreDropdown() {
-  const sel = document.getElementById('active-store-dropdown');
-  sel.innerHTML = multiStoreDB.map(s => `
-    <option value="${s.id}" ${s.id === activeStoreId ? 'selected' : ''}>
-      ${s.name} (${s.city})
-    </option>
-  `).join('');
-
-  const store = getActiveStore();
-  const badge = document.getElementById('active-store-badge');
-  badge.textContent = store.status;
-  badge.className = `status-tag ${store.status === 'ACTIVE' ? 'tag-active' : (store.status === 'TRIAL' ? 'tag-trial' : 'tag-expired')}`;
-
-  // Check Expiry Alert
-  const alertBanner = document.getElementById('license-alert-banner');
-  if (store.status === 'EXPIRED') {
-    alertBanner.style.display = 'flex';
-    document.getElementById('license-alert-msg').textContent = `The subscription for "${store.name}" has EXPIRED. Please renew.`;
+function checkAuthStatus() {
+  const authScreen = document.getElementById('auth-screen');
+  if (!currentSessionUser) {
+    authScreen.style.display = 'flex';
   } else {
-    alertBanner.style.display = 'none';
+    authScreen.style.display = 'none';
+    setupUserPermissionsUI();
+    renderTopHeader();
+    updateSidebarStats();
+    switchNavTab('home');
   }
 }
 
-function switchActiveStore(newId) {
-  activeStoreId = newId;
-  cart = [];
-  persistSaaS();
-  renderPosCatalog();
-  renderInventoryTable();
+function switchAuthMode(mode) {
+  document.getElementById('tab-btn-login').classList.toggle('active', mode === 'login');
+  document.getElementById('tab-btn-register').classList.toggle('active', mode === 'register');
+  document.getElementById('auth-form-login').classList.toggle('hidden', mode !== 'login');
+  document.getElementById('auth-form-register').classList.toggle('hidden', mode !== 'register');
 }
 
-function updateClock() {
-  const d = new Date();
-  document.getElementById('live-time').textContent = d.toLocaleTimeString('en-PK', { hour12: true });
-  document.getElementById('live-date').textContent = d.toLocaleDateString('en-PK', { weekday: 'short', day: 'numeric', month: 'short' });
-}
-setInterval(updateClock, 1000);
-updateClock();
+function attemptLogin() {
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value.trim();
 
-function updateTopHeader() {
+  const found = usersDB.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
+  if (!found) {
+    alert('Invalid username or password!');
+    return;
+  }
+
+  currentSessionUser = found;
+  persist();
+  checkAuthStatus();
+}
+
+function attemptSelfRegister() {
+  const name = document.getElementById('reg-shop-name').value.trim();
+  const industry = document.getElementById('reg-industry').value;
+  const city = document.getElementById('reg-city').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const username = document.getElementById('reg-username').value.trim();
+  const pass = document.getElementById('reg-password').value.trim();
+
+  if (!name || !username || !pass) {
+    alert('Please complete all required fields!');
+    return;
+  }
+
+  if (usersDB.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+    alert('This username is already taken. Please choose another.');
+    return;
+  }
+
+  const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-3);
+
+  // 1. Create Store
+  const newStore = {
+    id: slug,
+    name,
+    city,
+    phone,
+    currency: 'Rs.',
+    industry,
+    fee: 2500,
+    status: 'TRIAL',
+    policy: 'Goods once sold can be exchanged within 24 hours with receipt.',
+    catalog: [
+      { id: Date.now(), sku: 'GEN-01', name: 'Sample Item', cat: 'General', variant: 'Standard', price: 1000, cost: 700, stock: 20, low: 5 }
+    ],
+    transactions: [],
+    stockLogs: [],
+    vendorBills: [],
+    customerDues: []
+  };
+  multiStoreDB.push(newStore);
+
+  // 2. Create Owner User
+  const newUser = {
+    id: 'usr-' + Date.now(),
+    username,
+    pass,
+    name: name + ' Admin',
+    role: 'owner',
+    storeId: slug
+  };
+  usersDB.push(newUser);
+
+  currentSessionUser = newUser;
+  persist();
+  alert(`Congratulations! Shop "${name}" registered successfully with 7-Day Free Trial.`);
+  checkAuthStatus();
+}
+
+function performLogout() {
+  currentSessionUser = null;
+  persist();
+  checkAuthStatus();
+}
+
+function setupUserPermissionsUI() {
+  const role = currentSessionUser.role;
+
+  // Role display
+  document.getElementById('top-user-display').textContent = currentSessionUser.name;
+  const roleBadge = document.getElementById('top-role-badge');
+  roleBadge.textContent = role.toUpperCase();
+  roleBadge.className = `role-tag role-${role}`;
+
+  // Role based Nav Tabs filtering
+  document.getElementById('nav-tab-admin').classList.toggle('hidden', role !== 'superadmin');
+  document.getElementById('nav-tab-staff').classList.toggle('hidden', role === 'cashier');
+  document.getElementById('nav-tab-stock-rec').classList.toggle('hidden', role === 'cashier');
+  document.getElementById('nav-tab-stock-pay').classList.toggle('hidden', role === 'cashier');
+  document.getElementById('nav-tab-summary').classList.toggle('hidden', role === 'cashier');
+}
+
+function renderTopHeader() {
   const s = getActiveStore();
-  document.title = `${s.name} — OmniKhata SaaS`;
+  document.getElementById('top-store-label').textContent = `Store: ${s.name} (${s.city})`;
+  document.title = `${s.name} — OmniKhata POS`;
 }
 
 // =========================================================================
-// 3. NAVIGATION
+// 3. STAFF & SUB-USER MANAGEMENT (Multiple users per client)
+// =========================================================================
+function renderStaffTable() {
+  const s = getActiveStore();
+  const storeStaff = usersDB.filter(u => u.storeId === s.id);
+  const tbody = document.getElementById('staff-table-tbody');
+
+  tbody.innerHTML = storeStaff.map(st => `
+    <tr>
+      <td><strong>${st.name}</strong></td>
+      <td><span style="font-family:monospace;font-weight:700">${st.username}</span></td>
+      <td><span class="role-tag role-${st.role}">${st.role.toUpperCase()}</span></td>
+      <td><span style="color:#16a34a;font-weight:800">Active</span></td>
+      <td>
+        ${st.id !== currentSessionUser.id ? `<button class="btn btn-danger" style="padding:3px 7px;font-size:11px" onclick="deleteStaffUser('${st.id}')">Remove</button>` : 'Logged In'}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openAddStaffModal() {
+  document.getElementById('staff-name').value = '';
+  document.getElementById('staff-username').value = '';
+  document.getElementById('staff-password').value = '';
+  openModal('modal-add-staff');
+}
+
+function saveNewStaff() {
+  const s = getActiveStore();
+  const name = document.getElementById('staff-name').value.trim();
+  const username = document.getElementById('staff-username').value.trim();
+  const pass = document.getElementById('staff-password').value.trim();
+  const role = document.getElementById('staff-role').value;
+
+  if (!name || !username || !pass) {
+    alert('Please enter all staff credentials!');
+    return;
+  }
+
+  if (usersDB.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+    alert('Username already taken by another user!');
+    return;
+  }
+
+  usersDB.push({
+    id: 'usr-' + Date.now(),
+    username,
+    pass,
+    name,
+    role,
+    storeId: s.id
+  });
+
+  persist();
+  closeModal('modal-add-staff');
+  renderStaffTable();
+  alert(`User "${username}" created with role "${role.toUpperCase()}"!`);
+}
+
+function deleteStaffUser(userId) {
+  if (confirm('Delete this staff user account?')) {
+    usersDB = usersDB.filter(u => u.id !== userId);
+    persist();
+    renderStaffTable();
+  }
+}
+
+// =========================================================================
+// 4. SUPER ADMIN PROVISIONING
+// =========================================================================
+function renderAdminConsole() {
+  document.getElementById('adm-store-count').textContent = multiStoreDB.length;
+  const activeCount = multiStoreDB.filter(s => s.status === 'ACTIVE').length;
+  document.getElementById('adm-active-subs').textContent = activeCount;
+  const totalMRR = multiStoreDB.filter(s => s.status === 'ACTIVE').reduce((sum, s) => sum + (s.fee || 0), 0);
+  document.getElementById('adm-mrr').textContent = `Rs. ${totalMRR.toLocaleString()}`;
+
+  const tbody = document.getElementById('admin-stores-tbody');
+  tbody.innerHTML = multiStoreDB.map(s => {
+    const ownerUser = usersDB.find(u => u.storeId === s.id && u.role === 'owner');
+    return `
+      <tr>
+        <td style="font-family:monospace;font-weight:700">${s.id}</td>
+        <td><strong>${s.name}</strong></td>
+        <td>${s.industry.toUpperCase()}</td>
+        <td>${s.city} • ${s.phone}</td>
+        <td>Rs. ${(s.fee||0).toLocaleString()}</td>
+        <td><span class="role-tag" style="background:#e0f2fe;color:#0284c7">${s.status}</span></td>
+        <td>
+          <button class="btn btn-primary" style="padding:4px 8px;font-size:11px" onclick="adminSwitchStore('${s.id}')">⚡ Login As Store</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function adminSwitchStore(storeId) {
+  localStorage.setItem('omni_admin_target_store', storeId);
+  renderTopHeader();
+  updateSidebarStats();
+  switchNavTab('home');
+}
+
+function openCreateShopModal() { openModal('modal-create-shop'); }
+
+function saveNewClientShopByAdmin() {
+  const slug = document.getElementById('ns-slug').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+  const name = document.getElementById('ns-name').value.trim();
+  const industry = document.getElementById('ns-industry').value;
+  const fee = parseFloat(document.getElementById('ns-fee').value) || 2500;
+  const ownerUser = document.getElementById('ns-owner-user').value.trim();
+  const ownerPass = document.getElementById('ns-owner-pass').value.trim();
+
+  if (!slug || !name || !ownerUser || !ownerPass) {
+    alert('Please complete all fields!');
+    return;
+  }
+
+  if (multiStoreDB.some(s => s.id === slug) || usersDB.some(u => u.username.toLowerCase() === ownerUser.toLowerCase())) {
+    alert('Store ID or Username already exists!');
+    return;
+  }
+
+  multiStoreDB.push({
+    id: slug,
+    name,
+    city: 'Rawalpindi',
+    phone: '0300-0000000',
+    currency: 'Rs.',
+    industry,
+    fee,
+    status: 'ACTIVE',
+    policy: 'Exchange permitted within 24 hours.',
+    catalog: [
+      { id: Date.now(), sku: 'ITEM-01', name: 'Starter Product', cat: 'General', variant: 'Standard', price: 1200, cost: 800, stock: 25, low: 5 }
+    ],
+    transactions: [],
+    stockLogs: [],
+    vendorBills: [],
+    customerDues: []
+  });
+
+  usersDB.push({
+    id: 'usr-' + Date.now(),
+    username: ownerUser,
+    pass: ownerPass,
+    name: name + ' Admin',
+    role: 'owner',
+    storeId: slug
+  });
+
+  persist();
+  closeModal('modal-create-shop');
+  renderAdminConsole();
+  alert(`Store "${name}" and Client Login "${ownerUser}" successfully created!`);
+}
+
+// =========================================================================
+// 5. NAVIGATION & POS BILLING ENGINE
 // =========================================================================
 function switchNavTab(tabName) {
-  const tabs = ['home', 'billing', 'cust-pay', 'stock-rec', 'stock-pay', 'inventory', 'summary', 'admin'];
+  const tabs = ['home', 'billing', 'cust-pay', 'stock-rec', 'stock-pay', 'inventory', 'summary', 'staff', 'admin'];
   tabs.forEach(t => {
     const el = document.getElementById(`view-${t}`);
     if (el) el.classList.toggle('hidden', t !== tabName);
   });
 
-  document.querySelectorAll('.tab-link').forEach((tab, i) => {
-    tab.classList.toggle('active', tabs[i] === tabName);
+  document.querySelectorAll('.tab-link').forEach(tab => {
+    tab.classList.toggle('active', tab.id === `nav-tab-${tabName}`);
   });
 
   if (tabName === 'billing') renderPosCatalog();
@@ -1041,12 +1331,10 @@ function switchNavTab(tabName) {
   if (tabName === 'stock-pay') renderVendorPayablesTable();
   if (tabName === 'inventory') renderInventoryTable();
   if (tabName === 'summary') renderDailyZReport();
+  if (tabName === 'staff') renderStaffTable();
   if (tabName === 'admin') renderAdminConsole();
 }
 
-// =========================================================================
-// 4. SIDEBAR STATS
-// =========================================================================
 function updateSidebarStats() {
   const s = getActiveStore();
   const today = new Date().toDateString();
@@ -1070,9 +1358,6 @@ function updateSidebarStats() {
   document.getElementById('side-cust-receivables').textContent = `Rs. ${custTotal.toLocaleString()}`;
 }
 
-// =========================================================================
-// 5. POS BILLING ENGINE
-// =========================================================================
 function renderPosCatalog() {
   const s = getActiveStore();
   const pillsBox = document.getElementById('pos-cat-pills');
@@ -1224,7 +1509,6 @@ function finishPosSale() {
   const change = cash - total;
   const cust = document.getElementById('cart-customer-name').value.trim() || 'Walk-in Customer';
 
-  // Deduct inventory
   cart.forEach(c => {
     const p = (s.catalog || []).find(x => x.id === c.id);
     if (p) p.stock = Math.max(0, p.stock - c.qty);
@@ -1234,6 +1518,7 @@ function finishPosSale() {
     id: (s.transactions || []).length + 1,
     date: new Date().toISOString(),
     customer: cust,
+    cashier: currentSessionUser.name,
     items: [...cart],
     total,
     cash,
@@ -1241,12 +1526,13 @@ function finishPosSale() {
   };
   s.transactions = s.transactions || [];
   s.transactions.push(tx);
-  persistSaaS();
+  persist();
 
   buildReceiptSlip(tx, s);
   closeModal('modal-cash-payment');
   clearCart();
   renderPosCatalog();
+  updateSidebarStats();
   setTimeout(() => window.print(), 200);
 }
 
@@ -1265,6 +1551,7 @@ function buildReceiptSlip(tx, store) {
     </div>
     <div>Bill #: INV-${String(tx.id).padStart(4,'0')}</div>
     <div>Date: ${d.toLocaleDateString()} ${d.toLocaleTimeString()}</div>
+    <div>Cashier: ${tx.cashier}</div>
     <div>Customer: ${tx.customer}</div>
     <div>--------------------------------</div>
     ${items}
@@ -1279,7 +1566,7 @@ function buildReceiptSlip(tx, store) {
 }
 
 // =========================================================================
-// 6. RECEIVE STOCK & VENDORS
+// 6. STOCK & KHATA LEDGERS
 // =========================================================================
 function openReceiveStockModal() {
   const s = getActiveStore();
@@ -1327,9 +1614,10 @@ function saveReceivedStock() {
     });
   }
 
-  persistSaaS();
+  persist();
   closeModal('modal-receive-stock');
   renderStockReceivedTable();
+  updateSidebarStats();
   alert(`Added ${qty} units to ${p.name}!`);
 }
 
@@ -1369,9 +1657,10 @@ function saveVendorBill() {
     balance: amount
   });
 
-  persistSaaS();
+  persist();
   closeModal('modal-vendor-bill');
   renderVendorPayablesTable();
+  updateSidebarStats();
 }
 
 function renderVendorPayablesTable() {
@@ -1400,14 +1689,12 @@ function payVendor(billId) {
   if (amt > 0) {
     b.paid += amt;
     b.balance = Math.max(0, b.amount - b.paid);
-    persistSaaS();
+    persist();
     renderVendorPayablesTable();
+    updateSidebarStats();
   }
 }
 
-// =========================================================================
-// 7. CUSTOMER KHATA (UDHAAR)
-// =========================================================================
 function renderCustomerDuesTable() {
   const s = getActiveStore();
   const tbody = document.getElementById('cust-dues-tbody');
@@ -1433,8 +1720,9 @@ function receiveCustomerPay(id) {
   const amt = parseFloat(prompt(`Enter cash received from ${c.name} (Due: Rs. ${c.balance}):`, c.balance));
   if (amt > 0) {
     c.balance = Math.max(0, c.balance - amt);
-    persistSaaS();
+    persist();
     renderCustomerDuesTable();
+    updateSidebarStats();
   }
 }
 
@@ -1455,13 +1743,11 @@ function openCustomerCreditModal() {
     total: amount,
     balance: amount
   });
-  persistSaaS();
+  persist();
   renderCustomerDuesTable();
+  updateSidebarStats();
 }
 
-// =========================================================================
-// 8. INVENTORY & Z-REPORT
-// =========================================================================
 function renderInventoryTable() {
   const s = getActiveStore();
   const tbody = document.getElementById('inventory-table-tbody');
@@ -1482,14 +1768,14 @@ function renderInventoryTable() {
 function updateStockInline(id, val) {
   const s = getActiveStore();
   const p = (s.catalog || []).find(x => x.id === id);
-  if (p) { p.stock = parseInt(val) || 0; persistSaaS(); }
+  if (p) { p.stock = parseInt(val) || 0; persist(); }
 }
 
 function deleteItem(id) {
   const s = getActiveStore();
   if (confirm('Delete item?')) {
     s.catalog = (s.catalog || []).filter(x => x.id !== id);
-    persistSaaS();
+    persist();
     renderInventoryTable();
   }
 }
@@ -1516,7 +1802,7 @@ function saveNewProduct() {
     low: 5
   });
 
-  persistSaaS();
+  persist();
   closeModal('modal-product');
   renderInventoryTable();
   renderPosCatalog();
@@ -1559,170 +1845,7 @@ function reprintTx(id) {
 }
 
 // =========================================================================
-// 9. SUPER ADMIN CONSOLE (SaaS Multi-Tenant Management)
-// =========================================================================
-function renderAdminConsole() {
-  document.getElementById('adm-store-count').textContent = multiStoreDB.length;
-  const activeCount = multiStoreDB.filter(s => s.status === 'ACTIVE').length;
-  document.getElementById('adm-active-subs').textContent = activeCount;
-  const totalMRR = multiStoreDB.filter(s => s.status === 'ACTIVE').reduce((sum, s) => sum + (s.fee || 0), 0);
-  document.getElementById('adm-mrr').textContent = `Rs. ${totalMRR.toLocaleString()}`;
-
-  const tbody = document.getElementById('admin-stores-tbody');
-  tbody.innerHTML = multiStoreDB.map(s => `
-    <tr>
-      <td style="font-family:monospace;font-weight:700">${s.id}</td>
-      <td><strong>${s.name}</strong></td>
-      <td><span class="status-tag" style="background:#e0f2fe;color:#0284c7">${s.industry.toUpperCase()}</span></td>
-      <td>${s.city} • ${s.phone}</td>
-      <td>Rs. ${(s.fee||0).toLocaleString()}/mo</td>
-      <td>
-        <span class="status-tag ${s.status === 'ACTIVE' ? 'tag-active' : (s.status === 'TRIAL' ? 'tag-trial' : 'tag-expired')}">${s.status}</span>
-      </td>
-      <td>${s.expiry || '—'}</td>
-      <td>
-        <button class="btn btn-primary" style="padding:4px 8px;font-size:11px" onclick="switchActiveStore('${s.id}'); switchNavTab('home');">⚡ Open</button>
-        <button class="btn btn-secondary" style="padding:4px 8px;font-size:11px" onclick="toggleStoreStatus('${s.id}')">Toggle Plan</button>
-        ${multiStoreDB.length > 1 ? `<button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteStore('${s.id}')">Delete</button>` : ''}
-      </td>
-    </tr>
-  `).join('');
-}
-
-function toggleStoreStatus(id) {
-  const s = multiStoreDB.find(x => x.id === id);
-  if (!s) return;
-  s.status = s.status === 'ACTIVE' ? 'EXPIRED' : 'ACTIVE';
-  persistSaaS();
-  renderAdminConsole();
-}
-
-function deleteStore(id) {
-  if (confirm(`Are you sure you want to delete store "${id}"?`)) {
-    multiStoreDB = multiStoreDB.filter(s => s.id !== id);
-    if (activeStoreId === id) activeStoreId = multiStoreDB[0].id;
-    persistSaaS();
-    renderAdminConsole();
-  }
-}
-
-function openCreateShopModal() {
-  document.getElementById('ns-slug').value = '';
-  document.getElementById('ns-name').value = '';
-  document.getElementById('ns-city').value = '';
-  document.getElementById('ns-phone').value = '';
-  openModal('modal-create-shop');
-}
-
-function saveNewClientShop() {
-  const slug = document.getElementById('ns-slug').value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
-  const name = document.getElementById('ns-name').value.trim();
-  const city = document.getElementById('ns-city').value.trim();
-  const phone = document.getElementById('ns-phone').value.trim();
-  const industry = document.getElementById('ns-industry').value;
-  const fee = parseFloat(document.getElementById('ns-fee').value) || 2000;
-  const status = document.getElementById('ns-status').value;
-
-  if (!slug || !name) { alert('Store ID and Name are required!'); return; }
-  if (multiStoreDB.some(s => s.id === slug)) { alert('Store ID already exists!'); return; }
-
-  // Industry presets
-  let defaultCatalog = [];
-  let defaultPolicy = "Thank you for your visit!";
-  if (industry === 'shoes') {
-    defaultPolicy = "Exchange within 7 days with original box.";
-    defaultCatalog = [
-      { id: 101, sku: 'SHO-01', name: 'Oxford Formal Leather Shoes', cat: 'Formal Shoes', variant: 'Size 41 | Black', price: 4200, cost: 2600, stock: 15, low: 3 },
-      { id: 102, sku: 'SHO-02', name: 'Air Mesh Sports Sneakers', cat: 'Sports', variant: 'Size 42 | White', price: 3400, cost: 2000, stock: 20, low: 4 }
-    ];
-  } else if (industry === 'grocery') {
-    defaultPolicy = "Goods once sold can be exchanged within 24 hours with receipt.";
-    defaultCatalog = [
-      { id: 201, sku: 'GRO-01', name: 'Cooking Oil 5L Tin', cat: 'Oils', variant: '5 Liters', price: 2650, cost: 2450, stock: 30, low: 5 },
-      { id: 202, sku: 'GRO-02', name: 'Premium Tea Pack', cat: 'Beverages', variant: '900 grams', price: 1450, cost: 1300, stock: 25, low: 4 }
-    ];
-  } else if (industry === 'auto') {
-    defaultPolicy = "No exchange or return on electrical components.";
-    defaultCatalog = [
-      { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
-      { id: 2, sku: 'JSA-EO-001', name: 'Engine Oil 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters Can', price: 3200, cost: 2350, stock: 18, low: 4 }
-    ];
-  }
-
-  const newStore = {
-    id: slug,
-    name,
-    city,
-    phone,
-    currency: "Rs.",
-    industry,
-    fee,
-    status,
-    expiry: "2026-12-31",
-    policy: defaultPolicy,
-    catalog: defaultCatalog,
-    transactions: [],
-    stockLogs: [],
-    vendorBills: [],
-    customerDues: []
-  };
-
-  multiStoreDB.push(newStore);
-  activeStoreId = slug;
-  persistSaaS();
-  closeModal('modal-create-shop');
-  renderAdminConsole();
-  alert(`Store "${name}" provisioned and activated successfully!`);
-}
-
-function openStoreConfigModal() {
-  const s = getActiveStore();
-  document.getElementById('cfg-name').value = s.name;
-  document.getElementById('cfg-city').value = s.city;
-  document.getElementById('cfg-phone').value = s.phone;
-  document.getElementById('cfg-policy').value = s.policy || '';
-  openModal('modal-store-config');
-}
-
-function saveActiveStoreConfig() {
-  const s = getActiveStore();
-  s.name = document.getElementById('cfg-name').value.trim() || s.name;
-  s.city = document.getElementById('cfg-city').value.trim() || s.city;
-  s.phone = document.getElementById('cfg-phone').value.trim();
-  s.policy = document.getElementById('cfg-policy').value.trim();
-  persistSaaS();
-  closeModal('modal-store-config');
-  alert('Store profile updated!');
-}
-
-function exportSaaSDatabase() {
-  const blob = new Blob([JSON.stringify(multiStoreDB, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `omnikhata_saas_backup_${Date.now()}.json`;
-  a.click();
-}
-
-function importSaaSDatabase(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (Array.isArray(data)) {
-        multiStoreDB = data;
-        persistSaaS();
-        renderAdminConsole();
-        alert('Platform database restored successfully!');
-      }
-    } catch(err) { alert('Invalid backup file'); }
-  };
-  reader.readAsText(file);
-}
-
-// =========================================================================
-// 10. UTILITIES
+// 7. UTILITIES & BOOT
 // =========================================================================
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -1730,9 +1853,8 @@ document.querySelectorAll('.modal-shade').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
 });
 
-// INITIAL BOOT
-persistSaaS();
-renderPosCatalog();
+// INITIAL AUTH RUN
+checkAuthStatus();
 </script>
 </body>
 </html>
