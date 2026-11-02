@@ -311,7 +311,7 @@
     <div id="auth-form-login">
       <div class="auth-input-group">
         <label>Username or Email</label>
-        <input type="text" id="login-username" placeholder="e.g. admin or jsauto or cashier1">
+        <input type="text" id="login-username" placeholder="e.g. ali_juice or admin or jsauto">
       </div>
       <div class="auth-input-group">
         <label>Password</label>
@@ -323,9 +323,9 @@
 
       <div class="quick-demo-accounts">
         <div style="font-weight:700;margin-bottom:4px">💡 Demo Credentials (Preloaded):</div>
-        <div>• <strong>admin</strong> / <strong>admin123</strong> ➔ Opens 👑 <strong>Super Admin Console</strong></div>
-        <div>• <strong>jsauto</strong> / <strong>123456</strong> ➔ Opens 🏪 <strong>JS Auto Parts (Owner)</strong></div>
-        <div>• <strong>cashier1</strong> / <strong>123456</strong> ➔ Opens 💳 <strong>Counter POS (Cashier)</strong></div>
+        <div>• 🍹 <strong>ali_juice</strong> / <strong>ali123</strong> (Ali Juice Distribution - Sheikhupura)</div>
+        <div>• 👑 <strong>admin</strong> / <strong>admin123</strong> (Super Admin Console)</div>
+        <div>• 🏪 <strong>jsauto</strong> / <strong>123456</strong> (JS Auto Parts - Rawalpindi)</div>
       </div>
     </div>
 
@@ -338,6 +338,7 @@
       <div class="auth-input-group">
         <label>Industry Template *</label>
         <select id="reg-industry">
+          <option value="beverages">🍹 Juice & Beverage Distribution</option>
           <option value="auto">🚗 Auto Spare Parts & Oils</option>
           <option value="shoes">👞 Footwear & Shoe Shop</option>
           <option value="grocery">🛒 Grocery & Supermarket</option>
@@ -347,7 +348,7 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <div class="auth-input-group">
           <label>City *</label>
-          <input type="text" id="reg-city" placeholder="Rawalpindi">
+          <input type="text" id="reg-city" placeholder="Sheikhupura">
         </div>
         <div class="auth-input-group">
           <label>Phone *</label>
@@ -419,7 +420,7 @@
           <div class="flow-node" onclick="openReceiveStockModal()">
             <div class="node-icon">📦</div>
             <div class="node-title">Receive Stock</div>
-            <div style="font-size:11px;color:#64748b">Inward Items</div>
+            <div style="font-size:11px;color:#64748b">Inward Cartons/Crates</div>
             <span class="node-badge badge-blue">Action 1</span>
           </div>
 
@@ -428,7 +429,7 @@
           <div class="flow-node" onclick="openVendorBillModal()">
             <div class="node-icon">📑</div>
             <div class="node-title">Enter Vendor Bills</div>
-            <div style="font-size:11px;color:#64748b">Supplier Khata</div>
+            <div style="font-size:11px;color:#64748b">Factory Khata</div>
             <span class="node-badge badge-amber">Action 2</span>
           </div>
 
@@ -445,12 +446,12 @@
 
       <!-- CUSTOMERS LANE -->
       <div class="flow-lane">
-        <div class="flow-lane-title">👥 Customers & Sales Flow</div>
+        <div class="flow-lane-title">👥 Retailers & Sales Billing Flow</div>
         <div class="workflow-row">
           <div class="flow-node" style="border-color:#2563eb;background:#f0f7ff" onclick="switchNavTab('billing')">
             <div class="node-icon">🧾</div>
             <div class="node-title">Counter Billing</div>
-            <div style="font-size:11px;color:#2563eb">Barcode Checkout</div>
+            <div style="font-size:11px;color:#2563eb">Fast Order Invoice</div>
             <span class="node-badge badge-blue">POS Active</span>
           </div>
 
@@ -459,7 +460,7 @@
           <div class="flow-node" onclick="openCustomerCreditModal()">
             <div class="node-icon">📄</div>
             <div class="node-title">Create Invoices</div>
-            <div style="font-size:11px;color:#64748b">Credit / Udhaar</div>
+            <div style="font-size:11px;color:#64748b">Retailer Khata / Credit</div>
             <span class="node-badge badge-amber">Credit Sale</span>
           </div>
 
@@ -468,7 +469,7 @@
           <div class="flow-node" onclick="switchNavTab('cust-pay')">
             <div class="node-icon">💳</div>
             <div class="node-title">Customer Pay Bills</div>
-            <div style="font-size:11px;color:#16a34a">Collect Khata</div>
+            <div style="font-size:11px;color:#16a34a">Collect Khata Dues</div>
             <span class="node-badge badge-green">Receive Cash</span>
           </div>
         </div>
@@ -499,7 +500,7 @@
           <div class="flow-node" onclick="switchNavTab('staff')">
             <div class="node-icon">👥</div>
             <div class="node-title">Manage Staff</div>
-            <div style="font-size:11px;color:#64748b">Cashiers & Roles</div>
+            <div style="font-size:11px;color:#64748b">Cashiers & Sales Reps</div>
             <span class="node-badge badge-green">Permissions</span>
           </div>
         </div>
@@ -551,7 +552,7 @@
     <div class="pos-left">
       <div class="pos-catalog-head">
         <input type="text" id="pos-barcode-input" class="scan-input-box"
-          placeholder="Scan barcode or type item / SKU and press Enter..."
+          placeholder="Scan barcode or type juice flavor / SKU and press Enter..."
           onkeydown="handlePosEnter(event)" oninput="filterPosCatalog(this.value)" autocomplete="off">
         <div class="cat-pills-row" id="pos-cat-pills"></div>
       </div>
@@ -565,7 +566,7 @@
       </div>
 
       <div style="padding:8px 12px;background:#f1f5f9;border-bottom:1px solid var(--border);display:flex;gap:6px">
-        <input type="text" id="cart-customer-name" placeholder="Walk-in Customer" style="flex:1;padding:6px 10px;border:1px solid #cbd5e1;border-radius:4px">
+        <input type="text" id="cart-customer-name" placeholder="Retailer / Customer Name" style="flex:1;padding:6px 10px;border:1px solid #cbd5e1;border-radius:4px">
         <input type="text" id="cart-customer-phone" placeholder="Phone #" style="width:120px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:4px">
       </div>
 
@@ -600,13 +601,13 @@
 <div id="view-cust-pay" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>💳 Customer Pay Bills (Receive Udhaar / Khata)</span>
+      <span>💳 Customer Pay Bills (Retailer Udhaar & Khata)</span>
       <button class="btn btn-success" onclick="openCustomerCreditModal()">➕ New Credit Invoice</button>
     </h3>
     <table class="nice-table">
       <thead>
         <tr>
-          <th>Customer Name</th>
+          <th>Retailer / Customer</th>
           <th>Phone</th>
           <th>Reference #</th>
           <th>Total Credit (Rs.)</th>
@@ -626,16 +627,16 @@
 <div id="view-stock-rec" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>📦 Receive Stock (GRN Inventory Inward)</span>
-      <button class="btn btn-primary" onclick="openReceiveStockModal()">➕ Inward New Stock</button>
+      <span>📦 Receive Stock (Juice Factory / Supplier Delivery)</span>
+      <button class="btn btn-primary" onclick="openReceiveStockModal()">➕ Inward Stock</button>
     </h3>
     <table class="nice-table">
       <thead>
         <tr>
           <th>Date</th>
-          <th>Vendor / Supplier</th>
+          <th>Factory / Supplier</th>
           <th>Item Received</th>
-          <th>Qty Added</th>
+          <th>Cartons / Qty</th>
           <th>Cost Price (Rs.)</th>
           <th>Total Cost (Rs.)</th>
           <th>Payment Type</th>
@@ -652,13 +653,13 @@
 <div id="view-stock-pay" class="hidden view-container">
   <div class="panel-box">
     <h3>
-      <span>💸 Stock Pay Bills (Vendor Outstandings)</span>
-      <button class="btn btn-primary" onclick="openVendorBillModal()">➕ Enter Vendor Bill</button>
+      <span>💸 Stock Pay Bills (Factory Outstandings)</span>
+      <button class="btn btn-primary" onclick="openVendorBillModal()">➕ Enter Factory Bill</button>
     </h3>
     <table class="nice-table">
       <thead>
         <tr>
-          <th>Vendor / Supplier</th>
+          <th>Factory / Supplier</th>
           <th>Invoice #</th>
           <th>Date</th>
           <th>Bill Amount (Rs.)</th>
@@ -690,7 +691,7 @@
           <th>SKU / Code</th>
           <th>Product Name</th>
           <th>Category</th>
-          <th>Variant / Specs</th>
+          <th>Variant / Pack Size</th>
           <th>Sale Price (Rs.)</th>
           <th>Cost (Rs.)</th>
           <th>In Stock</th>
@@ -737,10 +738,6 @@
       <span>👥 Store Staff & User Accounts</span>
       <button class="btn btn-success" onclick="openAddStaffModal()">➕ Add New Staff Member</button>
     </h3>
-    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
-      Create logins for your counter cashiers, sales boys, or branch managers with limited permissions.
-    </p>
-
     <table class="nice-table">
       <thead>
         <tr>
@@ -805,13 +802,13 @@
 <div class="modal-shade" id="modal-add-staff">
   <div class="modal-box">
     <h2>👥 Add New Staff Member</h2>
-    <div class="m-row"><label>Full Name *</label><input type="text" id="staff-name" placeholder="e.g. Ali Ahmed"></div>
-    <div class="m-row"><label>Username *</label><input type="text" id="staff-username" placeholder="ali_cashier"></div>
+    <div class="m-row"><label>Full Name *</label><input type="text" id="staff-name" placeholder="e.g. Sales Rep / Cashier"></div>
+    <div class="m-row"><label>Username *</label><input type="text" id="staff-username" placeholder="ali_staff"></div>
     <div class="m-row"><label>Password *</label><input type="password" id="staff-password" placeholder="••••••••"></div>
     <div class="m-row">
       <label>Role / Permissions *</label>
       <select id="staff-role">
-        <option value="cashier">Cashier (Only Counter Billing & Receive Cash)</option>
+        <option value="cashier">Cashier / Sales Boy (Only Billing & Cash Receive)</option>
         <option value="manager">Manager (Billing, Stock Receive & Inventory)</option>
         <option value="owner">Co-Owner (Full Store Access)</option>
       </select>
@@ -827,12 +824,13 @@
 <div class="modal-shade" id="modal-create-shop">
   <div class="modal-box">
     <h2>🏪 Provision New Client Shop</h2>
-    <div class="m-row"><label>Store ID / Slug *</label><input type="text" id="ns-slug" placeholder="e.g. apex-shoes"></div>
-    <div class="m-row"><label>Shop / Business Name *</label><input type="text" id="ns-name" placeholder="e.g. Apex Footwear"></div>
+    <div class="m-row"><label>Store ID / Slug *</label><input type="text" id="ns-slug" placeholder="e.g. ali-juice"></div>
+    <div class="m-row"><label>Shop / Business Name *</label><input type="text" id="ns-name" placeholder="e.g. Ali Juice Distribution"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row">
         <label>Industry Template *</label>
         <select id="ns-industry">
+          <option value="beverages">🍹 Juice & Beverage Distribution</option>
           <option value="auto">🚗 Auto Parts & Oils</option>
           <option value="shoes">👞 Footwear & Shoe Shop</option>
           <option value="grocery">🛒 Grocery & Supermarket</option>
@@ -842,7 +840,7 @@
       <div class="m-row"><label>Monthly Fee (Rs.)</label><input type="number" id="ns-fee" value="2500"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="m-row"><label>Initial Owner Username *</label><input type="text" id="ns-owner-user" placeholder="owner_user"></div>
+      <div class="m-row"><label>Initial Owner Username *</label><input type="text" id="ns-owner-user" placeholder="ali_juice"></div>
       <div class="m-row"><label>Initial Password *</label><input type="password" id="ns-owner-pass" placeholder="••••••••"></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px">
@@ -857,9 +855,9 @@
   <div class="modal-box">
     <h2>📦 Receive Stock (GRN)</h2>
     <div class="m-row"><label>Product to Restock *</label><select id="rs-product-select"></select></div>
-    <div class="m-row"><label>Supplier / Vendor Name *</label><input type="text" id="rs-vendor-name" placeholder="Distributor Name"></div>
+    <div class="m-row"><label>Supplier / Vendor Name *</label><input type="text" id="rs-vendor-name" placeholder="e.g. Nestlé / Shezan Factory"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="m-row"><label>Quantity *</label><input type="number" id="rs-qty" value="10" min="1"></div>
+      <div class="m-row"><label>Quantity (Cartons/Packs) *</label><input type="number" id="rs-qty" value="10" min="1"></div>
       <div class="m-row"><label>Cost Per Unit (Rs.) *</label><input type="number" id="rs-cost" placeholder="0"></div>
     </div>
     <div class="m-row">
@@ -918,10 +916,10 @@
 <div class="modal-shade" id="modal-product">
   <div class="modal-box">
     <h2>➕ Add Product</h2>
-    <div class="m-row"><label>Product Name *</label><input type="text" id="np-name"></div>
+    <div class="m-row"><label>Product Name *</label><input type="text" id="np-name" placeholder="e.g. Nestlé Fruita Vitals Mango"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="m-row"><label>Category *</label><input type="text" id="np-cat"></div>
-      <div class="m-row"><label>Variant / Specs</label><input type="text" id="np-variant"></div>
+      <div class="m-row"><label>Category *</label><input type="text" id="np-cat" placeholder="e.g. 1-Liter Tetra Pack"></div>
+      <div class="m-row"><label>Variant / Pack Size</label><input type="text" id="np-variant" placeholder="e.g. 1 Liter (Carton of 12)"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="m-row"><label>Sale Price (Rs.) *</label><input type="number" id="np-price"></div>
@@ -943,16 +941,52 @@
 
 <script>
 // =========================================================================
-// 1. DATA REPOSITORIES: USERS & STORES
+// 1. DATA REPOSITORIES: USERS & CLIENT STORES
 // =========================================================================
 
 const INITIAL_USERS = [
+  // 1. Ali from Sheikhupura (Juice Distribution Owner)
+  { id: 'usr-ali', username: 'ali_juice', pass: 'ali123', name: 'Ali (Sheikhupura)', role: 'owner', storeId: 'ali-juice-skp' },
+  // 2. Ali's Delivery / Counter Cashier
+  { id: 'usr-ali-cashier', username: 'ali_counter', pass: '123456', name: 'Ali Counter Cashier', role: 'cashier', storeId: 'ali-juice-skp' },
+  // 3. Super Admin
   { id: 'usr-admin', username: 'admin', pass: 'admin123', name: 'Master Admin', role: 'superadmin', storeId: null },
-  { id: 'usr-js-owner', username: 'jsauto', pass: '123456', name: 'JS Auto Owner', role: 'owner', storeId: 'js-auto' },
-  { id: 'usr-js-cashier', username: 'cashier1', pass: '123456', name: 'Counter Cashier', role: 'cashier', storeId: 'js-auto' }
+  // 4. JS Auto Owner (Rawalpindi)
+  { id: 'usr-js-owner', username: 'jsauto', pass: '123456', name: 'JS Auto Owner', role: 'owner', storeId: 'js-auto' }
 ];
 
 const INITIAL_STORES = [
+  // Store 1: Ali Juice Distribution - Sheikhupura
+  {
+    id: "ali-juice-skp",
+    name: "Ali Juice Distribution",
+    city: "Sheikhupura",
+    phone: "0302-8877665",
+    currency: "Rs.",
+    industry: "beverages",
+    fee: 3000,
+    status: "ACTIVE",
+    policy: "All juice cartons must be verified on delivery. Damaged packs replaced within 48 hours.",
+    catalog: [
+      { id: 501, sku: 'JUC-NES-MAN-1L', name: 'Nestlé Fruita Vitals Chaunsa', cat: '1L Tetra Packs', variant: '1 Liter (Carton of 12)', price: 340, cost: 290, stock: 85, low: 15 },
+      { id: 502, sku: 'JUC-NES-APP-1L', name: 'Nestlé Fruita Vitals Red Apple', cat: '1L Tetra Packs', variant: '1 Liter (Carton of 12)', price: 340, cost: 290, stock: 60, low: 12 },
+      { id: 503, sku: 'JUC-SHE-MAN-250', name: 'Shezan Mango Juice 250ml', cat: '250ml Mini Packs', variant: '250ml Pack of 24', price: 65, cost: 52, stock: 150, low: 30 },
+      { id: 504, sku: 'JUC-SHE-APP-250', name: 'Shezan Apple Nectar 250ml', cat: '250ml Mini Packs', variant: '250ml Pack of 24', price: 65, cost: 52, stock: 110, low: 25 },
+      { id: 505, sku: 'JUC-MRA-MAN-15L', name: 'Marhaba Fresh Mango Pulpy', cat: '1.5L Bottles', variant: '1.5 Liter Bottle', price: 220, cost: 175, stock: 45, low: 10 },
+      { id: 506, sku: 'JUC-SLI-CAN-250', name: 'Slice Mango Drink Can 250ml', cat: 'Tin Cans', variant: '250ml Slim Can', price: 90, cost: 72, stock: 120, low: 20 }
+    ],
+    transactions: [],
+    stockLogs: [
+      { id: 1, date: new Date().toLocaleDateString(), vendor: 'Nestlé Pakistan Sheikhupura Plant', item: 'Nestlé Fruita Vitals Chaunsa', qty: 50, cost: 290, total: 14500, type: 'PAID' }
+    ],
+    vendorBills: [
+      { id: 1, vendor: 'Nestlé Regional Depot', invoice: 'DEP-8902', date: new Date().toLocaleDateString(), amount: 45000, paid: 20000, balance: 25000 }
+    ],
+    customerDues: [
+      { id: 1, name: 'Bismillah General Store (Batti Chowk SKP)', phone: '0301-4455667', ref: 'UDH-01', total: 18500, balance: 6500 }
+    ]
+  },
+  // Store 2: JS Auto Parts - Rawalpindi
   {
     id: "js-auto",
     name: "JS Auto Parts",
@@ -965,8 +999,7 @@ const INITIAL_STORES = [
     policy: "No exchange or return after 24 hours. Electrical items non-returnable.",
     catalog: [
       { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
-      { id: 2, sku: 'JSA-OF-002', name: 'Sakura Oil Filter C-1005', cat: 'Oil Filters', variant: 'Civic / City', price: 380, cost: 270, stock: 25, low: 10 },
-      { id: 3, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 }
+      { id: 2, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 }
     ],
     transactions: [],
     stockLogs: [],
@@ -975,10 +1008,22 @@ const INITIAL_STORES = [
   }
 ];
 
+// Initialize DB and always ensure Ali from Sheikhupura exists
 let usersDB = JSON.parse(localStorage.getItem('omni_users_db')) || INITIAL_USERS;
 let multiStoreDB = JSON.parse(localStorage.getItem('omni_multi_stores')) || INITIAL_STORES;
 
-// *** CRITICAL REQUIREMENT: BY DEFAULT IT SHOULD BE LOGGED OUT ***
+// Make sure Ali's store and user exist even if storage had old data
+if (!multiStoreDB.some(s => s.id === 'ali-juice-skp')) {
+  multiStoreDB.unshift(INITIAL_STORES[0]);
+}
+if (!usersDB.some(u => u.username === 'ali_juice')) {
+  usersDB.unshift(INITIAL_USERS[0]);
+  usersDB.unshift(INITIAL_USERS[1]);
+}
+localStorage.setItem('omni_users_db', JSON.stringify(usersDB));
+localStorage.setItem('omni_multi_stores', JSON.stringify(multiStoreDB));
+
+// Default session is null (Logged out on startup)
 let currentSessionUser = null; 
 
 let cart = [];
@@ -1005,22 +1050,20 @@ function getActiveStore() {
 function checkAuthStatus() {
   const authScreen = document.getElementById('auth-screen');
   if (!currentSessionUser) {
-    // Show login modal over everything by default
     authScreen.style.display = 'flex';
   } else {
-    // Hide login modal
     authScreen.style.display = 'none';
     setupUserPermissionsUI();
     renderTopHeader();
     updateSidebarStats();
 
-    // *** ROLE DECIDES THE DEFAULT VIEW ***
+    // ROLE DECIDES THE PREVIEW VIEW
     if (currentSessionUser.role === 'superadmin') {
-      switchNavTab('admin'); // Super admin goes straight to Super Admin Console
+      switchNavTab('admin');
     } else if (currentSessionUser.role === 'cashier') {
-      switchNavTab('billing'); // Cashier goes straight to Counter Billing
+      switchNavTab('billing');
     } else {
-      switchNavTab('home'); // Store Owners & Managers go to QuickBooks Home Workflow
+      switchNavTab('home'); // Owner lands on Home Workflow
     }
   }
 }
@@ -1112,13 +1155,11 @@ function performLogout() {
 function setupUserPermissionsUI() {
   const role = currentSessionUser.role;
 
-  // Role display
   document.getElementById('top-user-display').textContent = currentSessionUser.name;
   const roleBadge = document.getElementById('top-role-badge');
   roleBadge.textContent = role.toUpperCase();
   roleBadge.className = `role-tag role-${role}`;
 
-  // Role based Nav Tabs filtering
   document.getElementById('nav-tab-admin').classList.toggle('hidden', role !== 'superadmin');
   document.getElementById('nav-tab-staff').classList.toggle('hidden', role === 'cashier');
   document.getElementById('nav-tab-stock-rec').classList.toggle('hidden', role === 'cashier');
@@ -1211,21 +1252,19 @@ function renderAdminConsole() {
   document.getElementById('adm-mrr').textContent = `Rs. ${totalMRR.toLocaleString()}`;
 
   const tbody = document.getElementById('admin-stores-tbody');
-  tbody.innerHTML = multiStoreDB.map(s => {
-    return `
-      <tr>
-        <td style="font-family:monospace;font-weight:700">${s.id}</td>
-        <td><strong>${s.name}</strong></td>
-        <td>${s.industry.toUpperCase()}</td>
-        <td>${s.city} • ${s.phone}</td>
-        <td>Rs. ${(s.fee||0).toLocaleString()}</td>
-        <td><span class="role-tag" style="background:#e0f2fe;color:#0284c7">${s.status}</span></td>
-        <td>
-          <button class="btn btn-primary" style="padding:4px 8px;font-size:11px" onclick="adminSwitchStore('${s.id}')">⚡ Login As Store</button>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  tbody.innerHTML = multiStoreDB.map(s => `
+    <tr>
+      <td style="font-family:monospace;font-weight:700">${s.id}</td>
+      <td><strong>${s.name}</strong></td>
+      <td>${s.industry.toUpperCase()}</td>
+      <td>${s.city} • ${s.phone}</td>
+      <td>Rs. ${(s.fee||0).toLocaleString()}</td>
+      <td><span class="role-tag" style="background:#e0f2fe;color:#0284c7">${s.status}</span></td>
+      <td>
+        <button class="btn btn-primary" style="padding:4px 8px;font-size:11px" onclick="adminSwitchStore('${s.id}')">⚡ Login As Store</button>
+      </td>
+    </tr>
+  `).join('');
 }
 
 function adminSwitchStore(storeId) {
@@ -1258,7 +1297,7 @@ function saveNewClientShopByAdmin() {
   multiStoreDB.push({
     id: slug,
     name,
-    city: 'Rawalpindi',
+    city: 'Sheikhupura',
     phone: '0300-0000000',
     currency: 'Rs.',
     industry,
@@ -1485,7 +1524,7 @@ function finishPosSale() {
   const total = updateBillTotals();
   const cash = parseFloat(document.getElementById('pos-cash-tendered').value) || 0;
   const change = cash - total;
-  const cust = document.getElementById('cart-customer-name').value.trim() || 'Walk-in Customer';
+  const cust = document.getElementById('cart-customer-name').value.trim() || 'Retailer / Walk-in';
 
   cart.forEach(c => {
     const p = (s.catalog || []).find(x => x.id === c.id);
@@ -1529,7 +1568,7 @@ function buildReceiptSlip(tx, store) {
     </div>
     <div>Bill #: INV-${String(tx.id).padStart(4,'0')}</div>
     <div>Date: ${d.toLocaleDateString()} ${d.toLocaleTimeString()}</div>
-    <div>Cashier: ${tx.cashier}</div>
+    <div>Sales Rep / Cashier: ${tx.cashier}</div>
     <div>Customer: ${tx.customer}</div>
     <div>--------------------------------</div>
     ${items}
@@ -1538,7 +1577,7 @@ function buildReceiptSlip(tx, store) {
     <div style="display:flex;justify-content:space-between"><span>Cash:</span><span>Rs. ${tx.cash}</span></div>
     <div style="display:flex;justify-content:space-between"><span>Change:</span><span>Rs. ${tx.change}</span></div>
     <div>--------------------------------</div>
-    <div style="text-align:center;font-size:10px">${store.policy || 'Thank you for visiting!'}</div>
+    <div style="text-align:center;font-size:10px">${store.policy || 'Thank you for your business!'}</div>
   `;
   document.getElementById('thermal-slip').style.display = 'block';
 }
@@ -1556,7 +1595,7 @@ function openReceiveStockModal() {
 function saveReceivedStock() {
   const s = getActiveStore();
   const prodId = parseInt(document.getElementById('rs-product-select').value);
-  const vendor = document.getElementById('rs-vendor-name').value.trim() || 'Distributor';
+  const vendor = document.getElementById('rs-vendor-name').value.trim() || 'Factory Depot';
   const qty = parseInt(document.getElementById('rs-qty').value) || 0;
   const cost = parseFloat(document.getElementById('rs-cost').value) || 0;
   const payType = document.getElementById('rs-pay-type').value;
@@ -1596,7 +1635,7 @@ function saveReceivedStock() {
   closeModal('modal-receive-stock');
   renderStockReceivedTable();
   updateSidebarStats();
-  alert(`Added ${qty} units to ${p.name}!`);
+  alert(`Added ${qty} cartons/units to ${p.name}!`);
 }
 
 function renderStockReceivedTable() {
@@ -1706,7 +1745,7 @@ function receiveCustomerPay(id) {
 
 function openCustomerCreditModal() {
   const s = getActiveStore();
-  const name = prompt('Customer Name:');
+  const name = prompt('Retailer / Customer Name:');
   if (!name) return;
   const phone = prompt('Customer Phone:');
   const amount = parseFloat(prompt('Credit Amount (Rs.):')) || 0;
