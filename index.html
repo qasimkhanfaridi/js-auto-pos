@@ -772,21 +772,36 @@
     <div id="auth-form-login">
       <div class="auth-input-group">
         <label>Username or Email</label>
-        <input type="text" id="login-username" placeholder="e.g. ali_juice or admin or jsauto">
+        <input type="text" id="login-username" placeholder="e.g. ali_juice, jsauto, admin" onkeydown="if(event.key==='Enter') attemptLogin()">
       </div>
       <div class="auth-input-group">
         <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••">
+        <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') attemptLogin()">
       </div>
       <button class="btn btn-primary" style="width:100%;padding:11px;font-size:14px" onclick="attemptLogin()">
         🚀 Login to Counter
       </button>
 
       <div class="quick-demo-accounts">
-        <div style="font-weight:700;margin-bottom:4px">💡 Demo Credentials (Preloaded):</div>
-        <div>• 🍹 <strong>ali_juice</strong> / <strong>ali123</strong> (Ali Juice Distribution - Sheikhupura)</div>
-        <div>• 👑 <strong>admin</strong> / <strong>admin123</strong> (Super Admin Console)</div>
-        <div>• 🏪 <strong>jsauto</strong> / <strong>123456</strong> (JS Auto Parts - Rawalpindi)</div>
+        <div style="font-weight:700;margin-bottom:8px;color:#0f172a">💡 1-Click Demo Logins:</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button type="button" class="btn btn-secondary" style="font-size:11.5px;padding:6px 10px;justify-content:space-between;border:1px solid #cbd5e1" onclick="quickFillLogin('ali_juice','ali123')">
+            <span>🍹 <strong>Ali Juice</strong> (Sheikhupura)</span>
+            <span style="font-weight:800;color:#2563eb">ali_juice ➔</span>
+          </button>
+          <button type="button" class="btn btn-secondary" style="font-size:11.5px;padding:6px 10px;justify-content:space-between;border:1px solid #cbd5e1" onclick="quickFillLogin('jsauto','123456')">
+            <span>🏪 <strong>JS Auto Parts</strong> (Rawalpindi)</span>
+            <span style="font-weight:800;color:#2563eb">jsauto ➔</span>
+          </button>
+          <button type="button" class="btn btn-secondary" style="font-size:11.5px;padding:6px 10px;justify-content:space-between;border:1px solid #cbd5e1" onclick="quickFillLogin('admin','admin123')">
+            <span>👑 <strong>Master Admin</strong> (Console)</span>
+            <span style="font-weight:800;color:#2563eb">admin ➔</span>
+          </button>
+          <button type="button" class="btn btn-secondary" style="font-size:11.5px;padding:6px 10px;justify-content:space-between;border:1px solid #cbd5e1" onclick="quickFillLogin('ali_counter','123456')">
+            <span>🧾 <strong>Ali Cashier</strong> (POS Only)</span>
+            <span style="font-weight:800;color:#2563eb">ali_counter ➔</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -2837,740 +2852,32 @@ const INITIAL_STORES = [
   }
 ];
 
-// Auto-upgrade JS Auto catalog to complete 65 products if old cached version was short
-const jsAutoStore = multiStoreDB.find(s => s.id === 'js-auto');
-if (jsAutoStore && (!jsAutoStore.catalog || jsAutoStore.catalog.length < 60)) {
-  jsAutoStore.catalog = [
-    {
-        "id":  1,
-        "sku":  "JS-OF-01",
-        "name":  "Honda Oil Filter",
-        "cat":  "Oil Filters",
-        "variant":  "JS-OF-01",
-        "price":  750,
-        "cost":  540,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  2,
-        "sku":  "JS-OF-02",
-        "name":  "Toyota Xli Oil Filter",
-        "cat":  "Oil Filters",
-        "variant":  "JS-OF-02",
-        "price":  950,
-        "cost":  684,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  3,
-        "sku":  "JS-OF-03",
-        "name":  "Toyota Landcruiser Oil Filter",
-        "cat":  "Oil Filters",
-        "variant":  "JS-OF-03",
-        "price":  1650,
-        "cost":  1188,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  4,
-        "sku":  "JS-OF-04",
-        "name":  "Toyota Revo + Vigo Oil Filter",
-        "cat":  "Oil Filters",
-        "variant":  "JS-OF-04",
-        "price":  1450,
-        "cost":  1044,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  5,
-        "sku":  "JS-OF-05",
-        "name":  "Suzuki Alto Oil Filter (New)",
-        "cat":  "Oil Filters",
-        "variant":  "JS-OF-05",
-        "price":  680,
-        "cost":  490,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  6,
-        "sku":  "JS-OF-06",
-        "name":  "Suzuki Mehran + Ravi Oil Filter",
-        "cat":  "Oil Filters",
-        "variant":  "JS-OF-06",
-        "price":  650,
-        "cost":  468,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  7,
-        "sku":  "JS-AF-01",
-        "name":  "Haval H6 Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-01",
-        "price":  9000,
-        "cost":  6480,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  8,
-        "sku":  "JS-AF-02",
-        "name":  "Jaecoo J5 + J7 Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-02",
-        "price":  8300,
-        "cost":  5976,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  9,
-        "sku":  "JS-AF-03",
-        "name":  "Kia Sportage Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-03",
-        "price":  3400,
-        "cost":  2448,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  10,
-        "sku":  "JS-AF-04",
-        "name":  "Toyota Xli Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-04",
-        "price":  1400,
-        "cost":  1008,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  11,
-        "sku":  "JS-AF-05",
-        "name":  "Toyota Xli Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-05",
-        "price":  1400,
-        "cost":  1008,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  12,
-        "sku":  "JS-AF-06",
-        "name":  "Toyota Xli + Grande Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-06",
-        "price":  1520,
-        "cost":  1094,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  13,
-        "sku":  "JS-AF-07",
-        "name":  "Honda City Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-07",
-        "price":  1400,
-        "cost":  1008,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  14,
-        "sku":  "JS-AF-08",
-        "name":  "Honda City Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-08",
-        "price":  1400,
-        "cost":  1008,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  15,
-        "sku":  "JS-AF-09",
-        "name":  "Honda City Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-09",
-        "price":  1530,
-        "cost":  1102,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  16,
-        "sku":  "JS-AF-10",
-        "name":  "Honda Civic Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-10",
-        "price":  1430,
-        "cost":  1030,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  17,
-        "sku":  "JS-AF-11",
-        "name":  "Honda Civic Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-11",
-        "price":  1350,
-        "cost":  972,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  18,
-        "sku":  "JS-AF-12",
-        "name":  "Honda Civic Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-12",
-        "price":  1440,
-        "cost":  1037,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  19,
-        "sku":  "JS-AF-13",
-        "name":  "Honda Civic Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-13",
-        "price":  1470,
-        "cost":  1058,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  20,
-        "sku":  "JS-AF-14",
-        "name":  "Honda Civic Air + AC Filter",
-        "cat":  "Air \u0026 AC Filters",
-        "variant":  "JS-AF-14",
-        "price":  2070,
-        "cost":  1490,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  21,
-        "sku":  "JS-FF-01",
-        "name":  "Toyota Fuel Filter V8",
-        "cat":  "Fuel Filters",
-        "variant":  "JS-FF-01",
-        "price":  4000,
-        "cost":  2880,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  22,
-        "sku":  "JS-FF-02",
-        "name":  "Revo Fuel Filter",
-        "cat":  "Fuel Filters",
-        "variant":  "JS-FF-02",
-        "price":  3800,
-        "cost":  2736,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  23,
-        "sku":  "JS-FF-03",
-        "name":  "Vigo Diesel Filter",
-        "cat":  "Fuel Filters",
-        "variant":  "JS-FF-03",
-        "price":  3800,
-        "cost":  2736,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  24,
-        "sku":  "JS-FF-04",
-        "name":  "Revo Diesel Filter",
-        "cat":  "Fuel Filters",
-        "variant":  "JS-FF-04",
-        "price":  3800,
-        "cost":  2736,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  25,
-        "sku":  "JS-TO-01",
-        "name":  "Waxco ATF Steering Oil",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-01",
-        "price":  1100,
-        "cost":  792,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  26,
-        "sku":  "JS-TO-02",
-        "name":  "PSO Gear Oil",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-02",
-        "price":  1100,
-        "cost":  792,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  27,
-        "sku":  "JS-TO-03",
-        "name":  "Kixx ATF Multi",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-03",
-        "price":  2850,
-        "cost":  2052,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  28,
-        "sku":  "JS-TO-04",
-        "name":  "Motul ATF Dx-III",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-04",
-        "price":  2750,
-        "cost":  1980,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  29,
-        "sku":  "JS-TO-05",
-        "name":  "Geartec Gear Oil",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-05",
-        "price":  2650,
-        "cost":  1908,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  30,
-        "sku":  "JS-TO-06",
-        "name":  "Kixx CVTf",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-06",
-        "price":  3150,
-        "cost":  2268,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  31,
-        "sku":  "JS-TO-07",
-        "name":  "Toyota WS",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-07",
-        "price":  13500,
-        "cost":  9720,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  32,
-        "sku":  "JS-TO-08",
-        "name":  "Toyota T-iv",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-08",
-        "price":  14500,
-        "cost":  10440,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  33,
-        "sku":  "JS-TO-09",
-        "name":  "Toyota TC",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-09",
-        "price":  14000,
-        "cost":  10080,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  34,
-        "sku":  "JS-TO-10",
-        "name":  "Toyota FE",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-10",
-        "price":  13800,
-        "cost":  9936,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  35,
-        "sku":  "JS-TO-11",
-        "name":  "Suzuki Green 2",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-11",
-        "price":  16000,
-        "cost":  11520,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  36,
-        "sku":  "JS-TO-12",
-        "name":  "Honda DW-1",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-12",
-        "price":  16500,
-        "cost":  11880,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  37,
-        "sku":  "JS-TO-13",
-        "name":  "Honda HMMF",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-13",
-        "price":  21500,
-        "cost":  15480,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  38,
-        "sku":  "JS-TO-14",
-        "name":  "Honda HCF-2",
-        "cat":  "Transmission Oils",
-        "variant":  "JS-TO-14",
-        "price":  15500,
-        "cost":  11160,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  39,
-        "sku":  "JS-BC-01",
-        "name":  "Guard Brake Oil (Big)",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-01",
-        "price":  500,
-        "cost":  360,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  40,
-        "sku":  "JS-BC-02",
-        "name":  "Guard Brake Oil (Small)",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-02",
-        "price":  350,
-        "cost":  252,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  41,
-        "sku":  "JS-BC-03",
-        "name":  "Seiken Brake Oil BF3",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-03",
-        "price":  1180,
-        "cost":  850,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  42,
-        "sku":  "JS-BC-04",
-        "name":  "Veslee Coolant (Green + Red)",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-04",
-        "price":  380,
-        "cost":  274,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  43,
-        "sku":  "JS-BC-05",
-        "name":  "Honda Coolant",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-05",
-        "price":  1300,
-        "cost":  936,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  44,
-        "sku":  "JS-BC-06",
-        "name":  "Toyota Coolant (Small)",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-06",
-        "price":  1300,
-        "cost":  936,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  45,
-        "sku":  "JS-BC-07",
-        "name":  "Toyota Coolant (Big)",
-        "cat":  "Brake Oils \u0026 Coolants",
-        "variant":  "JS-BC-07",
-        "price":  6800,
-        "cost":  4896,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  46,
-        "sku":  "JS-CC-01",
-        "name":  "Auto Doc Cata Clean",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-01",
-        "price":  1500,
-        "cost":  1080,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  47,
-        "sku":  "JS-CC-02",
-        "name":  "Aim Carb Clean",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-02",
-        "price":  600,
-        "cost":  432,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  48,
-        "sku":  "JS-CC-03",
-        "name":  "Nasa Carb Clean",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-03",
-        "price":  450,
-        "cost":  324,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  49,
-        "sku":  "JS-CC-04",
-        "name":  "7cf P Leather Polish",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-04",
-        "price":  550,
-        "cost":  396,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  50,
-        "sku":  "JS-CC-05",
-        "name":  "WD-40",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-05",
-        "price":  620,
-        "cost":  446,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  51,
-        "sku":  "JS-CC-06",
-        "name":  "Aim Rust Remover",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-06",
-        "price":  400,
-        "cost":  288,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  52,
-        "sku":  "JS-CC-07",
-        "name":  "Deargon Engine Degreaser",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-07",
-        "price":  800,
-        "cost":  576,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  53,
-        "sku":  "JS-CC-08",
-        "name":  "GFS Grease",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-08",
-        "price":  680,
-        "cost":  490,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  54,
-        "sku":  "JS-CC-09",
-        "name":  "Flamingo Fuel Injector Cleaner",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-09",
-        "price":  400,
-        "cost":  288,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  55,
-        "sku":  "JS-CC-10",
-        "name":  "Flamingo Engine Degreaser",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-10",
-        "price":  600,
-        "cost":  432,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  56,
-        "sku":  "JS-CC-11",
-        "name":  "Flamingo Motor Flush",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-11",
-        "price":  500,
-        "cost":  360,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  57,
-        "sku":  "JS-CC-12",
-        "name":  "Flamingo Diamond Hard Wax",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-12",
-        "price":  850,
-        "cost":  612,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  58,
-        "sku":  "JS-CC-13",
-        "name":  "7cf Hard Wax",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-13",
-        "price":  850,
-        "cost":  612,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  59,
-        "sku":  "JS-CC-14",
-        "name":  "Cosmic Hard Wax",
-        "cat":  "Cleaners \u0026 Car Care",
-        "variant":  "JS-CC-14",
-        "price":  1400,
-        "cost":  1008,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  60,
-        "sku":  "JS-EO-01",
-        "name":  "Total Quartz 9000 5W-30 (Big)",
-        "cat":  "Engine Oils",
-        "variant":  "JS-EO-01",
-        "price":  9600,
-        "cost":  6912,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  61,
-        "sku":  "JS-EO-02",
-        "name":  "Total Quartz 9000 5W-30 (Small)",
-        "cat":  "Engine Oils",
-        "variant":  "JS-EO-02",
-        "price":  7200,
-        "cost":  5184,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  62,
-        "sku":  "JS-EO-03",
-        "name":  "Total Quartz 7000 10W-40 (Big)",
-        "cat":  "Engine Oils",
-        "variant":  "JS-EO-03",
-        "price":  6800,
-        "cost":  4896,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  63,
-        "sku":  "JS-EO-04",
-        "name":  "Total Quartz 7000 10W-40 (Small)",
-        "cat":  "Engine Oils",
-        "variant":  "JS-EO-04",
-        "price":  5100,
-        "cost":  3672,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  64,
-        "sku":  "JS-EO-05",
-        "name":  "Total Quartz 3000 20W-50 (Big)",
-        "cat":  "Engine Oils",
-        "variant":  "JS-EO-05",
-        "price":  5800,
-        "cost":  4176,
-        "stock":  25,
-        "low":  5
-    },
-    {
-        "id":  65,
-        "sku":  "JS-EO-06",
-        "name":  "Total Quartz 3000 20W-50 (Small)",
-        "cat":  "Engine Oils",
-        "variant":  "JS-EO-06",
-        "price":  4400,
-        "cost":  3168,
-        "stock":  25,
-        "low":  5
-    }
-];
-  localStorage.setItem('omni_multi_stores', JSON.stringify(multiStoreDB));
-}
 // Initialize DB and always ensure Ali from Sheikhupura exists
 let usersDB = JSON.parse(localStorage.getItem('omni_users_db')) || INITIAL_USERS;
 let multiStoreDB = JSON.parse(localStorage.getItem('omni_multi_stores')) || INITIAL_STORES;
 
-// Make sure Ali's store and user exist even if storage had old data
-if (!multiStoreDB.some(s => s.id === 'ali-juice-skp')) {
-  multiStoreDB.unshift(INITIAL_STORES[0]);
-}
-if (!usersDB.some(u => u.username === 'ali_juice')) {
-  usersDB.unshift(INITIAL_USERS[0]);
-  usersDB.unshift(INITIAL_USERS[1]);
-}
+// Ensure all pre-configured demo stores and users exist in local database
+INITIAL_STORES.forEach(initStore => {
+  const existingStore = multiStoreDB.find(s => s.id === initStore.id);
+  if (!existingStore) {
+    multiStoreDB.push(initStore);
+  } else if (initStore.id === 'js-auto' && (!existingStore.catalog || existingStore.catalog.length < 60)) {
+    existingStore.catalog = initStore.catalog;
+  }
+});
+
+INITIAL_USERS.forEach(initUser => {
+  const existing = usersDB.find(u => u.username.toLowerCase() === initUser.username.toLowerCase());
+  if (!existing) {
+    usersDB.push({ ...initUser });
+  } else {
+    existing.pass = initUser.pass;
+    existing.role = initUser.role;
+    existing.storeId = initUser.storeId;
+    existing.name = initUser.name;
+  }
+});
+
 localStorage.setItem('omni_users_db', JSON.stringify(usersDB));
 localStorage.setItem('omni_multi_stores', JSON.stringify(multiStoreDB));
 
@@ -3598,23 +2905,42 @@ function getActiveStore() {
 // =========================================================================
 // 2. AUTHENTICATION & ROLE-BASED VIEW DECISION
 // =========================================================================
+function quickFillLogin(u, p) {
+  const uInput = document.getElementById('login-username');
+  const pInput = document.getElementById('login-password');
+  if (uInput) uInput.value = u;
+  if (pInput) pInput.value = p;
+  attemptLogin();
+}
+
 function checkAuthStatus() {
   const authScreen = document.getElementById('auth-screen');
   if (!currentSessionUser) {
-    authScreen.style.display = 'flex';
+    if (authScreen) {
+      authScreen.style.display = 'flex';
+      authScreen.classList.remove('hidden');
+    }
   } else {
-    authScreen.style.display = 'none';
-    setupUserPermissionsUI();
-    renderTopHeader();
-    updateSidebarStats();
+    if (authScreen) {
+      authScreen.style.display = 'none';
+      authScreen.classList.add('hidden');
+    }
+    try { setupUserPermissionsUI(); } catch (e) { console.error('setupUserPermissionsUI error:', e); }
+    try { renderTopHeader(); } catch (e) { console.error('renderTopHeader error:', e); }
+    try { updateSidebarStats(); } catch (e) { console.error('updateSidebarStats error:', e); }
+    try { updateQbBalances(); } catch (e) { console.error('updateQbBalances error:', e); }
 
     // ROLE DECIDES THE PREVIEW VIEW
-    if (currentSessionUser.role === 'superadmin') {
-      switchNavTab('admin');
-    } else if (currentSessionUser.role === 'cashier') {
-      switchNavTab('billing');
-    } else {
-      switchNavTab('home'); // Owner lands on Home Workflow
+    try {
+      if (currentSessionUser.role === 'superadmin') {
+        switchNavTab('admin');
+      } else if (currentSessionUser.role === 'cashier') {
+        switchNavTab('billing');
+      } else {
+        switchNavTab('home'); // Owner lands on Home Workflow
+      }
+    } catch (e) {
+      console.error('switchNavTab error:', e);
     }
   }
 }
@@ -3627,12 +2953,26 @@ function switchAuthMode(mode) {
 }
 
 function attemptLogin() {
-  const u = document.getElementById('login-username').value.trim();
-  const p = document.getElementById('login-password').value.trim();
+  const uInput = document.getElementById('login-username');
+  const pInput = document.getElementById('login-password');
+  const u = (uInput ? uInput.value : '').trim();
+  const p = (pInput ? pInput.value : '').trim();
+
+  if (!u || !p) {
+    alert('Please enter both username and password.');
+    return;
+  }
+
+  // Ensure initial users are present
+  INITIAL_USERS.forEach(initUser => {
+    const existing = usersDB.find(x => x.username.toLowerCase() === initUser.username.toLowerCase());
+    if (!existing) usersDB.push({ ...initUser });
+    else existing.pass = initUser.pass;
+  });
 
   const found = usersDB.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
   if (!found) {
-    alert('Invalid username or password!');
+    alert(`Invalid username or password!\n\nPlease use preloaded demo credentials:\n• ali_juice / ali123\n• jsauto / 123456\n• admin / admin123\n• ali_counter / 123456`);
     return;
   }
 
@@ -4289,27 +3629,34 @@ function openCalendarModal() {
 }
 
 function updateSidebarStats() {
-  updateQbBalances();
+  try { updateQbBalances(); } catch (e) { console.error('updateQbBalances error:', e); }
   const s = getActiveStore();
+  if (!s) return;
   const today = new Date().toDateString();
   const todayTxs = (s.transactions || []).filter(t => new Date(t.date).toDateString() === today);
-  const sales = todayTxs.reduce((acc, t) => acc + t.total, 0);
+  const sales = todayTxs.reduce((acc, t) => acc + (t.total || 0), 0);
   let cost = 0;
-  todayTxs.forEach(t => t.items.forEach(i => cost += (i.cost || 0) * i.qty));
+  todayTxs.forEach(t => (t.items || []).forEach(i => cost += (i.cost || 0) * (i.qty || 0)));
   const profit = Math.max(0, sales - cost);
 
-  document.getElementById('side-today-sales').textContent = `Rs. ${sales.toLocaleString()}`;
-  document.getElementById('side-today-bills').textContent = todayTxs.length;
-  document.getElementById('side-today-profit').textContent = `Rs. ${profit.toLocaleString()}`;
+  const elSales = document.getElementById('side-today-sales');
+  if (elSales) elSales.textContent = `Rs. ${sales.toLocaleString()}`;
+  const elBills = document.getElementById('side-today-bills');
+  if (elBills) elBills.textContent = todayTxs.length;
+  const elProfit = document.getElementById('side-today-profit');
+  if (elProfit) elProfit.textContent = `Rs. ${profit.toLocaleString()}`;
 
-  const lowCount = (s.catalog || []).filter(p => p.stock <= (p.low || 5)).length;
-  document.getElementById('side-low-stock').textContent = lowCount;
+  const lowCount = (s.catalog || []).filter(p => (p.stock || 0) <= (p.low || 5)).length;
+  const elLow = document.getElementById('side-low-stock');
+  if (elLow) elLow.textContent = lowCount;
 
-  const vendorTotal = (s.vendorBills || []).reduce((acc, b) => acc + b.balance, 0);
-  document.getElementById('side-vendor-payables').textContent = `Rs. ${vendorTotal.toLocaleString()}`;
+  const vendorTotal = (s.vendorBills || []).reduce((acc, b) => acc + (b.balance || 0), 0);
+  const elVP = document.getElementById('side-vendor-payables');
+  if (elVP) elVP.textContent = `Rs. ${vendorTotal.toLocaleString()}`;
 
-  const custTotal = (s.customerDues || []).reduce((acc, c) => acc + c.balance, 0);
-  document.getElementById('side-cust-receivables').textContent = `Rs. ${custTotal.toLocaleString()}`;
+  const custTotal = (s.customerDues || []).reduce((acc, c) => acc + (c.balance || 0), 0);
+  const elCR = document.getElementById('side-cust-receivables');
+  if (elCR) elCR.textContent = `Rs. ${custTotal.toLocaleString()}`;
 }
 
 function renderPosCatalog() {
