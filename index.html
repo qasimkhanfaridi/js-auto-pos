@@ -3,1318 +3,1474 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JS Auto — POS Billing System</title>
+<title>OmniKhata POS — Dashboard & Workflow Hub</title>
 <style>
   :root {
-    --navy: #0a1938;
-    --red: #d31038;
-    --gold: #f5a623;
-    --light: #f4f6fb;
-    --white: #ffffff;
-    --gray: #e2e6ef;
-    --dark: #1a2a4a;
-    --green: #1aaa55;
-    --orange: #e07b00;
+    --primary: #0f172a;       /* Slate 900 */
+    --top-nav: #1e293b;       /* Slate 800 */
+    --accent: #2563eb;        /* Royal Blue */
+    --accent-red: #dc2626;    /* Crimson */
+    --accent-green: #16a34a;  /* Forest Green */
+    --accent-gold: #d97706;   /* Amber */
+    --bg-page: #f1f5f9;       /* Slate 100 */
+    --card-bg: #ffffff;
+    --border: #cbd5e1;
+    --line: #94a3b8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--light); color: #222; font-size: 14px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-page); color: #0f172a; font-size: 13.5px;
+  }
 
-  /* TOP BAR */
+  /* TOP APP BAR */
   .topbar {
-    background: var(--navy);
-    color: white;
+    background: var(--primary); color: white; height: 56px;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 18px; height: 54px;
+    padding: 0 20px; border-bottom: 2px solid #334155;
   }
-  .topbar .brand { display: flex; align-items: center; gap: 10px; }
-  .topbar .brand .logo-circle {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: var(--red); display: flex; align-items: center; justify-content: center;
-    font-weight: 900; font-size: 15px; color: white; letter-spacing: -1px;
-  }
-  .topbar .brand-name { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
-  .topbar .brand-sub { font-size: 11px; color: #aab4cc; margin-top: 1px; }
-  .topbar .topright { display: flex; align-items: center; gap: 16px; }
-  .topbar .clock { font-size: 22px; font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
-  .topbar .date { font-size: 11px; color: #aab4cc; text-align: right; }
-
-  /* TABS */
-  .tabs {
-    background: var(--dark);
-    display: flex; padding: 0 12px; gap: 4px;
-  }
-  .tab {
-    padding: 10px 22px; cursor: pointer; color: #8fa2c8;
-    font-size: 13px; font-weight: 600; border-bottom: 3px solid transparent;
-    transition: all .2s; letter-spacing: .3px;
-  }
-  .tab:hover { color: white; }
-  .tab.active { color: white; border-bottom-color: var(--red); }
-
-  /* LAYOUT */
-  .main { display: flex; height: calc(100vh - 96px); overflow: hidden; }
-
-  /* LEFT — PRODUCT CATALOG */
-  .catalog-panel {
-    width: 58%; background: white; display: flex; flex-direction: column; border-right: 2px solid var(--gray);
-  }
-  .catalog-header { padding: 10px 14px; background: var(--light); border-bottom: 1px solid var(--gray); }
-  .scan-row { display: flex; gap: 8px; margin-bottom: 8px; }
-  .scan-input {
-    flex: 1; padding: 9px 14px; border: 2px solid var(--navy);
-    border-radius: 6px; font-size: 15px; font-weight: 600;
-    background: white; outline: none;
-  }
-  .scan-input:focus { border-color: var(--red); }
-  .btn {
-    padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;
-    font-weight: 700; font-size: 13px; transition: opacity .15s;
-  }
-  .btn:hover { opacity: .85; }
-  .btn-red { background: var(--red); color: white; }
-  .btn-navy { background: var(--navy); color: white; }
-  .btn-green { background: var(--green); color: white; }
-  .btn-gray { background: var(--gray); color: #333; }
-  .btn-gold { background: var(--gold); color: #222; }
-  .btn-sm { padding: 5px 11px; font-size: 12px; }
-
-  /* Category pills */
-  .cat-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-  .pill {
-    padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 600;
-    cursor: pointer; background: var(--gray); color: #444; border: 2px solid transparent;
-    transition: all .15s;
-  }
-  .pill.active { background: var(--navy); color: white; border-color: var(--navy); }
-  .pill:hover { border-color: var(--navy); }
-
-  /* Product grid */
-  .product-grid {
-    flex: 1; overflow-y: auto; padding: 10px;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 8px;
-    align-content: start;
-  }
-  .prod-card {
-    background: var(--light); border: 1.5px solid var(--gray); border-radius: 8px;
-    padding: 10px; cursor: pointer; transition: all .15s; user-select: none;
-  }
-  .prod-card:hover { border-color: var(--red); background: #fff5f7; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.1); }
-  .prod-card .cat-badge {
-    display: inline-block; font-size: 10px; font-weight: 700;
-    padding: 2px 6px; border-radius: 4px; margin-bottom: 5px;
-    background: var(--navy); color: white;
-  }
-  .prod-card .prod-name { font-weight: 700; font-size: 13px; color: var(--navy); line-height: 1.3; margin-bottom: 3px; }
-  .prod-card .prod-brand { font-size: 11px; color: #888; margin-bottom: 4px; }
-  .prod-card .prod-sku { font-size: 10px; color: #aaa; font-family: monospace; margin-bottom: 6px; }
-  .prod-card .prod-footer { display: flex; justify-content: space-between; align-items: center; }
-  .prod-card .prod-price { font-size: 15px; font-weight: 800; color: var(--red); }
-  .prod-card .prod-stock { font-size: 10px; }
-  .stock-ok { color: var(--green); font-weight: 700; }
-  .stock-low { color: var(--orange); font-weight: 700; }
-  .stock-out { color: var(--red); font-weight: 700; }
-
-  /* RIGHT — CART */
-  .cart-panel { width: 42%; display: flex; flex-direction: column; background: white; }
-  .cart-header {
-    padding: 10px 14px; background: var(--navy); color: white;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .cart-title { font-size: 16px; font-weight: 700; }
-  .cart-count { background: var(--red); color: white; border-radius: 50%; width: 22px; height: 22px;
-    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
-
-  /* Customer row */
-  .customer-row {
-    padding: 8px 14px; background: var(--light); border-bottom: 1px solid var(--gray);
-    display: flex; gap: 8px; align-items: center;
-  }
-  .customer-row input {
-    flex: 1; padding: 7px 10px; border: 1.5px solid var(--gray); border-radius: 5px; font-size: 13px;
-  }
-  .customer-row input:focus { outline: none; border-color: var(--navy); }
-
-  .cart-items { flex: 1; overflow-y: auto; padding: 6px 8px; }
-  .cart-empty { color: #aaa; text-align: center; margin-top: 40px; font-size: 14px; }
-  .cart-row {
-    display: flex; align-items: center; gap: 6px; padding: 7px 6px;
-    border-bottom: 1px solid var(--gray); background: white; border-radius: 4px; margin-bottom: 2px;
-  }
-  .cart-row:hover { background: #fafbff; }
-  .cart-row .cr-info { flex: 1; }
-  .cart-row .cr-name { font-weight: 700; font-size: 12.5px; color: var(--navy); }
-  .cart-row .cr-sku { font-size: 10px; color: #aaa; font-family: monospace; }
-  .cart-row .cr-price { font-size: 12px; color: #555; }
-  .cart-row .cr-qty { display: flex; align-items: center; gap: 4px; }
-  .qty-btn {
-    width: 22px; height: 22px; border: 1.5px solid var(--gray); border-radius: 4px;
-    cursor: pointer; background: white; font-weight: 700; font-size: 14px;
+  .brand-area { display: flex; align-items: center; gap: 12px; }
+  .logo-box {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white; font-weight: 900; font-size: 18px;
     display: flex; align-items: center; justify-content: center;
-    transition: all .1s;
   }
-  .qty-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
-  .qty-num { font-weight: 700; font-size: 14px; min-width: 22px; text-align: center; }
-  .cr-total { font-weight: 800; font-size: 13px; color: var(--navy); min-width: 60px; text-align: right; }
-  .cr-del { color: var(--red); cursor: pointer; font-size: 18px; padding: 0 2px; font-weight: 700; }
-
-  /* TOTALS */
-  .totals-box { padding: 10px 14px; border-top: 2px solid var(--gray); background: var(--light); }
-  .totals-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
-  .totals-row .label { color: #666; }
-  .totals-row .value { font-weight: 700; }
-  .totals-row.big { font-size: 18px; }
-  .totals-row.big .label { color: var(--navy); font-weight: 800; }
-  .totals-row.big .value { color: var(--red); font-weight: 900; }
-  .discount-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
-  .discount-row input {
-    width: 70px; padding: 5px 8px; border: 1.5px solid var(--gray); border-radius: 5px;
-    font-size: 13px; font-weight: 700; text-align: center;
+  .app-name { font-size: 17px; font-weight: 800; }
+  .app-name span { color: #60a5fa; }
+  .shop-selector-pill {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
+    color: #e2e8f0; display: flex; align-items: center; gap: 8px; cursor: pointer;
   }
-  .discount-row input:focus { outline: none; border-color: var(--navy); }
+  .shop-selector-pill:hover { background: rgba(255,255,255,0.18); border-color: #60a5fa; }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
 
-  /* ACTION BUTTONS */
-  .action-btns { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; background: white; border-top: 1px solid var(--gray); }
-  .pay-btn {
+  /* TOP NAVIGATION TABS */
+  .nav-tabs {
+    background: var(--top-nav); display: flex; padding: 0 16px; gap: 4px;
+    border-bottom: 1px solid #334155;
+  }
+  .tab-link {
+    padding: 11px 20px; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: 700;
+    border-bottom: 3px solid transparent; transition: all .15s; display: flex; align-items: center; gap: 7px;
+  }
+  .tab-link:hover { color: #f8fafc; }
+  .tab-link.active { color: white; border-bottom-color: #38bdf8; background: rgba(255,255,255,0.04); }
+
+  /* HOME WORKFLOW DIAGRAM CONTAINER */
+  .workflow-view {
+    padding: 20px 24px; max-width: 1400px; margin: 0 auto;
+  }
+  .dashboard-grid {
+    display: grid; grid-template-columns: 1fr 320px; gap: 20px;
+  }
+
+  /* QUICKBOOKS STYLE WORKFLOW LANES */
+  .flow-lane {
+    background: white; border-radius: 12px; border: 1.5px solid var(--border);
+    margin-bottom: 18px; position: relative; padding: 18px 20px 20px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .flow-lane-title {
+    position: absolute; top: -12px; left: 24px; background: #e0e7ff;
+    color: #3730a3; padding: 2px 14px; border-radius: 12px; font-size: 11px;
+    font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
+    border: 1px solid #c7d2fe;
+  }
+
+  /* WORKFLOW NODES & CONNECTIONS */
+  .workflow-row {
+    display: flex; align-items: center; justify-content: space-around;
+    padding: 10px 0; position: relative;
+  }
+  .flow-node {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    cursor: pointer; padding: 12px 16px; border-radius: 10px; width: 150px;
+    background: #f8fafc; border: 1.5px solid #cbd5e1; transition: all .2s;
+    position: relative; z-index: 2;
+  }
+  .flow-node:hover {
+    background: #eff6ff; border-color: var(--accent); transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(37,99,235,0.15);
+  }
+  .flow-node.highlight-main {
+    border-color: #3b82f6; background: #f0f7ff;
+    box-shadow: 0 3px 10px rgba(59,130,246,0.15);
+  }
+  .flow-node.highlight-pay {
+    border-color: #10b981; background: #f0fdf4;
+  }
+  .node-icon { font-size: 32px; margin-bottom: 6px; }
+  .node-title { font-weight: 800; font-size: 13px; color: #1e293b; line-height: 1.2; }
+  .node-badge {
+    font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 10px;
+    margin-top: 5px; text-transform: uppercase;
+  }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-amber { background: #fef3c7; color: #b45309; }
+  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+
+  /* ARROW CONNECTOR */
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: #94a3b8; font-size: 22px; font-weight: 900;
+  }
+
+  /* SIDEBAR PANELS */
+  .side-panel {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .side-card {
+    background: white; border-radius: 12px; border: 1.5px solid var(--border);
+    padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  }
+  .side-card h4 {
+    font-size: 13px; font-weight: 800; color: #475569; text-transform: uppercase;
+    letter-spacing: .5px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .quick-stat {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px;
+  }
+  .quick-stat:last-child { border-bottom: none; }
+  .quick-stat .val { font-weight: 800; font-size: 15px; }
+
+  /* POS BILLING LAYOUT */
+  .pos-main-layout {
+    display: flex; height: calc(100vh - 100px); overflow: hidden;
+  }
+  .pos-left {
+    width: 60%; background: white; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+  }
+  .pos-right {
+    width: 40%; background: #ffffff; display: flex; flex-direction: column;
+  }
+
+  /* SEARCH & CATALOG GRID */
+  .pos-catalog-head {
+    padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid var(--border);
+  }
+  .scan-input-box {
+    width: 100%; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 8px;
+    font-size: 14px; font-weight: 700; outline: none; margin-bottom: 8px;
+  }
+  .scan-input-box:focus { border-color: var(--accent); }
+  .cat-pills-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .cp-pill {
+    white-space: nowrap; padding: 5px 12px; border-radius: 16px; font-size: 12px;
+    font-weight: 700; cursor: pointer; background: #e2e8f0; color: #334155;
+  }
+  .cp-pill.active { background: var(--primary); color: white; }
+
+  .pos-grid {
+    flex: 1; overflow-y: auto; padding: 12px; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; align-content: start;
+  }
+  .item-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 10px; cursor: pointer; transition: all .15s; display: flex; flex-direction: column;
+  }
+  .item-card:hover {
+    border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+  }
+  .item-card .ic-cat { font-size: 9.5px; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 4px; }
+  .item-card .ic-name { font-weight: 700; font-size: 13px; line-height: 1.3; margin-bottom: 4px; }
+  .item-card .ic-variant { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+  .item-card .ic-foot { display: flex; justify-content: space-between; align-items: baseline; margin-top: auto; }
+  .item-card .ic-price { font-size: 15px; font-weight: 900; color: var(--accent-red); }
+  .item-card .ic-stock { font-size: 10.5px; font-weight: 700; }
+
+  /* CART ITEMS */
+  .cart-header-strip {
+    background: var(--primary); color: white; padding: 12px 16px;
+    display: flex; justify-content: space-between; align-items: center; font-weight: 800;
+  }
+  .cart-rows-box { flex: 1; overflow-y: auto; padding: 8px 12px; }
+  .cart-line {
+    display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--border);
+  }
+  .cart-line-info { flex: 1; min-width: 0; }
+  .cart-line-name { font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cart-line-sub { font-size: 11px; color: #64748b; font-family: monospace; }
+  .qty-ctrl { display: flex; align-items: center; gap: 4px; }
+  .qty-ctrl button {
+    width: 22px; height: 22px; border: 1px solid #cbd5e1; border-radius: 4px;
+    cursor: pointer; background: white; font-weight: 800;
+  }
+  .cart-line-total { font-weight: 800; min-width: 70px; text-align: right; color: var(--primary); }
+
+  .cart-footer-box {
+    padding: 12px 16px; background: #f8fafc; border-top: 2px solid var(--border);
+  }
+  .cf-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+  .cf-row.grand { font-size: 19px; font-weight: 900; color: var(--primary); border-top: 1px dashed #cbd5e1; padding-top: 8px; }
+  .cf-row.grand .v { color: var(--accent-red); font-size: 22px; }
+
+  .btn-checkout {
     width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer;
-    font-size: 17px; font-weight: 800; background: var(--green); color: white;
-    letter-spacing: .5px; transition: opacity .15s;
+    background: var(--accent-green); color: white; font-size: 16px; font-weight: 800;
+    margin-top: 10px; transition: opacity .15s;
   }
-  .pay-btn:hover { opacity: .9; }
-  .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
-  .secondary-btns { display: flex; gap: 8px; }
-  .secondary-btns .btn { flex: 1; font-size: 12px; padding: 9px; }
+  .btn-checkout:disabled { background: #cbd5e1; cursor: not-allowed; }
 
-  /* ========== INVENTORY TAB ========== */
-  .inv-panel { padding: 16px; overflow-y: auto; height: calc(100vh - 96px); }
-  .inv-topbar { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
-  .inv-topbar input { padding: 8px 12px; border: 1.5px solid var(--gray); border-radius: 6px; font-size: 13px; flex: 1; min-width: 200px; }
-  .inv-topbar input:focus { outline: none; border-color: var(--navy); }
-  .inv-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
-  .inv-table th { background: var(--navy); color: white; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 700; }
-  .inv-table td { padding: 9px 12px; border-bottom: 1px solid var(--gray); font-size: 13px; }
-  .inv-table tr:hover td { background: #f8faff; }
-  .inv-table .sku-cell { font-family: monospace; font-size: 11px; color: #888; }
-  .inv-table .price-cell { font-weight: 700; color: var(--red); }
-  .badge { padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-  .badge-green { background: #d4f5e2; color: var(--green); }
-  .badge-orange { background: #fff3d4; color: var(--orange); }
-  .badge-red { background: #fde0e5; color: var(--red); }
+  /* COMMON BUTTONS */
+  .btn {
+    padding: 8px 14px; border-radius: 6px; font-weight: 700; font-size: 13px;
+    border: none; cursor: pointer; transition: all .15s;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-dark { background: var(--primary); color: white; }
+  .btn-secondary { background: #e2e8f0; color: #1e293b; }
+  .btn-success { background: var(--accent-green); color: white; }
+  .btn-danger { background: var(--accent-red); color: white; }
 
-  /* ========== BARCODE TAB ========== */
-  .bc-panel { padding: 16px; overflow-y: auto; height: calc(100vh - 96px); display: flex; gap: 16px; flex-wrap: wrap; align-content: start; }
-  .bc-left { flex: 1; min-width: 280px; }
-  .bc-right { flex: 1; min-width: 280px; }
-  .bc-preview {
-    background: white; border: 2px dashed var(--gray); border-radius: 10px;
-    padding: 20px; text-align: center; margin-top: 12px;
+  /* FULL SCREEN PANELS (INVENTORY, VENDORS, AUDIT) */
+  .full-panel-container { padding: 24px; max-width: 1300px; margin: 0 auto; }
+  .panel-box {
+    background: white; border-radius: 12px; border: 1.5px solid var(--border);
+    padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); margin-bottom: 20px;
   }
-  .label-sticker {
-    display: inline-block; background: white; border: 2px solid #333;
-    padding: 10px 16px; border-radius: 4px; min-width: 200px;
+  .panel-box h3 {
+    font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-  .label-sticker .l-shop { font-size: 11px; font-weight: 700; color: var(--navy); letter-spacing: 2px; }
-  .label-sticker .l-name { font-size: 14px; font-weight: 800; margin: 3px 0; }
-  .label-sticker .l-price { font-size: 18px; font-weight: 900; color: var(--red); }
-  .label-sticker .l-sku { font-size: 10px; color: #888; font-family: monospace; }
-  .label-sticker svg { display: block; margin: 4px auto; }
 
-  /* ========== REPORTS TAB ========== */
-  .rep-panel { padding: 16px; overflow-y: auto; height: calc(100vh - 96px); }
-  .rep-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .rep-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.08); border-left: 4px solid var(--navy); }
-  .rep-card .rc-val { font-size: 26px; font-weight: 900; color: var(--navy); }
-  .rep-card .rc-lbl { font-size: 12px; color: #888; margin-top: 3px; }
-  .rep-card.red-border { border-left-color: var(--red); }
-  .rep-card .rc-val.red { color: var(--red); }
-  .rep-card.green-border { border-left-color: var(--green); }
-  .rep-card .rc-val.green { color: var(--green); }
-  .tx-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
-  .tx-table th { background: var(--dark); color: white; padding: 10px 12px; text-align: left; font-size: 12px; }
-  .tx-table td { padding: 9px 12px; border-bottom: 1px solid var(--gray); font-size: 13px; }
-  .tx-table tr:hover td { background: #f8faff; }
+  /* MODALS */
+  .modal-shade {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(2px);
+    z-index: 1000; display: none; align-items: center; justify-content: center;
+  }
+  .modal-shade.open { display: flex; }
+  .modal-box {
+    background: white; border-radius: 12px; width: 90%; max-width: 540px;
+    padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto;
+  }
+  .modal-box h2 { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 14px; }
+  .m-row { margin-bottom: 12px; }
+  .m-row label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; }
+  .m-row input, .m-row select, .m-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px;
+    font-size: 13.5px; outline: none; font-family: inherit;
+  }
+  .m-row input:focus, .m-row select:focus { border-color: var(--accent); }
 
-  /* MODAL */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,.55); z-index: 1000; align-items: center; justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: white; border-radius: 12px; padding: 24px; min-width: 340px; max-width: 480px;
-    width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,.25);
-  }
-  .modal h2 { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 16px; }
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 4px; }
-  .form-group input, .form-group select {
-    width: 100%; padding: 9px 12px; border: 1.5px solid var(--gray);
-    border-radius: 6px; font-size: 14px;
-  }
-  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--navy); }
-  .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
-  .modal-btns .btn { flex: 1; padding: 11px; font-size: 14px; }
+  /* TABLE */
+  .nice-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .nice-table th { background: #1e293b; color: white; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 700; }
+  .nice-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .nice-table tr:hover td { background: #f8fafc; }
 
-  /* PAYMENT MODAL */
-  .pay-modal .amount-display {
-    font-size: 36px; font-weight: 900; color: var(--navy);
-    text-align: center; padding: 16px; background: var(--light);
-    border-radius: 8px; margin-bottom: 12px;
-  }
-  .pay-modal .amount-display span { color: var(--red); }
-  .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
-  .numpad-btn {
-    padding: 14px; font-size: 18px; font-weight: 700; border: 1.5px solid var(--gray);
-    border-radius: 8px; background: white; cursor: pointer; transition: all .1s;
-  }
-  .numpad-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
-  .numpad-btn.zero { grid-column: span 2; }
-  .change-display { font-size: 20px; font-weight: 800; text-align: center; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-  .change-pos { background: #d4f5e2; color: var(--green); }
-  .change-neg { background: #fde0e5; color: var(--red); }
-
-  /* RECEIPT */
+  /* THERMAL RECEIPT PRINT */
   @media print {
     body * { visibility: hidden; }
-    #receipt-print, #receipt-print * { visibility: visible; }
-    #receipt-print { position: fixed; top: 0; left: 0; width: 80mm; }
+    #thermal-slip, #thermal-slip * { visibility: visible; }
+    #thermal-slip { position: absolute; left: 0; top: 0; width: 78mm; padding: 2mm; font-family: 'Courier New', monospace; font-size: 11px; }
   }
-  #receipt-print {
-    font-family: 'Courier New', monospace; font-size: 12px; width: 300px; padding: 12px;
-    background: white;
-  }
-  #receipt-print .r-center { text-align: center; }
-  #receipt-print .r-bold { font-weight: 700; }
-  #receipt-print .r-line { border-top: 1px dashed #333; margin: 6px 0; }
-  #receipt-print .r-title { font-size: 16px; font-weight: 900; letter-spacing: 2px; }
-  #receipt-print .r-row { display: flex; justify-content: space-between; }
-  #receipt-print .r-total { font-size: 16px; font-weight: 900; }
-
-  /* SECTION CARDS */
-  .card { background: white; border-radius: 10px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
-  .card h3 { font-size: 14px; font-weight: 800; color: var(--navy); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--gray); }
+  #thermal-slip { display: none; background: white; color: black; }
 
   .hidden { display: none !important; }
-  .tab-content { height: 100%; }
-
-  /* SEARCH */
-  .search-wrap { position: relative; }
-  .search-wrap input { padding-left: 32px; }
-  .search-wrap .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 15px; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-thumb { background: var(--gray); border-radius: 3px; }
-
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 20px; right: 20px; padding: 10px 18px;
-    background: var(--navy); color: white; border-radius: 8px; font-weight: 700;
-    font-size: 13px; z-index: 9999; opacity: 0; transform: translateY(20px);
-    transition: all .3s; pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-
-  /* No results */
-  .no-results { color: #aaa; text-align: center; grid-column: 1/-1; padding: 40px; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- 1. TOP HEADER -->
 <div class="topbar">
-  <div class="brand">
-    <div class="logo-circle">JS</div>
+  <div class="brand-area">
+    <div class="logo-box">Ω</div>
     <div>
-      <div class="brand-name">JS AUTO</div>
-      <div class="brand-sub">Car Filters & Oils — Rawalpindi</div>
+      <div class="app-name">OmniKhata <span>POS</span></div>
+      <div style="font-size:11px;color:#94a3b8">Universal Retail & Workflow Hub</div>
     </div>
   </div>
-  <div class="topright">
-    <div style="text-align:right">
-      <div class="clock" id="clock">--:--:--</div>
-      <div class="date" id="date-display">---</div>
-    </div>
-    <div style="text-align:right">
-      <div style="font-size:11px;color:#aab4cc">Cashier</div>
-      <div style="font-size:13px;font-weight:700">Admin</div>
-    </div>
+
+  <!-- Configurable Store Name -->
+  <div class="shop-selector-pill" onclick="openStoreConfig()" title="Change Store Configuration">
+    <div class="pulse-dot"></div>
+    <span>🏪 <strong id="top-store-name">JS Auto Parts</strong> (<span id="top-store-city">Rawalpindi</span>)</span>
+    <span style="font-size:11px;color:#93c5fd">⚙️ Configure</span>
+  </div>
+
+  <div style="text-align:right">
+    <div id="live-time" style="font-size:17px;font-weight:800;color:#f59e0b">--:--:--</div>
+    <div id="live-date" style="font-size:11px;color:#94a3b8">---</div>
   </div>
 </div>
 
-<!-- TABS -->
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('pos')">🧾 Billing / POS</div>
-  <div class="tab" onclick="switchTab('inventory')">📦 Inventory</div>
-  <div class="tab" onclick="switchTab('barcode')">🏷️ Barcode Labels</div>
-  <div class="tab" onclick="switchTab('reports')">📊 Reports</div>
+<!-- 2. WORKFLOW NAVIGATION BAR -->
+<div class="nav-tabs">
+  <div class="tab-link active" onclick="switchView('home')">🏠 Home Workflow</div>
+  <div class="tab-link" onclick="switchView('billing')">🧾 Counter Billing (POS)</div>
+  <div class="tab-link" onclick="switchView('cust-pay')">💳 Customer Pay Bills (Udhaar)</div>
+  <div class="tab-link" onclick="switchView('stock-rec')">📦 Receive Stock (GRN)</div>
+  <div class="tab-link" onclick="switchView('stock-pay')">💸 Stock Pay Bills (Vendors)</div>
+  <div class="tab-link" onclick="switchView('inventory')">📊 Inventory & Items</div>
+  <div class="tab-link" onclick="switchView('summary')">📋 Daily Z-Report</div>
 </div>
 
-<!-- ===================== POS TAB ===================== -->
-<div id="tab-pos" class="tab-content">
-  <div class="main">
-    <!-- CATALOG -->
-    <div class="catalog-panel">
-      <div class="catalog-header">
-        <div class="scan-row">
-          <div class="search-wrap" style="flex:1">
-            <span class="search-icon">🔍</span>
-            <input class="scan-input" id="scan-input" type="text"
-              placeholder="Scan barcode or type product name / SKU…"
-              onkeydown="handleScan(event)" oninput="filterProducts(this.value)" autocomplete="off">
+<!-- ========================================================================= -->
+<!-- VIEW 1: HOME WORKFLOW DIAGRAM (QuickBooks Style as in User Images)       -->
+<!-- ========================================================================= -->
+<div id="view-home" class="workflow-view">
+  <div class="dashboard-grid">
+    <!-- LEFT: WORKFLOW LANES -->
+    <div>
+      <!-- LANE 1: VENDORS / SUPPLIERS WORKFLOW -->
+      <div class="flow-lane">
+        <div class="flow-lane-title">🚚 Vendors & Inventory Flow</div>
+        <div class="workflow-row">
+          <div class="flow-node" onclick="openReceiveStockModal()">
+            <div class="node-icon">📦</div>
+            <div class="node-title">Receive Stock</div>
+            <div style="font-size:11px;color:#64748b">Increase Inventory</div>
+            <span class="node-badge badge-blue">Action 1</span>
           </div>
-          <button class="btn btn-red" onclick="clearSearch()">✕ Clear</button>
-        </div>
-        <div class="cat-pills" id="cat-pills">
-          <div class="pill active" onclick="filterCat('all',this)">All</div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-node" onclick="openEnterVendorBillModal()">
+            <div class="node-icon">📑</div>
+            <div class="node-title">Enter Vendor Bills</div>
+            <div style="font-size:11px;color:#64748b">Record Khata / Udhaar</div>
+            <span class="node-badge badge-amber">Action 2</span>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-node highlight-pay" onclick="switchView('stock-pay')">
+            <div class="node-icon">💸</div>
+            <div class="node-title">Stock Pay Bills</div>
+            <div style="font-size:11px;color:#16a34a">Pay Vendor Outstandings</div>
+            <span class="node-badge badge-green">Action 3</span>
+          </div>
         </div>
       </div>
-      <div class="product-grid" id="product-grid"></div>
+
+      <!-- LANE 2: CUSTOMERS & SALES BILLING WORKFLOW -->
+      <div class="flow-lane">
+        <div class="flow-lane-title">👥 Customers & Sales Flow</div>
+        <div class="workflow-row">
+          <div class="flow-node highlight-main" onclick="switchView('billing')">
+            <div class="node-icon">🧾</div>
+            <div class="node-title">Counter Billing</div>
+            <div style="font-size:11px;color:#2563eb">Barcode POS Sales</div>
+            <span class="node-badge badge-blue">POS Active</span>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-node" onclick="openNewCustomerCreditModal()">
+            <div class="node-icon">📄</div>
+            <div class="node-title">Create Invoices</div>
+            <div style="font-size:11px;color:#64748b">Credit / Walk-in Sale</div>
+            <span class="node-badge badge-amber">Credit Sale</span>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-node highlight-pay" onclick="switchView('cust-pay')">
+            <div class="node-icon">💳</div>
+            <div class="node-title">Customer Pay Bills</div>
+            <div style="font-size:11px;color:#16a34a">Collect Khata / Dues</div>
+            <span class="node-badge badge-green">Receive Cash</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LANE 3: BANKING & CASH SUMMARY -->
+      <div class="flow-lane">
+        <div class="flow-lane-title">🏦 Cash Register & Summary</div>
+        <div class="workflow-row">
+          <div class="flow-node" onclick="switchView('summary')">
+            <div class="node-icon">📊</div>
+            <div class="node-title">Daily Z-Report</div>
+            <div style="font-size:11px;color:#64748b">Today's Sales & Cash</div>
+            <span class="node-badge badge-purple">Reports</span>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-node" onclick="switchView('inventory')">
+            <div class="node-icon">🏷️</div>
+            <div class="node-title">Stock Audit</div>
+            <div style="font-size:11px;color:#64748b">Low Stock & Valuation</div>
+            <span class="node-badge badge-amber">Stock Status</span>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-node" onclick="openStoreConfig()">
+            <div class="node-icon">⚙️</div>
+            <div class="node-title">Store Profile</div>
+            <div style="font-size:11px;color:#64748b">Presets & Hardware</div>
+            <span class="node-badge badge-blue">Settings</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- CART -->
-    <div class="cart-panel">
-      <div class="cart-header">
-        <div class="cart-title">🛒 Bill / Cart</div>
-        <div class="cart-count" id="cart-count">0</div>
-      </div>
-
-      <!-- Customer name -->
-      <div class="customer-row">
-        <span style="font-size:12px;color:#666;white-space:nowrap">Customer:</span>
-        <input id="customer-name" type="text" placeholder="Walk-in Customer (optional)">
-        <span style="font-size:12px;color:#666;white-space:nowrap">Phone:</span>
-        <input id="customer-phone" type="text" placeholder="03XX-XXXXXXX" style="max-width:130px">
-      </div>
-
-      <div class="cart-items" id="cart-items">
-        <div class="cart-empty" id="cart-empty-msg">
-          <div style="font-size:40px;margin-bottom:8px">🛒</div>
-          Scan or click a product to add it to the bill
+    <!-- RIGHT: QUICK STATUS SUMMARY SIDEBAR -->
+    <div class="side-panel">
+      <div class="side-card">
+        <h4>⚡ Today's Counter Overview</h4>
+        <div class="quick-stat">
+          <span style="color:#64748b">Today's Sales:</span>
+          <span class="val" style="color:var(--accent-green)" id="side-today-sales">Rs. 0</span>
+        </div>
+        <div class="quick-stat">
+          <span style="color:#64748b">Bills Generated:</span>
+          <span class="val" id="side-today-bills">0</span>
+        </div>
+        <div class="quick-stat">
+          <span style="color:#64748b">Est. Gross Profit:</span>
+          <span class="val" style="color:var(--accent)" id="side-today-profit">Rs. 0</span>
         </div>
       </div>
 
-      <!-- TOTALS -->
-      <div class="totals-box">
-        <div class="totals-row">
-          <span class="label">Subtotal</span>
-          <span class="value" id="subtotal">Rs. 0</span>
+      <div class="side-card">
+        <h4>📦 Stock & Payables Status</h4>
+        <div class="quick-stat">
+          <span style="color:#64748b">Low Stock Alerts:</span>
+          <span class="val" style="color:var(--accent-red)" id="side-low-stock">0</span>
         </div>
-        <div class="discount-row">
-          <span style="font-size:12px;color:#666">Discount:</span>
-          <input type="number" id="discount-input" value="0" min="0" max="100" placeholder="0"
-            oninput="updateTotals()"> <span style="font-size:12px;color:#666">%</span>
-          <span style="font-size:12px;color:#666;margin-left:auto" id="discount-amount">- Rs. 0</span>
+        <div class="quick-stat">
+          <span style="color:#64748b">Vendor Payables:</span>
+          <span class="val" style="color:var(--accent-red)" id="side-vendor-payables">Rs. 0</span>
         </div>
-        <div class="totals-row big">
-          <span class="label">TOTAL</span>
-          <span class="value" id="grand-total">Rs. 0</span>
+        <div class="quick-stat">
+          <span style="color:#64748b">Customer Receivables:</span>
+          <span class="val" style="color:var(--accent-gold)" id="side-cust-receivables">Rs. 0</span>
         </div>
       </div>
 
-      <!-- ACTION BUTTONS -->
-      <div class="action-btns">
-        <button class="pay-btn" id="pay-btn" onclick="openPayment()" disabled>
-          💰 Process Payment
-        </button>
-        <div class="secondary-btns">
-          <button class="btn btn-gray" onclick="clearCart()">🗑 Clear Bill</button>
-          <button class="btn btn-navy" onclick="holdBill()">⏸ Hold</button>
-          <button class="btn btn-gold" onclick="printLastReceipt()">🖨 Reprint</button>
+      <div class="side-card" style="background:#f8fafc">
+        <h4 style="margin-bottom:8px">1-Click Industry Templates</h4>
+        <p style="font-size:11px;color:#64748b;margin-bottom:10px">Switch catalog for any shop type:</p>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn btn-secondary" style="font-size:12px;text-align:left" onclick="loadPreset('auto')">🚗 Auto Parts & Oils</button>
+          <button class="btn btn-secondary" style="font-size:12px;text-align:left" onclick="loadPreset('shoes')">👞 Footwear & Shoe Shop</button>
+          <button class="btn btn-secondary" style="font-size:12px;text-align:left" onclick="loadPreset('grocery')">🛒 Grocery & Supermarket</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===================== INVENTORY TAB ===================== -->
-<div id="tab-inventory" class="tab-content hidden">
-  <div class="inv-panel">
-    <div class="inv-topbar">
-      <input type="text" id="inv-search" placeholder="🔍  Search product, SKU, brand…" oninput="filterInventory(this.value)">
-      <select id="inv-cat-filter" onchange="filterInventory(document.getElementById('inv-search').value)" style="padding:8px 12px;border:1.5px solid var(--gray);border-radius:6px;font-size:13px">
-        <option value="all">All Categories</option>
-      </select>
-      <button class="btn btn-green" onclick="openAddProduct()">➕ Add Product</button>
-      <button class="btn btn-navy" onclick="exportCSV()">⬇ Export CSV</button>
+<!-- ========================================================================= -->
+<!-- VIEW 2: COUNTER BILLING (POS)                                             -->
+<!-- ========================================================================= -->
+<div id="view-billing" class="hidden">
+  <div class="pos-main-layout">
+    <!-- LEFT: CATALOG -->
+    <div class="pos-left">
+      <div class="pos-catalog-head">
+        <input type="text" id="pos-barcode-input" class="scan-input-box"
+          placeholder="Scan barcode or type item / SKU / variant and press Enter..."
+          onkeydown="handlePosEnter(event)" oninput="filterPosCatalog(this.value)" autocomplete="off">
+        <div class="cat-pills-row" id="pos-cat-pills"></div>
+      </div>
+      <div class="pos-grid" id="pos-grid-container"></div>
     </div>
-    <table class="inv-table" id="inv-table">
+
+    <!-- RIGHT: CART -->
+    <div class="pos-right">
+      <div class="cart-header-strip">
+        <span>🛒 Counter Bill</span>
+        <button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="clearCart()">Clear Cart</button>
+      </div>
+
+      <div style="padding:8px 12px;background:#f1f5f9;border-bottom:1px solid var(--border);display:flex;gap:6px">
+        <input type="text" id="cart-customer-name" placeholder="Walk-in Customer" style="flex:1;padding:6px 10px;border:1px solid #cbd5e1;border-radius:4px">
+        <input type="text" id="cart-customer-phone" placeholder="Phone #" style="width:120px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:4px">
+      </div>
+
+      <div class="cart-rows-box" id="cart-items-list">
+        <div style="text-align:center;color:#94a3b8;margin-top:60px">
+          <div style="font-size:36px;margin-bottom:6px">🏷️</div>
+          Scan item or click product from left catalog
+        </div>
+      </div>
+
+      <div class="cart-footer-box">
+        <div class="cf-row"><span>Subtotal:</span><span id="pos-subtotal" style="font-weight:700">Rs. 0</span></div>
+        <div class="cf-row" style="align-items:center">
+          <span>Discount:</span>
+          <div>
+            <input type="number" id="pos-disc-pct" value="0" min="0" max="100" style="width:50px;padding:3px;text-align:center;border:1px solid #cbd5e1;border-radius:4px" oninput="updateBillTotals()"> %
+            <span id="pos-disc-amt" style="color:var(--accent-red);margin-left:6px">- Rs. 0</span>
+          </div>
+        </div>
+        <div class="cf-row grand"><span>NET TOTAL:</span><span class="v" id="pos-grand-total">Rs. 0</span></div>
+        <button class="btn-checkout" id="btn-collect-cash" onclick="openCashPaymentModal()" disabled>
+          💰 Collect Cash & Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- VIEW 3: CUSTOMER PAY BILLS (UDHAAR KHATA)                                -->
+<!-- ========================================================================= -->
+<div id="view-cust-pay" class="hidden full-panel-container">
+  <div class="panel-box">
+    <h3>
+      <span>💳 Customer Pay Bills (Receive Udhaar / Khata Dues)</span>
+      <button class="btn btn-success" onclick="openNewCustomerCreditModal()">➕ New Credit / Udhaar Invoice</button>
+    </h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
+      Customers who purchased on credit / udhaar and are now paying their outstanding bills.
+    </p>
+
+    <table class="nice-table">
       <thead>
         <tr>
-          <th>#</th>
-          <th>SKU</th>
-          <th>Product Name</th>
-          <th>Brand</th>
-          <th>Category</th>
-          <th>Price (Rs.)</th>
-          <th>Cost (Rs.)</th>
-          <th>Stock</th>
+          <th>Customer Name</th>
+          <th>Phone</th>
+          <th>Reference / Bill #</th>
+          <th>Total Credit (Rs.)</th>
+          <th>Balance Due (Rs.)</th>
           <th>Status</th>
-          <th>Actions</th>
+          <th>Action</th>
         </tr>
       </thead>
-      <tbody id="inv-tbody"></tbody>
+      <tbody id="cust-dues-tbody"></tbody>
     </table>
   </div>
 </div>
 
-<!-- ===================== BARCODE TAB ===================== -->
-<div id="tab-barcode" class="tab-content hidden">
-  <div class="bc-panel">
-    <div class="bc-left">
-      <div class="card">
-        <h3>🏷️ Generate Barcode Label</h3>
-        <div class="form-group">
-          <label>Select Product</label>
-          <select id="bc-product" onchange="previewLabel()">
-            <option value="">-- Select Product --</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Price Override (leave blank for default)</label>
-          <input type="number" id="bc-price-override" placeholder="Rs." oninput="previewLabel()">
-        </div>
-        <div class="form-group">
-          <label>Number of Copies</label>
-          <input type="number" id="bc-copies" value="1" min="1" max="100">
-        </div>
-        <button class="btn btn-navy" onclick="printLabels()" style="width:100%;margin-top:4px">🖨 Print Labels</button>
-      </div>
+<!-- ========================================================================= -->
+<!-- VIEW 4: RECEIVE STOCK (INVENTORY GRN)                                    -->
+<!-- ========================================================================= -->
+<div id="view-stock-rec" class="hidden full-panel-container">
+  <div class="panel-box">
+    <h3>
+      <span>📦 Receive Stock (Goods Received / Inventory Restock)</span>
+      <button class="btn btn-primary" onclick="openReceiveStockModal()">➕ Receive New Stock</button>
+    </h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
+      Add stock quantities directly into inventory when new boxes arrive from suppliers.
+    </p>
 
-      <div class="card">
-        <h3>📝 Quick Custom Label</h3>
-        <div class="form-group"><label>Item Name</label><input type="text" id="custom-name" placeholder="e.g. Sakura Oil Filter C-1004" oninput="previewCustomLabel()"></div>
-        <div class="form-group"><label>Price (Rs.)</label><input type="number" id="custom-price" placeholder="350" oninput="previewCustomLabel()"></div>
-        <div class="form-group"><label>SKU / Code</label><input type="text" id="custom-sku" placeholder="JSA-001" oninput="previewCustomLabel()"></div>
-        <button class="btn btn-red" onclick="printCustomLabel()" style="width:100%;margin-top:4px">🖨 Print Custom Label</button>
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Vendor / Supplier</th>
+          <th>Item Received</th>
+          <th>Qty Added</th>
+          <th>Cost Price (Rs.)</th>
+          <th>Total Cost (Rs.)</th>
+          <th>Payment Type</th>
+        </tr>
+      </thead>
+      <tbody id="stock-received-log-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- VIEW 5: STOCK PAY BILLS (VENDOR PAYABLES)                                -->
+<!-- ========================================================================= -->
+<div id="view-stock-pay" class="hidden full-panel-container">
+  <div class="panel-box">
+    <h3>
+      <span>💸 Stock Pay Bills (Vendor Khata & Outstandings)</span>
+      <button class="btn btn-primary" onclick="openEnterVendorBillModal()">➕ Enter Vendor Bill</button>
+    </h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:14px">
+      Pay your suppliers and wholesalers for stock purchased on credit.
+    </p>
+
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>Vendor / Supplier</th>
+          <th>Invoice #</th>
+          <th>Date</th>
+          <th>Bill Amount (Rs.)</th>
+          <th>Paid So Far (Rs.)</th>
+          <th>Balance Due (Rs.)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="vendor-payables-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- VIEW 6: INVENTORY & ITEMS                                                -->
+<!-- ========================================================================= -->
+<div id="view-inventory" class="hidden full-panel-container">
+  <div class="panel-box">
+    <h3>
+      <span>📊 Complete Inventory & Stock Catalog</span>
+      <div>
+        <button class="btn btn-success" onclick="openAddProductModal()">➕ Add Product</button>
+        <button class="btn btn-secondary" onclick="exportInventoryCSV()">⬇ Export CSV</button>
+      </div>
+    </h3>
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <input type="text" id="inv-search-input" placeholder="Search by name, SKU, or category..."
+        style="flex:1;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:6px" oninput="renderInventoryTable()">
+      <select id="inv-cat-filter" style="padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:6px" onchange="renderInventoryTable()">
+        <option value="ALL">All Categories</option>
+      </select>
+    </div>
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>SKU / Code</th>
+          <th>Item Name</th>
+          <th>Category</th>
+          <th>Variant / Specs</th>
+          <th>Sale Price (Rs.)</th>
+          <th>Cost Price (Rs.)</th>
+          <th>Stock In Hand</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="inventory-table-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- VIEW 7: DAILY Z-REPORT SUMMARY                                           -->
+<!-- ========================================================================= -->
+<div id="view-summary" class="hidden full-panel-container">
+  <div class="panel-box">
+    <h3>
+      <span>📋 Daily Z-Report & Sales Ledger</span>
+      <button class="btn btn-dark" onclick="window.print()">🖨 Print Z-Report</button>
+    </h3>
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>Bill #</th>
+          <th>Time</th>
+          <th>Customer</th>
+          <th>Items Sold</th>
+          <th>Net Total (Rs.)</th>
+          <th>Tendered / Change</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="daily-tx-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- MODALS                                                                    -->
+<!-- ========================================================================= -->
+
+<!-- 1. RECEIVE STOCK MODAL -->
+<div class="modal-shade" id="modal-receive-stock">
+  <div class="modal-box">
+    <h2>📦 Receive Stock (Restock Item)</h2>
+    <div class="m-row">
+      <label>Select Product to Restock *</label>
+      <select id="rs-product-select"></select>
+    </div>
+    <div class="m-row">
+      <label>Supplier / Vendor Name *</label>
+      <input type="text" id="rs-vendor-name" placeholder="e.g. Sakura Official Distributor / Master Bros">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row">
+        <label>Quantity Received *</label>
+        <input type="number" id="rs-qty" value="10" min="1">
+      </div>
+      <div class="m-row">
+        <label>Cost Price Per Unit (Rs.) *</label>
+        <input type="number" id="rs-cost" placeholder="250">
       </div>
     </div>
-
-    <div class="bc-right">
-      <div class="card">
-        <h3>👁 Label Preview</h3>
-        <div class="bc-preview" id="label-preview">
-          <p style="color:#aaa">Select a product to preview label</p>
-        </div>
-      </div>
+    <div class="m-row">
+      <label>Payment Method *</label>
+      <select id="rs-pay-status">
+        <option value="PAID">Paid in Cash Immediately</option>
+        <option value="CREDIT">Buy on Credit (Enter into Vendor Khata)</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-receive-stock')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveReceivedStock()">✅ Confirm & Add to Inventory</button>
     </div>
   </div>
 </div>
 
-<!-- ===================== REPORTS TAB ===================== -->
-<div id="tab-reports" class="tab-content hidden">
-  <div class="rep-panel">
-    <div class="rep-cards">
-      <div class="rep-card green-border">
-        <div class="rc-val green" id="rep-today-sales">Rs. 0</div>
-        <div class="rc-lbl">Today's Sales</div>
-      </div>
-      <div class="rep-card">
-        <div class="rc-val" id="rep-today-tx">0</div>
-        <div class="rc-lbl">Transactions Today</div>
-      </div>
-      <div class="rep-card red-border">
-        <div class="rc-val red" id="rep-items-sold">0</div>
-        <div class="rc-lbl">Items Sold Today</div>
-      </div>
-      <div class="rep-card">
-        <div class="rc-val" id="rep-avg-bill">Rs. 0</div>
-        <div class="rc-lbl">Avg. Bill Value</div>
-      </div>
+<!-- 2. VENDOR BILL MODAL -->
+<div class="modal-shade" id="modal-vendor-bill">
+  <div class="modal-box">
+    <h2>📑 Enter Vendor Bill (Purchase on Khata)</h2>
+    <div class="m-row">
+      <label>Vendor / Supplier Name *</label>
+      <input type="text" id="vb-vendor-name" placeholder="e.g. Castrol Regional Hub">
     </div>
-
-    <div class="card">
-      <h3>📋 Sales History</h3>
-      <table class="tx-table">
-        <thead>
-          <tr><th>#</th><th>Time</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Actions</th></tr>
-        </thead>
-        <tbody id="tx-tbody">
-          <tr><td colspan="7" style="text-align:center;color:#aaa;padding:30px">No transactions yet today</td></tr>
-        </tbody>
-      </table>
+    <div class="m-row">
+      <label>Vendor Invoice / Reference Number *</label>
+      <input type="text" id="vb-invoice-no" placeholder="e.g. INV-9901">
+    </div>
+    <div class="m-row">
+      <label>Total Bill Amount (Rs.) *</label>
+      <input type="number" id="vb-amount" placeholder="e.g. 25000">
+    </div>
+    <div class="m-row">
+      <label>Notes / Goods Description</label>
+      <textarea id="vb-notes" rows="2" placeholder="e.g. 10 cartons engine oil"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-vendor-bill')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveVendorBill()">💾 Save to Vendor Khata</button>
     </div>
   </div>
 </div>
 
-<!-- ===================== PAYMENT MODAL ===================== -->
-<div class="modal-overlay" id="payment-modal">
-  <div class="modal pay-modal">
-    <h2>💰 Process Payment</h2>
-    <div class="amount-display">Total: <span id="pay-total-display">Rs. 0</span></div>
-    <div class="form-group">
-      <label>Cash Received (Rs.)</label>
-      <input type="number" id="cash-received" placeholder="Enter amount" oninput="calcChange()" style="font-size:20px;font-weight:800;text-align:center">
+<!-- 3. PAY VENDOR MODAL -->
+<div class="modal-shade" id="modal-pay-vendor">
+  <div class="modal-box">
+    <h2>💸 Pay Vendor Bill</h2>
+    <input type="hidden" id="pv-bill-id">
+    <div style="background:#f1f5f9;padding:12px;border-radius:6px;margin-bottom:12px">
+      <div>Vendor: <strong id="pv-vendor-name">---</strong></div>
+      <div>Balance Remaining: <strong id="pv-balance" style="color:var(--accent-red)">Rs. 0</strong></div>
     </div>
-    <div class="numpad">
-      <button class="numpad-btn" onclick="numpad('5000')">5,000</button>
-      <button class="numpad-btn" onclick="numpad('2000')">2,000</button>
-      <button class="numpad-btn" onclick="numpad('1000')">1,000</button>
-      <button class="numpad-btn" onclick="numpad('500')">500</button>
-      <button class="numpad-btn" onclick="numpad('200')">200</button>
-      <button class="numpad-btn" onclick="numpad('100')">100</button>
-      <button class="numpad-btn zero" onclick="numpadExact()">Exact Amount</button>
-      <button class="numpad-btn" onclick="numpad('CLR')" style="color:var(--red)">CLR</button>
+    <div class="m-row">
+      <label>Amount Paying Now (Rs.) *</label>
+      <input type="number" id="pv-amount" placeholder="Enter amount">
     </div>
-    <div class="change-display" id="change-display" style="background:#f4f6fb;color:#999">
-      Enter cash amount above
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-pay-vendor')">Cancel</button>
+      <button class="btn btn-success" style="flex:2" onclick="confirmVendorPayment()">✅ Submit Payment</button>
     </div>
-    <div class="modal-btns">
-      <button class="btn btn-gray" onclick="closeModal('payment-modal')">Cancel</button>
-      <button class="btn btn-green" id="complete-sale-btn" onclick="completeSale()" style="flex:2;font-size:15px" disabled>
+  </div>
+</div>
+
+<!-- 4. CUSTOMER RECEIVE PAYMENT MODAL -->
+<div class="modal-shade" id="modal-receive-cust-pay">
+  <div class="modal-box">
+    <h2>💳 Customer Pay Bill (Receive Cash)</h2>
+    <input type="hidden" id="rcp-cust-id">
+    <div style="background:#f1f5f9;padding:12px;border-radius:6px;margin-bottom:12px">
+      <div>Customer: <strong id="rcp-cust-name">---</strong></div>
+      <div>Outstanding Balance: <strong id="rcp-balance" style="color:var(--accent-red)">Rs. 0</strong></div>
+    </div>
+    <div class="m-row">
+      <label>Cash Received (Rs.) *</label>
+      <input type="number" id="rcp-amount" placeholder="Enter amount">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-receive-cust-pay')">Cancel</button>
+      <button class="btn btn-success" style="flex:2" onclick="confirmCustomerPayment()">✅ Record Payment Received</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. POS CASH PAYMENT MODAL -->
+<div class="modal-shade" id="modal-cash-payment">
+  <div class="modal-box">
+    <h2>💰 Collect Cash Payment</h2>
+    <div style="text-align:center;padding:14px;background:#f8fafc;border-radius:8px;margin-bottom:12px">
+      <div style="font-size:12px;color:#64748b;font-weight:700">NET TOTAL PAYABLE</div>
+      <div id="modal-pay-total" style="font-size:32px;font-weight:900;color:var(--accent-red)">Rs. 0</div>
+    </div>
+    <div class="m-row">
+      <label>Cash Given by Customer (Rs.)</label>
+      <input type="number" id="pos-cash-tendered" placeholder="Enter cash" style="font-size:22px;font-weight:800;text-align:center" oninput="calculateChange()">
+    </div>
+    <div id="pos-change-box" style="padding:12px;border-radius:6px;text-align:center;font-size:16px;font-weight:800;background:#f1f5f9;margin-bottom:12px">
+      Enter cash above
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-cash-payment')">Cancel</button>
+      <button class="btn btn-success" id="btn-complete-pos-sale" style="flex:2" onclick="completePosSale()" disabled>
         ✅ Complete Sale & Print Receipt
       </button>
     </div>
   </div>
 </div>
 
-<!-- ===================== ADD PRODUCT MODAL ===================== -->
-<div class="modal-overlay" id="add-product-modal">
-  <div class="modal">
-    <h2>➕ Add New Product</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="form-group" style="grid-column:1/-1">
-        <label>Product Name *</label>
-        <input type="text" id="np-name" placeholder="e.g. Sakura Oil Filter C-1004">
-      </div>
-      <div class="form-group">
-        <label>Brand</label>
-        <input type="text" id="np-brand" placeholder="Sakura">
-      </div>
-      <div class="form-group">
-        <label>Category *</label>
-        <select id="np-cat">
-          <option>Oil Filters</option>
-          <option>Air Filters</option>
-          <option>AC Filters</option>
-          <option>Fuel Filters</option>
-          <option>Engine Oils</option>
-          <option>ATF Oils</option>
-          <option>Coolants</option>
-          <option>Car Care</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Sale Price (Rs.) *</label>
-        <input type="number" id="np-price" placeholder="350">
-      </div>
-      <div class="form-group">
-        <label>Cost Price (Rs.)</label>
-        <input type="number" id="np-cost" placeholder="280">
-      </div>
-      <div class="form-group">
-        <label>Opening Stock</label>
-        <input type="number" id="np-stock" placeholder="10" value="1">
-      </div>
-      <div class="form-group">
-        <label>Low Stock Alert (qty)</label>
-        <input type="number" id="np-lowstock" placeholder="5" value="5">
-      </div>
-      <div class="form-group" style="grid-column:1/-1">
-        <label>SKU / Barcode (auto-generated if blank)</label>
-        <input type="text" id="np-sku" placeholder="JSA-001 or scan barcode">
-      </div>
+<!-- 6. STORE SETTINGS CONFIG MODAL -->
+<div class="modal-shade" id="modal-store-config">
+  <div class="modal-box">
+    <h2>🏪 Configure Shop Profile</h2>
+    <div class="m-row">
+      <label>Shop Name *</label>
+      <input type="text" id="cfg-shop-name" placeholder="e.g. JS Auto Parts or Apex Shoes">
     </div>
-    <div class="modal-btns">
-      <button class="btn btn-gray" onclick="closeModal('add-product-modal')">Cancel</button>
-      <button class="btn btn-green" onclick="saveNewProduct()">✅ Save Product</button>
+    <div class="m-row">
+      <label>Tagline / Location *</label>
+      <input type="text" id="cfg-shop-city" placeholder="e.g. Filters & Oils — Rawalpindi">
+    </div>
+    <div class="m-row">
+      <label>Phone / WhatsApp *</label>
+      <input type="text" id="cfg-shop-phone" placeholder="e.g. 0336-5804080">
+    </div>
+    <div class="m-row">
+      <label>Currency Symbol</label>
+      <input type="text" id="cfg-shop-curr" value="Rs.">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-store-config')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveStoreConfig()">💾 Save Changes</button>
     </div>
   </div>
 </div>
 
-<!-- ===================== EDIT PRODUCT MODAL ===================== -->
-<div class="modal-overlay" id="edit-product-modal">
-  <div class="modal">
-    <h2>✏️ Edit Product</h2>
-    <input type="hidden" id="ep-idx">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="form-group" style="grid-column:1/-1">
-        <label>Product Name</label><input type="text" id="ep-name">
-      </div>
-      <div class="form-group"><label>Brand</label><input type="text" id="ep-brand"></div>
-      <div class="form-group"><label>Category</label>
-        <select id="ep-cat">
-          <option>Oil Filters</option><option>Air Filters</option><option>AC Filters</option>
-          <option>Fuel Filters</option><option>Engine Oils</option><option>ATF Oils</option>
-          <option>Coolants</option><option>Car Care</option><option>Other</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Sale Price (Rs.)</label><input type="number" id="ep-price"></div>
-      <div class="form-group"><label>Cost Price (Rs.)</label><input type="number" id="ep-cost"></div>
-      <div class="form-group"><label>Stock Qty</label><input type="number" id="ep-stock"></div>
-      <div class="form-group"><label>Low Stock Alert</label><input type="number" id="ep-lowstock"></div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn btn-gray" onclick="closeModal('edit-product-modal')">Cancel</button>
-      <button class="btn btn-navy" onclick="saveEditProduct()">💾 Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- RECEIPT (hidden, for printing) -->
-<div id="receipt-print" style="display:none"></div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<!-- THERMAL RECEIPT SLIP -->
+<div id="thermal-slip"></div>
 
 <script>
-// ===================== DATA =====================
-let products = [
-  // Oil Filters
-  { id:1, sku:'JSA-OF-001', name:'Sakura Oil Filter C-1004', brand:'Sakura', cat:'Oil Filters', price:350, cost:250, stock:30, lowStock:10 },
-  { id:2, sku:'JSA-OF-002', name:'Sakura Oil Filter C-1005', brand:'Sakura', cat:'Oil Filters', price:380, cost:270, stock:25, lowStock:10 },
-  { id:3, sku:'JSA-OF-003', name:'Sakura Oil Filter C-1006', brand:'Sakura', cat:'Oil Filters', price:420, cost:300, stock:20, lowStock:8 },
-  { id:4, sku:'JSA-OF-004', name:'Bosch Oil Filter P3332', brand:'Bosch', cat:'Oil Filters', price:650, cost:470, stock:15, lowStock:5 },
-  { id:5, sku:'JSA-OF-005', name:'Mann Oil Filter W712/4', brand:'Mann', cat:'Oil Filters', price:720, cost:520, stock:12, lowStock:5 },
-  { id:6, sku:'JSA-OF-006', name:'Toyota Genuine Oil Filter', brand:'Toyota', cat:'Oil Filters', price:480, cost:340, stock:18, lowStock:6 },
-  // Air Filters
-  { id:7, sku:'JSA-AF-001', name:'Sakura Air Filter A-5545', brand:'Sakura', cat:'Air Filters', price:450, cost:320, stock:22, lowStock:8 },
-  { id:8, sku:'JSA-AF-002', name:'Sakura Air Filter A-1128', brand:'Sakura', cat:'Air Filters', price:480, cost:340, stock:18, lowStock:8 },
-  { id:9, sku:'JSA-AF-003', name:'Bosch Air Filter S0045', brand:'Bosch', cat:'Air Filters', price:780, cost:560, stock:10, lowStock:5 },
-  { id:10, sku:'JSA-AF-004', name:'Mann Air Filter C22029', brand:'Mann', cat:'Air Filters', price:850, cost:610, stock:8, lowStock:4 },
-  // AC Filters
-  { id:11, sku:'JSA-AC-001', name:'Sakura AC Cabin Filter CA-1828', brand:'Sakura', cat:'AC Filters', price:380, cost:270, stock:20, lowStock:8 },
-  { id:12, sku:'JSA-AC-002', name:'Bosch AC Cabin Filter M4001', brand:'Bosch', cat:'AC Filters', price:650, cost:460, stock:12, lowStock:5 },
-  // Fuel Filters
-  { id:13, sku:'JSA-FF-001', name:'Sakura Fuel Filter FS-1002', brand:'Sakura', cat:'Fuel Filters', price:280, cost:190, stock:25, lowStock:10 },
-  { id:14, sku:'JSA-FF-002', name:'Toyota Genuine Fuel Filter', brand:'Toyota', cat:'Fuel Filters', price:520, cost:370, stock:15, lowStock:6 },
-  // Engine Oils
-  { id:15, sku:'JSA-EO-001', name:'Castrol GTX 20W-50 (4L)', brand:'Castrol', cat:'Engine Oils', price:3200, cost:2300, stock:20, lowStock:5 },
-  { id:16, sku:'JSA-EO-002', name:'Mobil Super 3000 5W-30 (4L)', brand:'Mobil', cat:'Engine Oils', price:4500, cost:3200, stock:12, lowStock:4 },
-  { id:17, sku:'JSA-EO-003', name:'Shell Helix HX5 20W-50 (4L)', brand:'Shell', cat:'Engine Oils', price:3400, cost:2450, stock:15, lowStock:5 },
-  { id:18, sku:'JSA-EO-004', name:'Total Quartz 5000 20W-50 (4L)', brand:'Total', cat:'Engine Oils', price:2900, cost:2100, stock:18, lowStock:6 },
-  { id:19, sku:'JSA-EO-005', name:'Caltex Havoline 20W-50 (1L)', brand:'Caltex', cat:'Engine Oils', price:950, cost:680, stock:30, lowStock:10 },
-  // ATF
-  { id:20, sku:'JSA-ATF-001', name:'Toyota ATF Type T-IV (1L)', brand:'Toyota', cat:'ATF Oils', price:1800, cost:1300, stock:15, lowStock:5 },
-  { id:21, sku:'JSA-ATF-002', name:'Dexron VI ATF (1L)', brand:'Havoline', cat:'ATF Oils', price:1400, cost:1000, stock:12, lowStock:5 },
-  // Coolants
-  { id:22, sku:'JSA-CO-001', name:'Toyota Long Life Coolant (1L)', brand:'Toyota', cat:'Coolants', price:1200, cost:860, stock:20, lowStock:6 },
-  { id:23, sku:'JSA-CO-002', name:'Prestone Coolant Anti-Freeze (1L)', brand:'Prestone', cat:'Coolants', price:850, cost:600, stock:18, lowStock:6 },
-  // Car Care
-  { id:24, sku:'JSA-CC-001', name:'3M Car Wash Shampoo (500ml)', brand:'3M', cat:'Car Care', price:680, cost:480, stock:15, lowStock:5 },
-  { id:25, sku:'JSA-CC-002', name:'Turtle Wax Car Polish (300g)', brand:'Turtle Wax', cat:'Car Care', price:850, cost:600, stock:10, lowStock:4 },
-  { id:26, sku:'JSA-CC-003', name:'WD-40 Multipurpose (450ml)', brand:'WD-40', cat:'Car Care', price:950, cost:680, stock:12, lowStock:5 },
+// =========================================================================
+// DATA REPOSITORIES (Persistent LocalStorage)
+// =========================================================================
+let storeConfig = JSON.parse(localStorage.getItem('omni_config')) || {
+  name: "JS Auto Parts",
+  city: "Rawalpindi",
+  phone: "0336-5804080",
+  currency: "Rs."
+};
+
+let catalog = JSON.parse(localStorage.getItem('omni_catalog')) || [
+  { id: 1, sku: 'JSA-OF-001', name: 'Sakura Oil Filter C-1004', cat: 'Oil Filters', variant: 'Corolla / Yaris', price: 350, cost: 250, stock: 35, low: 10 },
+  { id: 2, sku: 'JSA-OF-002', name: 'Sakura Oil Filter C-1005', cat: 'Oil Filters', variant: 'Civic / City', price: 380, cost: 270, stock: 25, low: 10 },
+  { id: 3, sku: 'JSA-OF-004', name: 'Bosch Premium Oil Filter', cat: 'Oil Filters', variant: 'Universal', price: 650, cost: 480, stock: 15, low: 5 },
+  { id: 4, sku: 'JSA-EO-001', name: 'Castrol GTX 20W-50 (4L)', cat: 'Engine Oils', variant: '4 Liters', price: 3200, cost: 2350, stock: 18, low: 4 },
+  { id: 5, sku: 'JSA-EO-002', name: 'Mobil Super 3000 (4L)', cat: 'Engine Oils', variant: '5W-30 Full Synth', price: 4600, cost: 3400, stock: 12, low: 4 },
+  { id: 6, sku: 'JSA-CO-001', name: 'Toyota Coolant Ready-Mix', cat: 'Coolants', variant: '1 Liter Can', price: 1200, cost: 850, stock: 22, low: 6 }
+];
+
+let transactions = JSON.parse(localStorage.getItem('omni_txs')) || [];
+let stockLogs = JSON.parse(localStorage.getItem('omni_stock_logs')) || [
+  { id: 1, date: new Date().toLocaleDateString(), vendor: 'Sakura Distributor', item: 'Sakura Oil Filter C-1004', qty: 20, cost: 250, total: 5000, type: 'PAID' }
+];
+let vendorBills = JSON.parse(localStorage.getItem('omni_vendor_bills')) || [
+  { id: 1, vendor: 'Castrol Regional Hub', invoice: 'INV-4011', date: new Date().toLocaleDateString(), amount: 15000, paid: 5000, balance: 10000, notes: 'Engine oils delivery' }
+];
+let customerDues = JSON.parse(localStorage.getItem('omni_cust_dues')) || [
+  { id: 1, name: 'Malik Auto Workshop', phone: '0300-5544332', ref: 'CREDIT-101', total: 6800, balance: 3500 }
 ];
 
 let cart = [];
-let transactions = [];
-let holdBills = [];
-let nextProductId = 27;
-let currentSKUCounter = 27;
-let lastReceiptHTML = '';
+let currentPosCat = 'ALL';
+let posSearch = '';
 
-const categories = ['Oil Filters','Air Filters','AC Filters','Fuel Filters','Engine Oils','ATF Oils','Coolants','Car Care','Other'];
+function persist() {
+  localStorage.setItem('omni_config', JSON.stringify(storeConfig));
+  localStorage.setItem('omni_catalog', JSON.stringify(catalog));
+  localStorage.setItem('omni_txs', JSON.stringify(transactions));
+  localStorage.setItem('omni_stock_logs', JSON.stringify(stockLogs));
+  localStorage.setItem('omni_vendor_bills', JSON.stringify(vendorBills));
+  localStorage.setItem('omni_cust_dues', JSON.stringify(customerDues));
+  updateTopHeader();
+  updateSidebarStats();
+}
 
-// ===================== CLOCK =====================
+// =========================================================================
+// CLOCK & HEADER
+// =========================================================================
 function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-PK', {hour12:true});
-  document.getElementById('date-display').textContent = now.toLocaleDateString('en-PK', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+  const d = new Date();
+  document.getElementById('live-time').textContent = d.toLocaleTimeString('en-PK', { hour12: true });
+  document.getElementById('live-date').textContent = d.toLocaleDateString('en-PK', { weekday: 'short', day: 'numeric', month: 'short' });
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-// ===================== TABS =====================
-function switchTab(t) {
-  ['pos','inventory','barcode','reports'].forEach(id => {
-    document.getElementById('tab-'+id).classList.toggle('hidden', id !== t);
+function updateTopHeader() {
+  document.getElementById('top-store-name').textContent = storeConfig.name;
+  document.getElementById('top-store-city').textContent = storeConfig.city;
+}
+
+// =========================================================================
+// VIEW SWITCHING
+// =========================================================================
+function switchView(viewName) {
+  const views = ['home', 'billing', 'cust-pay', 'stock-rec', 'stock-pay', 'inventory', 'summary'];
+  views.forEach(v => {
+    const el = document.getElementById(`view-${v}`);
+    if (el) el.classList.toggle('hidden', v !== viewName);
   });
-  document.querySelectorAll('.tab').forEach((el,i) => {
-    el.classList.toggle('active', ['pos','inventory','barcode','reports'][i] === t);
+
+  document.querySelectorAll('.tab-link').forEach((tab, i) => {
+    tab.classList.toggle('active', views[i] === viewName);
   });
-  if (t === 'inventory') renderInventory();
-  if (t === 'barcode') populateBarcodeSelect();
-  if (t === 'reports') renderReports();
+
+  if (viewName === 'billing') { renderPosCatalog(); }
+  if (viewName === 'cust-pay') { renderCustomerDuesTable(); }
+  if (viewName === 'stock-rec') { renderStockReceivedTable(); }
+  if (viewName === 'stock-pay') { renderVendorPayablesTable(); }
+  if (viewName === 'inventory') { renderInventoryTable(); }
+  if (viewName === 'summary') { renderDailyZReport(); }
 }
 
-// ===================== PRODUCT CATALOG =====================
-let currentCat = 'all';
-let currentSearch = '';
+// =========================================================================
+// SIDEBAR STATS
+// =========================================================================
+function updateSidebarStats() {
+  const today = new Date().toDateString();
+  const todayTxs = transactions.filter(t => new Date(t.date).toDateString() === today);
+  const sales = todayTxs.reduce((s, t) => s + t.total, 0);
+  let cost = 0;
+  todayTxs.forEach(t => t.items.forEach(i => cost += (i.cost || 0) * i.qty));
+  const profit = Math.max(0, sales - cost);
 
-function buildCatPills() {
-  const pills = document.getElementById('cat-pills');
-  pills.innerHTML = '<div class="pill active" onclick="filterCat(\'all\',this)">All</div>';
-  [...new Set(products.map(p => p.cat))].forEach(cat => {
-    const d = document.createElement('div');
-    d.className = 'pill';
-    d.textContent = cat;
-    d.onclick = function() { filterCat(cat, this); };
-    pills.appendChild(d);
-  });
+  document.getElementById('side-today-sales').textContent = `Rs. ${sales.toLocaleString()}`;
+  document.getElementById('side-today-bills').textContent = todayTxs.length;
+  document.getElementById('side-today-profit').textContent = `Rs. ${profit.toLocaleString()}`;
+
+  const lowCount = catalog.filter(p => p.stock <= (p.low || 5)).length;
+  document.getElementById('side-low-stock').textContent = lowCount;
+
+  const vendorTotal = vendorBills.reduce((s, b) => s + b.balance, 0);
+  document.getElementById('side-vendor-payables').textContent = `Rs. ${vendorTotal.toLocaleString()}`;
+
+  const custTotal = customerDues.reduce((s, c) => s + c.balance, 0);
+  document.getElementById('side-cust-receivables').textContent = `Rs. ${custTotal.toLocaleString()}`;
 }
 
-function filterCat(cat, el) {
-  currentCat = cat;
-  document.querySelectorAll('.cat-pills .pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  renderProducts();
-}
+// =========================================================================
+// POS BILLING ENGINE
+// =========================================================================
+function renderPosCatalog() {
+  // Category pills
+  const pillsBox = document.getElementById('pos-cat-pills');
+  const distinctCats = ['ALL', ...new Set(catalog.map(p => p.cat))];
+  pillsBox.innerHTML = distinctCats.map(c => `
+    <div class="cp-pill ${c === currentPosCat ? 'active' : ''}" onclick="filterPosCat('${c}')">${c}</div>
+  `).join('');
 
-function filterProducts(val) {
-  currentSearch = val.trim().toLowerCase();
-  renderProducts();
-}
-
-function clearSearch() {
-  document.getElementById('scan-input').value = '';
-  currentSearch = '';
-  renderProducts();
-  document.getElementById('scan-input').focus();
-}
-
-function renderProducts() {
-  const grid = document.getElementById('product-grid');
-  let filtered = products.filter(p => {
-    const matchCat = currentCat === 'all' || p.cat === currentCat;
-    const matchSearch = !currentSearch ||
-      p.name.toLowerCase().includes(currentSearch) ||
-      p.brand.toLowerCase().includes(currentSearch) ||
-      p.sku.toLowerCase().includes(currentSearch);
+  // Items grid
+  const grid = document.getElementById('pos-grid-container');
+  const filtered = catalog.filter(p => {
+    const matchCat = currentPosCat === 'ALL' || p.cat === currentPosCat;
+    const matchSearch = !posSearch || p.name.toLowerCase().includes(posSearch) || p.sku.toLowerCase().includes(posSearch);
     return matchCat && matchSearch;
   });
+
   if (!filtered.length) {
-    grid.innerHTML = '<div class="no-results">No products found</div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94a3b8;padding:40px">No products found</div>';
     return;
   }
-  grid.innerHTML = filtered.map(p => {
-    const stockClass = p.stock === 0 ? 'stock-out' : p.stock <= p.lowStock ? 'stock-low' : 'stock-ok';
-    const stockLabel = p.stock === 0 ? 'Out of Stock' : p.stock <= p.lowStock ? `Low: ${p.stock}` : `In Stock: ${p.stock}`;
-    return `<div class="prod-card" onclick="addToCart(${p.id})">
-      <div class="cat-badge">${p.cat}</div>
-      <div class="prod-name">${p.name}</div>
-      <div class="prod-brand">${p.brand}</div>
-      <div class="prod-sku">${p.sku}</div>
-      <div class="prod-footer">
-        <div class="prod-price">Rs. ${p.price.toLocaleString()}</div>
-        <div class="prod-stock ${stockClass}">${stockLabel}</div>
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="item-card" onclick="addToCart(${p.id})">
+      <div class="ic-cat">${p.cat}</div>
+      <div class="ic-name">${p.name}</div>
+      <div class="ic-variant">${p.variant || '—'}</div>
+      <div class="ic-foot">
+        <div class="ic-price">Rs. ${p.price.toLocaleString()}</div>
+        <div class="ic-stock" style="color:${p.stock>0 ? '#16a34a':'#dc2626'}">Stock: ${p.stock}</div>
       </div>
-    </div>`;
-  }).join('');
+    </div>
+  `).join('');
 }
 
-// ===================== SCAN =====================
-function handleScan(e) {
+function filterPosCat(cat) {
+  currentPosCat = cat;
+  renderPosCatalog();
+}
+
+function filterPosCatalog(val) {
+  posSearch = val.trim().toLowerCase();
+  renderPosCatalog();
+}
+
+function handlePosEnter(e) {
   if (e.key === 'Enter') {
-    const val = e.target.value.trim();
+    const val = e.target.value.trim().toLowerCase();
     if (!val) return;
-    // Try exact SKU match first
-    const bySKU = products.find(p => p.sku.toLowerCase() === val.toLowerCase());
-    if (bySKU) {
-      addToCart(bySKU.id);
+    const match = catalog.find(p => p.sku.toLowerCase() === val || p.name.toLowerCase().includes(val));
+    if (match) {
+      addToCart(match.id);
       e.target.value = '';
-      currentSearch = '';
-      renderProducts();
-      return;
+      posSearch = '';
+      renderPosCatalog();
     }
-    // Try partial name match
-    const byName = products.find(p => p.name.toLowerCase().includes(val.toLowerCase()));
-    if (byName) {
-      addToCart(byName.id);
-      e.target.value = '';
-      currentSearch = '';
-      renderProducts();
-      return;
-    }
-    showToast(`❌ Product not found: "${val}"`);
   }
 }
 
-// ===================== CART =====================
-function addToCart(id) {
-  const prod = products.find(p => p.id === id);
-  if (!prod) return;
-  if (prod.stock === 0) { showToast('❌ Out of stock!'); return; }
-  const existing = cart.find(c => c.id === id);
-  if (existing) {
-    if (existing.qty >= prod.stock) { showToast('⚠️ Max stock reached'); return; }
-    existing.qty++;
+function addToCart(prodId) {
+  const p = catalog.find(x => x.id === prodId);
+  if (!p) return;
+  if (p.stock <= 0) { alert('Out of stock!'); return; }
+
+  const exist = cart.find(c => c.id === prodId);
+  if (exist) {
+    if (exist.qty < p.stock) exist.qty++;
   } else {
-    cart.push({ id: prod.id, name: prod.name, sku: prod.sku, price: prod.price, qty: 1 });
+    cart.push({ id: p.id, name: p.name, sku: p.sku, price: p.price, cost: p.cost, qty: 1 });
   }
   renderCart();
-  showToast(`✅ ${prod.name} added`);
 }
 
-function changeQty(id, delta) {
-  const item = cart.find(c => c.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
-  renderCart();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(c => c.id !== id);
-  renderCart();
-}
-
-function clearCart() {
-  cart = [];
-  document.getElementById('customer-name').value = '';
-  document.getElementById('customer-phone').value = '';
-  document.getElementById('discount-input').value = '0';
+function adjustCartQty(id, delta) {
+  const c = cart.find(x => x.id === id);
+  if (!c) return;
+  c.qty += delta;
+  if (c.qty <= 0) cart = cart.filter(x => x.id !== id);
   renderCart();
 }
 
 function renderCart() {
-  const container = document.getElementById('cart-items');
-  const empty = document.getElementById('cart-empty-msg');
-  const count = cart.reduce((s,i) => s + i.qty, 0);
-  document.getElementById('cart-count').textContent = count;
-
-  if (cart.length === 0) {
-    container.innerHTML = '<div class="cart-empty" id="cart-empty-msg"><div style="font-size:40px;margin-bottom:8px">🛒</div>Scan or click a product to add it to the bill</div>';
-    document.getElementById('pay-btn').disabled = true;
-    updateTotals();
+  const box = document.getElementById('cart-items-list');
+  const btn = document.getElementById('btn-collect-cash');
+  if (!cart.length) {
+    box.innerHTML = `<div style="text-align:center;color:#94a3b8;margin-top:60px"><div style="font-size:36px;margin-bottom:6px">🏷️</div>Scan item or click product from left catalog</div>`;
+    btn.disabled = true;
+    updateBillTotals();
     return;
   }
-  container.innerHTML = cart.map(item => `
-    <div class="cart-row">
-      <div class="cr-info">
-        <div class="cr-name">${item.name}</div>
-        <div class="cr-sku">${item.sku} &nbsp;|&nbsp; Rs. ${item.price.toLocaleString()} each</div>
+  btn.disabled = false;
+  box.innerHTML = cart.map(c => `
+    <div class="cart-line">
+      <div class="cart-line-info">
+        <div class="cart-line-name">${c.name}</div>
+        <div class="cart-line-sub">Rs. ${c.price.toLocaleString()} each</div>
       </div>
-      <div class="cr-qty">
-        <div class="qty-btn" onclick="changeQty(${item.id},-1)">−</div>
-        <div class="qty-num">${item.qty}</div>
-        <div class="qty-btn" onclick="changeQty(${item.id},1)">+</div>
+      <div class="qty-ctrl">
+        <button onclick="adjustCartQty(${c.id}, -1)">−</button>
+        <span style="font-weight:800;min-width:20px;text-align:center">${c.qty}</span>
+        <button onclick="adjustCartQty(${c.id}, 1)">+</button>
       </div>
-      <div class="cr-total">Rs. ${(item.price*item.qty).toLocaleString()}</div>
-      <div class="cr-del" onclick="removeFromCart(${item.id})" title="Remove">×</div>
+      <div class="cart-line-total">Rs. ${(c.price * c.qty).toLocaleString()}</div>
     </div>
   `).join('');
-  document.getElementById('pay-btn').disabled = false;
-  updateTotals();
+  updateBillTotals();
 }
 
-function updateTotals() {
-  const sub = cart.reduce((s,i) => s + i.price*i.qty, 0);
-  const disc = Math.max(0, Math.min(100, parseFloat(document.getElementById('discount-input').value) || 0));
-  const discAmt = Math.round(sub * disc / 100);
+function updateBillTotals() {
+  const sub = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+  const discPct = parseFloat(document.getElementById('pos-disc-pct').value) || 0;
+  const discAmt = Math.round(sub * (discPct / 100));
   const grand = sub - discAmt;
-  document.getElementById('subtotal').textContent = 'Rs. ' + sub.toLocaleString();
-  document.getElementById('discount-amount').textContent = '- Rs. ' + discAmt.toLocaleString();
-  document.getElementById('grand-total').textContent = 'Rs. ' + grand.toLocaleString();
+
+  document.getElementById('pos-subtotal').textContent = `Rs. ${sub.toLocaleString()}`;
+  document.getElementById('pos-disc-amt').textContent = `- Rs. ${discAmt.toLocaleString()}`;
+  document.getElementById('pos-grand-total').textContent = `Rs. ${grand.toLocaleString()}`;
   return grand;
 }
 
-// ===================== PAYMENT =====================
-function openPayment() {
-  if (cart.length === 0) return;
-  const total = updateTotals();
-  document.getElementById('pay-total-display').textContent = 'Rs. ' + total.toLocaleString();
-  document.getElementById('cash-received').value = '';
-  document.getElementById('change-display').className = 'change-display';
-  document.getElementById('change-display').style.cssText = 'background:#f4f6fb;color:#999';
-  document.getElementById('change-display').textContent = 'Enter cash amount above';
-  document.getElementById('complete-sale-btn').disabled = true;
-  document.getElementById('payment-modal').classList.add('open');
-  document.getElementById('cash-received').focus();
+function clearCart() {
+  cart = [];
+  renderCart();
 }
 
-function numpad(val) {
-  const inp = document.getElementById('cash-received');
-  if (val === 'CLR') { inp.value = ''; }
-  else { inp.value = String(Number(inp.value||0) + Number(val)); }
-  calcChange();
-}
-function numpadExact() {
-  const total = updateTotals();
-  document.getElementById('cash-received').value = total;
-  calcChange();
+function openCashPaymentModal() {
+  const total = updateBillTotals();
+  document.getElementById('modal-pay-total').textContent = `Rs. ${total.toLocaleString()}`;
+  document.getElementById('pos-cash-tendered').value = '';
+  document.getElementById('pos-change-box').textContent = 'Enter cash above';
+  document.getElementById('btn-complete-pos-sale').disabled = true;
+  openModal('modal-cash-payment');
+  setTimeout(() => document.getElementById('pos-cash-tendered').focus(), 150);
 }
 
-function calcChange() {
-  const total = updateTotals();
-  const cash = parseFloat(document.getElementById('cash-received').value) || 0;
-  const change = cash - total;
-  const disp = document.getElementById('change-display');
-  const btn = document.getElementById('complete-sale-btn');
+function calculateChange() {
+  const total = updateBillTotals();
+  const cash = parseFloat(document.getElementById('pos-cash-tendered').value) || 0;
+  const diff = cash - total;
+  const box = document.getElementById('pos-change-box');
+  const btn = document.getElementById('btn-complete-pos-sale');
+
   if (cash <= 0) {
-    disp.style.cssText = 'background:#f4f6fb;color:#999';
-    disp.textContent = 'Enter cash amount above';
+    box.style.background = '#f1f5f9'; box.style.color = '#000'; box.textContent = 'Enter cash above';
     btn.disabled = true;
-  } else if (change < 0) {
-    disp.className = 'change-display change-neg';
-    disp.style.cssText = '';
-    disp.textContent = `Short Rs. ${Math.abs(change).toLocaleString()} — Need more cash`;
+  } else if (diff < 0) {
+    box.style.background = '#fee2e2'; box.style.color = '#dc2626'; box.textContent = `Short by Rs. ${Math.abs(diff).toLocaleString()}`;
     btn.disabled = true;
   } else {
-    disp.className = 'change-display change-pos';
-    disp.style.cssText = '';
-    disp.textContent = `Change to return: Rs. ${change.toLocaleString()}`;
+    box.style.background = '#dcfce7'; box.style.color = '#15803d'; box.textContent = `Change to Return: Rs. ${diff.toLocaleString()}`;
     btn.disabled = false;
   }
 }
 
-function completeSale() {
-  const total = updateTotals();
-  const cash = parseFloat(document.getElementById('cash-received').value) || 0;
+function completePosSale() {
+  const total = updateBillTotals();
+  const cash = parseFloat(document.getElementById('pos-cash-tendered').value) || 0;
   const change = cash - total;
-  const customer = document.getElementById('customer-name').value || 'Walk-in Customer';
-  const phone = document.getElementById('customer-phone').value;
-  const disc = parseFloat(document.getElementById('discount-input').value) || 0;
-  const sub = cart.reduce((s,i) => s + i.price*i.qty, 0);
-  const discAmt = Math.round(sub * disc / 100);
+  const cust = document.getElementById('cart-customer-name').value.trim() || 'Walk-in Customer';
 
   // Deduct stock
-  cart.forEach(item => {
-    const prod = products.find(p => p.id === item.id);
-    if (prod) prod.stock -= item.qty;
+  cart.forEach(c => {
+    const p = catalog.find(x => x.id === c.id);
+    if (p) p.stock = Math.max(0, p.stock - c.qty);
   });
 
-  // Create transaction
   const tx = {
     id: transactions.length + 1,
-    time: new Date(),
-    customer, phone,
+    date: new Date().toISOString(),
+    customer: cust,
     items: [...cart],
-    subtotal: sub,
-    discPct: disc,
-    discAmt,
     total,
     cash,
     change
   };
   transactions.push(tx);
+  persist();
 
-  // Generate receipt
-  buildReceipt(tx);
-
-  // Clear cart
+  // Thermal print
+  buildReceiptSlip(tx);
+  closeModal('modal-cash-payment');
   clearCart();
-  closeModal('payment-modal');
-  renderProducts();
-
-  showToast('✅ Sale complete! Receipt printed.');
-
-  // Auto-print
-  setTimeout(() => { window.print(); }, 300);
+  renderPosCatalog();
+  setTimeout(() => window.print(), 200);
 }
 
-function buildReceipt(tx) {
-  const now = tx.time;
-  const dateStr = now.toLocaleDateString('en-PK', {day:'numeric',month:'short',year:'numeric'});
-  const timeStr = now.toLocaleTimeString('en-PK', {hour12:true});
-  let itemsHTML = tx.items.map(i =>
-    `<div class="r-row"><span>${i.name.substring(0,28)}</span><span></span></div>
-     <div class="r-row"><span>&nbsp;&nbsp;${i.qty} x Rs.${i.price.toLocaleString()}</span><span>Rs.${(i.qty*i.price).toLocaleString()}</span></div>`
-  ).join('');
+function buildReceiptSlip(tx) {
+  const d = new Date(tx.date);
+  const items = tx.items.map(i => `
+    <div style="display:flex;justify-content:space-between"><span>${i.name}</span><span>Rs.${i.price*i.qty}</span></div>
+    <div style="font-size:10px;color:#555">&nbsp;&nbsp;${i.qty} x Rs.${i.price}</div>
+  `).join('');
 
-  const html = `
-    <div class="r-center">
-      <div class="r-title">JS AUTO</div>
-      <div>Car Filters & Oils — Rawalpindi</div>
-      <div>0336-5804080</div>
+  document.getElementById('thermal-slip').innerHTML = `
+    <div style="text-align:center">
+      <div style="font-weight:900;font-size:15px">${storeConfig.name.toUpperCase()}</div>
+      <div>${storeConfig.city} • ${storeConfig.phone}</div>
+      <div>--------------------------------</div>
     </div>
-    <div class="r-line"></div>
-    <div class="r-row"><span>Bill #</span><span>${String(tx.id).padStart(4,'0')}</span></div>
-    <div class="r-row"><span>Date:</span><span>${dateStr}</span></div>
-    <div class="r-row"><span>Time:</span><span>${timeStr}</span></div>
-    <div class="r-row"><span>Customer:</span><span>${tx.customer}</span></div>
-    ${tx.phone ? `<div class="r-row"><span>Phone:</span><span>${tx.phone}</span></div>` : ''}
-    <div class="r-line"></div>
-    <div class="r-row r-bold"><span>ITEM</span><span>AMOUNT</span></div>
-    <div class="r-line"></div>
-    ${itemsHTML}
-    <div class="r-line"></div>
-    <div class="r-row"><span>Subtotal</span><span>Rs.${tx.subtotal.toLocaleString()}</span></div>
-    ${tx.discPct > 0 ? `<div class="r-row"><span>Discount (${tx.discPct}%)</span><span>-Rs.${tx.discAmt.toLocaleString()}</span></div>` : ''}
-    <div class="r-row r-total"><span>TOTAL</span><span>Rs.${tx.total.toLocaleString()}</span></div>
-    <div class="r-row"><span>Cash</span><span>Rs.${tx.cash.toLocaleString()}</span></div>
-    <div class="r-row"><span>Change</span><span>Rs.${tx.change.toLocaleString()}</span></div>
-    <div class="r-line"></div>
-    <div class="r-center">
-      <div>Thank you for visiting JS Auto!</div>
-      <div>No exchange / return after 24 hours</div>
-      <div style="margin-top:6px;font-size:10px">Powered by JS Auto POS</div>
-    </div>
+    <div>Bill #: INV-${String(tx.id).padStart(4,'0')}</div>
+    <div>Date: ${d.toLocaleDateString()} ${d.toLocaleTimeString()}</div>
+    <div>Customer: ${tx.customer}</div>
+    <div>--------------------------------</div>
+    ${items}
+    <div>--------------------------------</div>
+    <div style="display:flex;justify-content:space-between;font-weight:900"><span>TOTAL:</span><span>Rs. ${tx.total}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Cash:</span><span>Rs. ${tx.cash}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Change:</span><span>Rs. ${tx.change}</span></div>
+    <div>--------------------------------</div>
+    <div style="text-align:center;font-size:10px">Thank you for visiting! Powered by OmniKhata</div>
   `;
-  document.getElementById('receipt-print').innerHTML = html;
-  document.getElementById('receipt-print').style.display = 'block';
-  lastReceiptHTML = html;
+  document.getElementById('thermal-slip').style.display = 'block';
 }
 
-function printLastReceipt() {
-  if (!lastReceiptHTML) { showToast('No receipt to reprint'); return; }
-  window.print();
+// =========================================================================
+// RECEIVE STOCK & VENDOR PAY BILLS
+// =========================================================================
+function openReceiveStockModal() {
+  const sel = document.getElementById('rs-product-select');
+  sel.innerHTML = catalog.map(p => `<option value="${p.id}">${p.name} (Current: ${p.stock})</option>`).join('');
+  openModal('modal-receive-stock');
 }
 
-// ===================== HOLD BILL =====================
-function holdBill() {
-  if (cart.length === 0) { showToast('Cart is empty'); return; }
-  holdBills.push({ cart: [...cart], customer: document.getElementById('customer-name').value });
-  clearCart();
-  showToast(`Bill held (${holdBills.length} on hold)`);
+function saveReceivedStock() {
+  const prodId = parseInt(document.getElementById('rs-product-select').value);
+  const vendor = document.getElementById('rs-vendor-name').value.trim() || 'General Supplier';
+  const qty = parseInt(document.getElementById('rs-qty').value) || 0;
+  const cost = parseFloat(document.getElementById('rs-cost').value) || 0;
+  const payType = document.getElementById('rs-pay-status').value;
+
+  const p = catalog.find(x => x.id === prodId);
+  if (!p || qty <= 0) return;
+
+  p.stock += qty;
+  p.cost = cost;
+
+  stockLogs.push({
+    id: stockLogs.length + 1,
+    date: new Date().toLocaleDateString(),
+    vendor,
+    item: p.name,
+    qty,
+    cost,
+    total: qty * cost,
+    type: payType
+  });
+
+  if (payType === 'CREDIT') {
+    vendorBills.push({
+      id: vendorBills.length + 1,
+      vendor,
+      invoice: `GRN-${Date.now().toString().slice(-4)}`,
+      date: new Date().toLocaleDateString(),
+      amount: qty * cost,
+      paid: 0,
+      balance: qty * cost,
+      notes: `Received ${qty} x ${p.name}`
+    });
+  }
+
+  persist();
+  closeModal('modal-receive-stock');
+  renderStockReceivedTable();
+  alert(`✅ Successfully added ${qty} units to ${p.name}!`);
 }
 
-// ===================== INVENTORY =====================
-function renderInventory(filter = '') {
-  const search = (document.getElementById('inv-search')?.value || '').toLowerCase();
-  const catFilter = document.getElementById('inv-cat-filter')?.value || 'all';
-  // Populate cat filter
+function renderStockReceivedTable() {
+  const tbody = document.getElementById('stock-received-log-tbody');
+  tbody.innerHTML = [...stockLogs].reverse().map(l => `
+    <tr>
+      <td>${l.date}</td>
+      <td><strong>${l.vendor}</strong></td>
+      <td>${l.item}</td>
+      <td style="font-weight:800;color:var(--accent-green)">+${l.qty}</td>
+      <td>Rs. ${l.cost.toLocaleString()}</td>
+      <td>Rs. ${l.total.toLocaleString()}</td>
+      <td><span style="font-weight:800;color:${l.type==='PAID'?'#16a34a':'#d97706'}">${l.type}</span></td>
+    </tr>
+  `).join('');
+}
+
+function openEnterVendorBillModal() {
+  openModal('modal-vendor-bill');
+}
+
+function saveVendorBill() {
+  const vendor = document.getElementById('vb-vendor-name').value.trim();
+  const invoice = document.getElementById('vb-invoice-no').value.trim();
+  const amount = parseFloat(document.getElementById('vb-amount').value) || 0;
+  const notes = document.getElementById('vb-notes').value.trim();
+
+  if (!vendor || amount <= 0) { alert('Enter vendor name and amount!'); return; }
+
+  vendorBills.push({
+    id: vendorBills.length + 1,
+    vendor,
+    invoice,
+    date: new Date().toLocaleDateString(),
+    amount,
+    paid: 0,
+    balance: amount,
+    notes
+  });
+
+  persist();
+  closeModal('modal-vendor-bill');
+  renderVendorPayablesTable();
+  alert('Vendor bill recorded in Khata!');
+}
+
+function renderVendorPayablesTable() {
+  const tbody = document.getElementById('vendor-payables-tbody');
+  tbody.innerHTML = vendorBills.map(b => `
+    <tr>
+      <td><strong>${b.vendor}</strong></td>
+      <td>${b.invoice}</td>
+      <td>${b.date}</td>
+      <td>Rs. ${b.amount.toLocaleString()}</td>
+      <td style="color:#16a34a">Rs. ${b.paid.toLocaleString()}</td>
+      <td style="font-weight:800;color:${b.balance>0?'#dc2626':'#16a34a'}">Rs. ${b.balance.toLocaleString()}</td>
+      <td>
+        ${b.balance > 0 ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px" onclick="openPayVendorModal(${b.id})">💸 Pay Bill</button>` : '✅ Fully Paid'}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openPayVendorModal(billId) {
+  const b = vendorBills.find(x => x.id === billId);
+  if (!b) return;
+  document.getElementById('pv-bill-id').value = b.id;
+  document.getElementById('pv-vendor-name').textContent = b.vendor;
+  document.getElementById('pv-balance').textContent = `Rs. ${b.balance.toLocaleString()}`;
+  document.getElementById('pv-amount').value = b.balance;
+  openModal('modal-pay-vendor');
+}
+
+function confirmVendorPayment() {
+  const id = parseInt(document.getElementById('pv-bill-id').value);
+  const amt = parseFloat(document.getElementById('pv-amount').value) || 0;
+  const b = vendorBills.find(x => x.id === id);
+  if (!b || amt <= 0) return;
+
+  b.paid += amt;
+  b.balance = Math.max(0, b.amount - b.paid);
+  persist();
+  closeModal('modal-pay-vendor');
+  renderVendorPayablesTable();
+  alert('Payment recorded to vendor!');
+}
+
+// =========================================================================
+// CUSTOMER PAY BILLS (UDHAAR KHATA)
+// =========================================================================
+function renderCustomerDuesTable() {
+  const tbody = document.getElementById('cust-dues-tbody');
+  tbody.innerHTML = customerDues.map(c => `
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.phone || '—'}</td>
+      <td>${c.ref}</td>
+      <td>Rs. ${c.total.toLocaleString()}</td>
+      <td style="font-weight:800;color:${c.balance>0?'#dc2626':'#16a34a'}">Rs. ${c.balance.toLocaleString()}</td>
+      <td><span style="font-weight:800;color:${c.balance>0?'#d97706':'#16a34a'}">${c.balance>0?'Pending':'Paid'}</span></td>
+      <td>
+        ${c.balance > 0 ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px" onclick="openReceiveCustPayModal(${c.id})">💳 Receive Cash</button>` : 'Cleared'}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openReceiveCustPayModal(custId) {
+  const c = customerDues.find(x => x.id === custId);
+  if (!c) return;
+  document.getElementById('rcp-cust-id').value = c.id;
+  document.getElementById('rcp-cust-name').textContent = c.name;
+  document.getElementById('rcp-balance').textContent = `Rs. ${c.balance.toLocaleString()}`;
+  document.getElementById('rcp-amount').value = c.balance;
+  openModal('modal-receive-cust-pay');
+}
+
+function confirmCustomerPayment() {
+  const id = parseInt(document.getElementById('rcp-cust-id').value);
+  const amt = parseFloat(document.getElementById('rcp-amount').value) || 0;
+  const c = customerDues.find(x => x.id === id);
+  if (!c || amt <= 0) return;
+
+  c.balance = Math.max(0, c.balance - amt);
+  persist();
+  closeModal('modal-receive-cust-pay');
+  renderCustomerDuesTable();
+  alert('Payment received from customer!');
+}
+
+function openNewCustomerCreditModal() {
+  const name = prompt('Enter Customer Name:');
+  if (!name) return;
+  const phone = prompt('Enter Customer Phone:');
+  const amount = parseFloat(prompt('Enter Credit/Bill Amount (Rs.):')) || 0;
+  if (amount <= 0) return;
+
+  customerDues.push({
+    id: customerDues.length + 1,
+    name,
+    phone,
+    ref: `CREDIT-${Date.now().toString().slice(-4)}`,
+    total: amount,
+    balance: amount
+  });
+  persist();
+  renderCustomerDuesTable();
+}
+
+// =========================================================================
+// INVENTORY & DAILY SUMMARY TABLES
+// =========================================================================
+function renderInventoryTable() {
+  const search = (document.getElementById('inv-search-input')?.value || '').toLowerCase();
+  const catFilter = document.getElementById('inv-cat-filter')?.value || 'ALL';
+
   const sel = document.getElementById('inv-cat-filter');
   if (sel && sel.options.length <= 1) {
-    categories.forEach(c => { const o = new Option(c,c); sel.appendChild(o); });
+    [...new Set(catalog.map(p => p.cat))].forEach(c => sel.appendChild(new Option(c, c)));
   }
-  const tbody = document.getElementById('inv-tbody');
-  let shown = products.filter(p => {
-    const ms = !search || p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search) || p.brand.toLowerCase().includes(search);
-    const mc = catFilter === 'all' || p.cat === catFilter;
-    return ms && mc;
+
+  const tbody = document.getElementById('inventory-table-tbody');
+  const filtered = catalog.filter(p => {
+    const mc = catFilter === 'ALL' || p.cat === catFilter;
+    const ms = !search || p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search);
+    return mc && ms;
   });
-  tbody.innerHTML = shown.map((p,i) => {
-    const stockBadge = p.stock === 0
-      ? `<span class="badge badge-red">Out</span>`
-      : p.stock <= p.lowStock
-      ? `<span class="badge badge-orange">Low: ${p.stock}</span>`
-      : `<span class="badge badge-green">${p.stock}</span>`;
-    return `<tr>
-      <td>${i+1}</td>
-      <td class="sku-cell">${p.sku}</td>
-      <td><strong>${p.name}</strong></td>
-      <td>${p.brand}</td>
-      <td>${p.cat}</td>
-      <td class="price-cell">Rs. ${p.price.toLocaleString()}</td>
-      <td style="color:#888">Rs. ${(p.cost||0).toLocaleString()}</td>
-      <td><input type="number" value="${p.stock}" min="0" style="width:65px;padding:4px;border:1.5px solid var(--gray);border-radius:4px;font-weight:700;text-align:center"
-        onchange="updateStock(${p.id}, this.value)"></td>
-      <td>${stockBadge}</td>
-      <td>
-        <button class="btn btn-navy btn-sm" onclick="openEdit(${p.id})">Edit</button>
-        <button class="btn btn-red btn-sm" onclick="deleteProduct(${p.id})" style="margin-left:4px">Del</button>
-      </td>
-    </tr>`;
-  }).join('');
-  if (!shown.length) tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#aaa;padding:30px">No products found</td></tr>';
-}
 
-function filterInventory(val) { renderInventory(val); }
-
-function updateStock(id, val) {
-  const p = products.find(p => p.id === id);
-  if (p) { p.stock = parseInt(val) || 0; showToast(`Stock updated: ${p.name}`); }
-}
-
-function openAddProduct() {
-  document.getElementById('np-name').value = '';
-  document.getElementById('np-brand').value = '';
-  document.getElementById('np-price').value = '';
-  document.getElementById('np-cost').value = '';
-  document.getElementById('np-stock').value = '1';
-  document.getElementById('np-lowstock').value = '5';
-  document.getElementById('np-sku').value = '';
-  document.getElementById('add-product-modal').classList.add('open');
-}
-
-function saveNewProduct() {
-  const name = document.getElementById('np-name').value.trim();
-  const price = parseFloat(document.getElementById('np-price').value);
-  if (!name || !price) { showToast('❌ Name and Price are required'); return; }
-  const sku = document.getElementById('np-sku').value.trim() || `JSA-${String(currentSKUCounter++).padStart(3,'0')}`;
-  products.push({
-    id: nextProductId++,
-    sku, name,
-    brand: document.getElementById('np-brand').value.trim() || 'Generic',
-    cat: document.getElementById('np-cat').value,
-    price,
-    cost: parseFloat(document.getElementById('np-cost').value) || 0,
-    stock: parseInt(document.getElementById('np-stock').value) || 0,
-    lowStock: parseInt(document.getElementById('np-lowstock').value) || 5
-  });
-  closeModal('add-product-modal');
-  buildCatPills();
-  renderProducts();
-  renderInventory();
-  showToast('✅ Product added');
-}
-
-function openEdit(id) {
-  const p = products.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('ep-idx').value = id;
-  document.getElementById('ep-name').value = p.name;
-  document.getElementById('ep-brand').value = p.brand;
-  document.getElementById('ep-cat').value = p.cat;
-  document.getElementById('ep-price').value = p.price;
-  document.getElementById('ep-cost').value = p.cost || '';
-  document.getElementById('ep-stock').value = p.stock;
-  document.getElementById('ep-lowstock').value = p.lowStock;
-  document.getElementById('edit-product-modal').classList.add('open');
-}
-
-function saveEditProduct() {
-  const id = parseInt(document.getElementById('ep-idx').value);
-  const p = products.find(x => x.id === id);
-  if (!p) return;
-  p.name = document.getElementById('ep-name').value.trim() || p.name;
-  p.brand = document.getElementById('ep-brand').value.trim() || p.brand;
-  p.cat = document.getElementById('ep-cat').value;
-  p.price = parseFloat(document.getElementById('ep-price').value) || p.price;
-  p.cost = parseFloat(document.getElementById('ep-cost').value) || 0;
-  p.stock = parseInt(document.getElementById('ep-stock').value) || 0;
-  p.lowStock = parseInt(document.getElementById('ep-lowstock').value) || 5;
-  closeModal('edit-product-modal');
-  renderInventory();
-  renderProducts();
-  showToast('✅ Product updated');
-}
-
-function deleteProduct(id) {
-  if (!confirm('Delete this product?')) return;
-  products = products.filter(p => p.id !== id);
-  renderInventory();
-  renderProducts();
-  buildCatPills();
-  showToast('Product deleted');
-}
-
-function exportCSV() {
-  const rows = [['SKU','Name','Brand','Category','Sale Price','Cost','Stock']];
-  products.forEach(p => rows.push([p.sku, p.name, p.brand, p.cat, p.price, p.cost||0, p.stock]));
-  const csv = rows.map(r => r.join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'jsauto_inventory.csv'; a.click();
-}
-
-// ===================== BARCODE LABELS =====================
-function populateBarcodeSelect() {
-  const sel = document.getElementById('bc-product');
-  sel.innerHTML = '<option value="">-- Select Product --</option>';
-  products.forEach(p => {
-    const o = new Option(`${p.name} — Rs.${p.price}`, p.id);
-    sel.appendChild(o);
-  });
-}
-
-function code128SVG(text, w=200, h=60) {
-  // Simple visual barcode approximation (alternating bar widths)
-  const bars = [];
-  let x = 0;
-  const barW = w / (text.length * 6 + 20);
-  for (let i = 0; i < text.length * 3 + 10; i++) {
-    const bw = barW * (1 + (i % 3 === 0 ? 1 : 0));
-    bars.push(`<rect x="${x.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${h}" fill="${i%2===0?'#000':'#fff'}"/>`);
-    x += bw + barW * 0.3;
-  }
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" style="display:block">${bars.join('')}</svg>`;
-}
-
-function stickerHTML(name, price, sku, small=false) {
-  return `<div class="label-sticker">
-    <div class="l-shop">JS AUTO — RAWALPINDI</div>
-    <div class="l-name">${name.substring(0,30)}</div>
-    <div class="l-price">Rs. ${Number(price).toLocaleString()}</div>
-    ${code128SVG(sku)}
-    <div class="l-sku">${sku}</div>
-  </div>`;
-}
-
-function previewLabel() {
-  const id = parseInt(document.getElementById('bc-product').value);
-  const priceOv = document.getElementById('bc-price-override').value;
-  const p = products.find(x => x.id === id);
-  const preview = document.getElementById('label-preview');
-  if (!p) { preview.innerHTML = '<p style="color:#aaa">Select a product to preview label</p>'; return; }
-  const price = priceOv || p.price;
-  preview.innerHTML = stickerHTML(p.name, price, p.sku);
-}
-
-function previewCustomLabel() {
-  const name = document.getElementById('custom-name').value || 'Product Name';
-  const price = document.getElementById('custom-price').value || '0';
-  const sku = document.getElementById('custom-sku').value || 'JSA-000';
-  document.getElementById('label-preview').innerHTML = stickerHTML(name, price, sku);
-}
-
-function printLabels() {
-  const id = parseInt(document.getElementById('bc-product').value);
-  const p = products.find(x => x.id === id);
-  if (!p) { showToast('Select a product first'); return; }
-  const copies = parseInt(document.getElementById('bc-copies').value) || 1;
-  const price = document.getElementById('bc-price-override').value || p.price;
-  openLabelPrint(p.name, price, p.sku, copies);
-}
-
-function printCustomLabel() {
-  const name = document.getElementById('custom-name').value;
-  const price = document.getElementById('custom-price').value;
-  const sku = document.getElementById('custom-sku').value || 'JSA-CUSTOM';
-  if (!name || !price) { showToast('Enter name and price'); return; }
-  openLabelPrint(name, price, sku, 1);
-}
-
-function openLabelPrint(name, price, sku, copies) {
-  const w = window.open('', '_blank', 'width=500,height=600');
-  const labels = Array(copies).fill(stickerHTML(name, price, sku)).join('<div style="margin:4px 0"></div>');
-  w.document.write(`<!DOCTYPE html><html><head><title>Labels</title>
-    <style>
-      body{margin:10px;font-family:'Segoe UI',sans-serif;}
-      .label-sticker{display:inline-block;background:white;border:2px solid #333;padding:10px 16px;border-radius:4px;min-width:200px;margin:4px;}
-      .l-shop{font-size:11px;font-weight:700;color:#0a1938;letter-spacing:2px;}
-      .l-name{font-size:14px;font-weight:800;margin:3px 0;}
-      .l-price{font-size:18px;font-weight:900;color:#d31038;}
-      .l-sku{font-size:10px;color:#888;font-family:monospace;}
-      @media print{@page{margin:5mm}}
-    </style></head><body onload="window.print()">${labels}</body></html>`);
-  w.document.close();
-}
-
-// ===================== REPORTS =====================
-function renderReports() {
-  const today = new Date().toDateString();
-  const todayTx = transactions.filter(t => t.time.toDateString() === today);
-  const todaySales = todayTx.reduce((s,t) => s+t.total, 0);
-  const itemsSold = todayTx.reduce((s,t) => s + t.items.reduce((a,i)=>a+i.qty,0), 0);
-  const avg = todayTx.length ? Math.round(todaySales/todayTx.length) : 0;
-  document.getElementById('rep-today-sales').textContent = 'Rs. ' + todaySales.toLocaleString();
-  document.getElementById('rep-today-tx').textContent = todayTx.length;
-  document.getElementById('rep-items-sold').textContent = itemsSold;
-  document.getElementById('rep-avg-bill').textContent = 'Rs. ' + avg.toLocaleString();
-  const tbody = document.getElementById('tx-tbody');
-  if (!transactions.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:30px">No transactions yet today</td></tr>';
-    return;
-  }
-  tbody.innerHTML = [...transactions].reverse().map(tx => `
+  tbody.innerHTML = filtered.map(p => `
     <tr>
-      <td><strong>#${String(tx.id).padStart(4,'0')}</strong></td>
-      <td>${tx.time.toLocaleTimeString('en-PK',{hour12:true})}</td>
-      <td>${tx.customer}</td>
-      <td>${tx.items.reduce((s,i)=>s+i.qty,0)} items</td>
-      <td style="font-weight:800;color:var(--red)">Rs. ${tx.total.toLocaleString()}</td>
-      <td>Cash</td>
-      <td><button class="btn btn-navy btn-sm" onclick="reprintTx(${tx.id})">🖨 Reprint</button></td>
+      <td style="font-family:monospace;font-weight:700">${p.sku}</td>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.cat}</td>
+      <td style="color:#64748b">${p.variant || '—'}</td>
+      <td style="font-weight:800;color:var(--accent-red)">Rs. ${p.price.toLocaleString()}</td>
+      <td style="color:#64748b">Rs. ${(p.cost||0).toLocaleString()}</td>
+      <td><input type="number" value="${p.stock}" style="width:65px;padding:3px;text-align:center;font-weight:700" onchange="updateStockInline(${p.id}, this.value)"></td>
+      <td><button class="btn btn-danger" style="padding:3px 7px;font-size:11px" onclick="deleteItem(${p.id})">Del</button></td>
+    </tr>
+  `).join('');
+}
+
+function updateStockInline(id, val) {
+  const p = catalog.find(x => x.id === id);
+  if (p) { p.stock = parseInt(val) || 0; persist(); }
+}
+
+function deleteItem(id) {
+  if (confirm('Delete item?')) {
+    catalog = catalog.filter(x => x.id !== id);
+    persist();
+    renderInventoryTable();
+  }
+}
+
+function renderDailyZReport() {
+  const tbody = document.getElementById('daily-tx-tbody');
+  tbody.innerHTML = [...transactions].reverse().map(t => `
+    <tr>
+      <td><strong>#${String(t.id).padStart(4, '0')}</strong></td>
+      <td>${new Date(t.date).toLocaleTimeString()}</td>
+      <td>${t.customer}</td>
+      <td>${t.items.reduce((s, i) => s + i.qty, 0)} items</td>
+      <td style="font-weight:800;color:var(--accent-red)">Rs. ${t.total.toLocaleString()}</td>
+      <td>Rs. ${t.cash} / ret Rs. ${t.change}</td>
+      <td><button class="btn btn-secondary" style="padding:3px 6px;font-size:11px" onclick="reprintTx(${t.id})">🖨 Reprint</button></td>
     </tr>
   `).join('');
 }
 
 function reprintTx(id) {
-  const tx = transactions.find(t => t.id === id);
-  if (!tx) return;
-  buildReceipt(tx);
+  const t = transactions.find(x => x.id === id);
+  if (!t) return;
+  buildReceiptSlip(t);
   window.print();
 }
 
-// ===================== MODAL =====================
+// =========================================================================
+// PRESETS & STORE CONFIG
+// =========================================================================
+function openStoreConfig() {
+  document.getElementById('cfg-shop-name').value = storeConfig.name;
+  document.getElementById('cfg-shop-city').value = storeConfig.city;
+  document.getElementById('cfg-shop-phone').value = storeConfig.phone;
+  document.getElementById('cfg-shop-curr').value = storeConfig.currency;
+  openModal('modal-store-config');
+}
+
+function saveStoreConfig() {
+  storeConfig.name = document.getElementById('cfg-shop-name').value.trim() || 'My Shop';
+  storeConfig.city = document.getElementById('cfg-shop-city').value.trim() || 'City';
+  storeConfig.phone = document.getElementById('cfg-shop-phone').value.trim();
+  storeConfig.currency = document.getElementById('cfg-shop-curr').value.trim() || 'Rs.';
+  persist();
+  closeModal('modal-store-config');
+}
+
+function loadPreset(type) {
+  if (!confirm('Load demo template?')) return;
+  if (type === 'shoes') {
+    storeConfig = { name: "Apex Footwear Hub", city: "Mall Road", phone: "0300-1122334", currency: "Rs." };
+    catalog = [
+      { id: 101, sku: 'SHO-01', name: 'Oxford Formal Leather Shoes', cat: 'Formal Shoes', variant: 'Size 41 | Black', price: 4200, cost: 2600, stock: 15, low: 3 },
+      { id: 102, sku: 'SHO-02', name: 'Air Mesh Sports Sneakers', cat: 'Sports', variant: 'Size 42 | White', price: 3400, cost: 2000, stock: 20, low: 4 },
+      { id: 103, sku: 'SHO-03', name: 'Peshawari Chappal Handcrafted', cat: 'Traditional', variant: 'Size 40 | Brown', price: 2800, cost: 1700, stock: 25, low: 5 }
+    ];
+  } else if (type === 'grocery') {
+    storeConfig = { name: "Al-Madina Super Mart", city: "Commercial Market", phone: "0311-9988776", currency: "Rs." };
+    catalog = [
+      { id: 201, sku: 'GRO-01', name: 'Dalda Cooking Oil 5L Tin', cat: 'Oils', variant: '5 Liters', price: 2650, cost: 2450, stock: 30, low: 5 },
+      { id: 202, sku: 'GRO-02', name: 'Tapal Danedar Family Pack', cat: 'Tea', variant: '900 grams', price: 1450, cost: 1300, stock: 25, low: 4 },
+      { id: 203, sku: 'GRO-03', name: 'Basmati Rice Premium 5kg', cat: 'Rice', variant: '5 kg Bag', price: 1850, cost: 1550, stock: 40, low: 10 }
+    ];
+  } else {
+    storeConfig = { name: "JS Auto Parts", city: "Rawalpindi", phone: "0336-5804080", currency: "Rs." };
+  }
+  persist();
+  renderPosCatalog();
+  alert(`Loaded ${storeConfig.name} profile!`);
+}
+
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
+document.querySelectorAll('.modal-shade').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
 });
 
-// ===================== TOAST =====================
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-// ===================== INIT =====================
-buildCatPills();
-renderProducts();
-document.getElementById('scan-input').focus();
+// INITIAL BOOT
+updateTopHeader();
+updateSidebarStats();
+renderPosCatalog();
 </script>
 </body>
 </html>
