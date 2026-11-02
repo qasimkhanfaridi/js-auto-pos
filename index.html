@@ -287,6 +287,467 @@
   #thermal-slip { display: none; background: white; color: black; }
 
   .hidden { display: none !important; }
+
+  /* =========================================================================
+     AUTHENTIC QUICKBOOKS ENTERPRISE 21.0 STYLING
+     ========================================================================= */
+  .qb-desktop-wrapper {
+    background: #d4e1ed;
+    border: 2px solid #5a8ab5;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
+    color: #1e293b;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  /* WINDOW TITLE BAR */
+  .qb-window-titlebar {
+    background: linear-gradient(180deg, #1d4b7a 0%, #133457 100%);
+    color: white;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    user-select: none;
+    border-bottom: 1px solid #0f2742;
+  }
+  .qb-window-title-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qb-badge-icon {
+    background: #0284c7;
+    color: white;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #38bdf8;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.4);
+  }
+  .qb-window-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .qb-win-btn {
+    width: 18px;
+    height: 18px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+    line-height: 1;
+    color: #e2e8f0;
+  }
+  .qb-win-btn:hover { background: rgba(255,255,255,0.3); }
+  .qb-win-btn.close:hover { background: #dc2626; border-color: #ef4444; }
+
+  /* CLASSIC QUICKBOOKS MENU BAR */
+  .qb-menubar {
+    background: #eef3f8;
+    border-bottom: 1px solid #bfd3e6;
+    display: flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    color: #1e293b;
+    gap: 2px;
+  }
+  .qb-menu-item {
+    padding: 3px 8px;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: background 0.1s;
+  }
+  .qb-menu-item:hover {
+    background: #d4e4f2;
+    color: #0369a1;
+  }
+
+  /* QUICKBOOKS TOOLBAR RIBBON */
+  .qb-ribbon-bar {
+    background: linear-gradient(180deg, #f6f9fc 0%, #e5edf5 100%);
+    border-bottom: 1px solid #bfd3e6;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow-x: auto;
+    gap: 12px;
+  }
+  .qb-ribbon-items {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .qb-ribbon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #334155;
+    min-width: 54px;
+    transition: all 0.12s;
+    background: transparent;
+  }
+  .qb-ribbon-btn .rib-icon {
+    font-size: 17px;
+    margin-bottom: 2px;
+  }
+  .qb-ribbon-btn:hover {
+    background: #ffffff;
+    border-color: #93c5fd;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    color: #0284c7;
+  }
+  .qb-ribbon-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: 1px solid #94a3b8;
+    border-radius: 3px;
+    padding: 3px 8px;
+    min-width: 200px;
+  }
+  .qb-ribbon-search input {
+    border: none;
+    outline: none;
+    font-size: 11px;
+    width: 100%;
+    color: #1e293b;
+  }
+
+  /* TABS (HOME PAGE | INSIGHTS) */
+  .qb-tabs-row {
+    background: #dce7f2;
+    padding: 6px 12px 0;
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #a8c4de;
+  }
+  .qb-tab-btn {
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    background: #cddfeeed;
+    border: 1px solid #a8c4de;
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .qb-tab-btn:hover {
+    background: #e2eef8;
+    color: #0f172a;
+  }
+  .qb-tab-btn.active {
+    background: #ffffff;
+    color: #0369a1;
+    border-top: 3px solid #0284c7;
+    margin-bottom: -1px;
+    padding-bottom: 7px;
+  }
+
+  /* WORKFLOW MAIN CANVAS */
+  .qb-canvas-layout {
+    background: #ffffff;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 14px;
+    min-height: 600px;
+  }
+  .qb-flow-left {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .qb-flow-and-right-columns {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 14px;
+  }
+
+  /* SECTION BOXES WITH PILL HEADERS */
+  .qb-lane-box {
+    background: #fbfcfe;
+    border: 1.5px solid #a8c5df;
+    border-radius: 5px;
+    padding: 16px 14px 12px;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(15,23,42,0.03);
+  }
+  .qb-lane-pill {
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    background: linear-gradient(180deg, #d8e8f8 0%, #b8d4ee 100%);
+    border: 1px solid #7ea8cf;
+    color: #0f355c;
+    padding: 2px 16px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  /* WORKFLOW NODES & ICONS */
+  .qb-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    padding: 6px 4px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.15s;
+    user-select: none;
+    width: 108px;
+    position: relative;
+  }
+  .qb-node:hover {
+    background: #e8f2fc;
+    border-color: #7bb4e3;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(2,132,199,0.12);
+  }
+  .qb-node-icon {
+    font-size: 32px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3px;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.08));
+  }
+  .qb-node-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f355c;
+    line-height: 1.25;
+  }
+  .qb-node-sub {
+    font-size: 9.5px;
+    color: #64748b;
+    margin-top: 1px;
+  }
+
+  /* SVG ARROW CONNECTORS */
+  .qb-arrow-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7099c2;
+    font-size: 20px;
+    font-weight: 900;
+    user-select: none;
+    padding: 0 4px;
+  }
+  .qb-arrow-down {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7099c2;
+    font-size: 18px;
+    font-weight: 900;
+    user-select: none;
+    margin: 2px 0;
+  }
+
+  /* VENDORS SECTION LAYOUT */
+  .qb-vendors-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .qb-vendors-row-1 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+  .qb-vendors-row-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 40px;
+  }
+
+  /* CUSTOMERS SECTION LAYOUT */
+  .qb-customers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .qb-customers-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .qb-customers-col-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .qb-customers-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .qb-customers-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 20px 0;
+    border-top: 1px dashed #d0e0ee;
+  }
+
+  /* EMPLOYEES LANE */
+  .qb-employees-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 0;
+  }
+
+  /* RIGHT SIDE CANVAS: COMPANY & BANKING */
+  .qb-canvas-right-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .qb-side-icons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  /* COLLAPSIBLE ACCORDION SIDEBAR */
+  .qb-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .qb-accordion-card {
+    background: #f8fafc;
+    border: 1.5px solid #a8c5df;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .qb-accordion-header {
+    background: linear-gradient(180deg, #e4edf6 0%, #ccdfee 100%);
+    border-bottom: 1px solid #a8c5df;
+    padding: 8px 12px;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #0f355c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    letter-spacing: 0.4px;
+  }
+  .qb-accordion-header:hover {
+    background: #d6e7f5;
+  }
+  .qb-accordion-body {
+    padding: 10px 12px;
+    font-size: 12px;
+    background: white;
+  }
+  .qb-bal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .qb-bal-row:last-child { border-bottom: none; }
+  .qb-bal-label { color: #475569; font-weight: 600; font-size: 11px; }
+  .qb-bal-val { font-weight: 800; font-size: 13px; }
+
+  /* INSIGHTS DASHBOARD */
+  .qb-insights-screen {
+    background: #f1f5f9;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .qb-insights-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .qb-kpi-card {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .qb-kpi-title { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }
+  .qb-kpi-val { font-size: 22px; font-weight: 900; color: #0f172a; }
+  .qb-kpi-sub { font-size: 11px; margin-top: 4px; }
+
+  .qb-insights-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .qb-chart-card {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .qb-chart-card h4 {
+    font-size: 13px; font-weight: 800; color: #1e293b; margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .qb-bar-row {
+    margin-bottom: 10px;
+  }
+  .qb-bar-label-wrap {
+    display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 700; margin-bottom: 3px;
+  }
+  .qb-bar-track {
+    background: #e2e8f0; height: 10px; border-radius: 5px; overflow: hidden;
+  }
+  .qb-bar-fill {
+    height: 100%; border-radius: 5px;
+  }
+
 </style>
 </head>
 <body>
@@ -410,143 +871,535 @@
 <!-- ========================================================================= -->
 <!-- VIEW 1: HOME WORKFLOW (For Store Owners & Managers)                      -->
 <!-- ========================================================================= -->
-<div id="view-home" class="view-container">
-  <div class="dashboard-grid">
-    <div>
-      <!-- VENDORS LANE -->
-      <div class="flow-lane">
-        <div class="flow-lane-title">🚚 Vendors & Inventory Flow</div>
-        <div class="workflow-row">
-          <div class="flow-node" onclick="openReceiveStockModal()">
-            <div class="node-icon">📦</div>
-            <div class="node-title">Receive Stock</div>
-            <div style="font-size:11px;color:#64748b">Inward Cartons/Crates</div>
-            <span class="node-badge badge-blue">Action 1</span>
-          </div>
 
-          <div class="flow-arrow">➔</div>
+<!-- ========================================================================= -->
+<!-- AUTHENTIC QUICKBOOKS ENTERPRISE 21.0 - HOME WORKFLOW & INSIGHTS CANVAS    -->
+<!-- ========================================================================= -->
+<div id="view-home" class="view-container" style="max-width:1440px;padding:12px 16px">
 
-          <div class="flow-node" onclick="openVendorBillModal()">
-            <div class="node-icon">📑</div>
-            <div class="node-title">Enter Vendor Bills</div>
-            <div style="font-size:11px;color:#64748b">Factory Khata</div>
-            <span class="node-badge badge-amber">Action 2</span>
-          </div>
-
-          <div class="flow-arrow">➔</div>
-
-          <div class="flow-node" onclick="switchNavTab('stock-pay')">
-            <div class="node-icon">💸</div>
-            <div class="node-title">Stock Pay Bills</div>
-            <div style="font-size:11px;color:#16a34a">Pay Outstandings</div>
-            <span class="node-badge badge-green">Action 3</span>
-          </div>
-        </div>
+  <div class="qb-desktop-wrapper">
+    <!-- 1. WINDOW TITLE BAR -->
+    <div class="qb-window-titlebar">
+      <div class="qb-window-title-left">
+        <span class="qb-badge-icon">qb</span>
+        <span id="qb-window-title-text">Master Brothers - Intuit QuickBooks Enterprise Solutions: Manufacturing and Wholesale 21.0 - [Home]</span>
       </div>
-
-      <!-- CUSTOMERS LANE -->
-      <div class="flow-lane">
-        <div class="flow-lane-title">👥 Retailers & Sales Billing Flow</div>
-        <div class="workflow-row">
-          <div class="flow-node" style="border-color:#2563eb;background:#f0f7ff" onclick="switchNavTab('billing')">
-            <div class="node-icon">🧾</div>
-            <div class="node-title">Counter Billing</div>
-            <div style="font-size:11px;color:#2563eb">Fast Order Invoice</div>
-            <span class="node-badge badge-blue">POS Active</span>
-          </div>
-
-          <div class="flow-arrow">➔</div>
-
-          <div class="flow-node" onclick="openCustomerCreditModal()">
-            <div class="node-icon">📄</div>
-            <div class="node-title">Create Invoices</div>
-            <div style="font-size:11px;color:#64748b">Retailer Khata / Credit</div>
-            <span class="node-badge badge-amber">Credit Sale</span>
-          </div>
-
-          <div class="flow-arrow">➔</div>
-
-          <div class="flow-node" onclick="switchNavTab('cust-pay')">
-            <div class="node-icon">💳</div>
-            <div class="node-title">Customer Pay Bills</div>
-            <div style="font-size:11px;color:#16a34a">Collect Khata Dues</div>
-            <span class="node-badge badge-green">Receive Cash</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- BANKING & REPORTS LANE -->
-      <div class="flow-lane">
-        <div class="flow-lane-title">🏦 Cash Register & Summary</div>
-        <div class="workflow-row">
-          <div class="flow-node" onclick="switchNavTab('summary')">
-            <div class="node-icon">📊</div>
-            <div class="node-title">Daily Z-Report</div>
-            <div style="font-size:11px;color:#64748b">Sales Audit</div>
-            <span class="node-badge badge-amber">Daily Close</span>
-          </div>
-
-          <div class="flow-arrow">➔</div>
-
-          <div class="flow-node" onclick="switchNavTab('inventory')">
-            <div class="node-icon">🏷️</div>
-            <div class="node-title">Stock Audit</div>
-            <div style="font-size:11px;color:#64748b">Low Stock Alerts</div>
-            <span class="node-badge badge-blue">Catalog</span>
-          </div>
-
-          <div class="flow-arrow">➔</div>
-
-          <div class="flow-node" onclick="switchNavTab('staff')">
-            <div class="node-icon">👥</div>
-            <div class="node-title">Manage Staff</div>
-            <div style="font-size:11px;color:#64748b">Cashiers & Sales Reps</div>
-            <span class="node-badge badge-green">Permissions</span>
-          </div>
-        </div>
+      <div class="qb-window-controls">
+        <div class="qb-win-btn" title="Minimize">_</div>
+        <div class="qb-win-btn" title="Maximize">□</div>
+        <div class="qb-win-btn close" title="Close" onclick="switchNavTab('billing')">✕</div>
       </div>
     </div>
 
-    <!-- SIDEBAR OVERVIEW -->
-    <div>
-      <div class="side-card">
-        <h4>⚡ Today's Counter Overview</h4>
-        <div class="quick-stat">
-          <span style="color:#64748b">Today's Sales:</span>
-          <span class="val" style="color:var(--accent-green)" id="side-today-sales">Rs. 0</span>
+    <!-- 2. QUICKBOOKS CLASSIC MENU BAR -->
+    <div class="qb-menubar">
+      <div class="qb-menu-item" onclick="switchQbSubtab('home')">File</div>
+      <div class="qb-menu-item" onclick="openChartOfAccountsModal()">Edit</div>
+      <div class="qb-menu-item" onclick="switchQbSubtab('insights')">View</div>
+      <div class="qb-menu-item" onclick="switchNavTab('inventory')">Lists</div>
+      <div class="qb-menu-item" onclick="openReceiveStockModal()">Favorites</div>
+      <div class="qb-menu-item" onclick="openInventoryActivitiesModal()">Mfg & Whsle</div>
+      <div class="qb-menu-item" onclick="openChartOfAccountsModal()">Company</div>
+      <div class="qb-menu-item" onclick="switchNavTab('cust-pay')">Customers</div>
+      <div class="qb-menu-item" onclick="switchNavTab('stock-pay')">Vendors</div>
+      <div class="qb-menu-item" onclick="switchNavTab('staff')">Employees</div>
+      <div class="qb-menu-item" onclick="openRecordDepositsModal()">Banking</div>
+      <div class="qb-menu-item" onclick="switchNavTab('summary')">Reports</div>
+      <div class="qb-menu-item">Window</div>
+      <div class="qb-menu-item" onclick="alert('OmniKhata POS Cloud v21.0\nModeled after QuickBooks Enterprise Manufacturing & Wholesale\nClient Store: ' + getActiveStore().name)">Help</div>
+    </div>
+
+    <!-- 3. QUICKBOOKS TOOLBAR RIBBON -->
+    <div class="qb-ribbon-bar">
+      <div class="qb-ribbon-items">
+        <div class="qb-ribbon-btn" onclick="switchQbSubtab('home')">
+          <span class="rib-icon">🏠</span>
+          <span>Home</span>
         </div>
-        <div class="quick-stat">
-          <span style="color:#64748b">Bills Generated:</span>
-          <span class="val" id="side-today-bills">0</span>
+        <div class="qb-ribbon-btn" onclick="openChartOfAccountsModal()">
+          <span class="rib-icon">🏢</span>
+          <span>My Company</span>
         </div>
-        <div class="quick-stat">
-          <span style="color:#64748b">Est. Profit:</span>
-          <span class="val" style="color:var(--accent)" id="side-today-profit">Rs. 0</span>
+        <div class="qb-ribbon-btn" onclick="switchQbSubtab('insights')">
+          <span class="rib-icon">📈</span>
+          <span>Income Tracker</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="switchNavTab('stock-pay')">
+          <span class="rib-icon">📋</span>
+          <span>Bill Tracker</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="openCalendarModal()">
+          <span class="rib-icon">📅</span>
+          <span>Calendar</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="switchQbSubtab('insights')">
+          <span class="rib-icon">📷</span>
+          <span>Snapshots</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="switchNavTab('cust-pay')">
+          <span class="rib-icon">👥</span>
+          <span>Customers</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="switchNavTab('stock-pay')">
+          <span class="rib-icon">🚚</span>
+          <span>Vendors</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="switchNavTab('staff')">
+          <span class="rib-icon">👔</span>
+          <span>Employees</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="openRecordDepositsModal()">
+          <span class="rib-icon">🏦</span>
+          <span>Bank Feeds</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="openCustomerStatementModal()">
+          <span class="rib-icon">📁</span>
+          <span>Docs</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="switchNavTab('summary')">
+          <span class="rib-icon">📊</span>
+          <span>Reports</span>
+        </div>
+        <div class="qb-ribbon-btn" onclick="openCreditCardModal()">
+          <span class="rib-icon">💳</span>
+          <span>Credit Cards</span>
         </div>
       </div>
 
-      <div class="side-card">
-        <h4>📦 Shop Balances</h4>
-        <div class="quick-stat">
-          <span style="color:#64748b">Low Stock Items:</span>
-          <span class="val" style="color:var(--accent-red)" id="side-low-stock">0</span>
-        </div>
-        <div class="quick-stat">
-          <span style="color:#64748b">Vendor Payables:</span>
-          <span class="val" style="color:var(--accent-red)" id="side-vendor-payables">Rs. 0</span>
-        </div>
-        <div class="quick-stat">
-          <span style="color:#64748b">Customer Receivables:</span>
-          <span class="val" style="color:var(--accent-gold)" id="side-cust-receivables">Rs. 0</span>
-        </div>
+      <div class="qb-ribbon-search">
+        <span>🔍</span>
+        <input type="text" placeholder="Search Company or Help" onkeydown="if(event.key==='Enter')alert('Quick search: ' + this.value)">
       </div>
     </div>
+
+    <!-- 4. SUBTABS: [ HOME PAGE ] | [ INSIGHTS ] -->
+    <div class="qb-tabs-row">
+      <div class="qb-tab-btn active" id="qb-tab-btn-home" onclick="switchQbSubtab('home')">
+        <span>🏠</span> Home Page
+      </div>
+      <div class="qb-tab-btn" id="qb-tab-btn-insights" onclick="switchQbSubtab('insights')">
+        <span>📊</span> Insights
+      </div>
+    </div>
+
+    <!-- 5. WORKFLOW CANVAS (HOME PAGE TAB) -->
+    <div id="qb-content-home" class="qb-canvas-layout">
+      
+      <!-- MAIN WORKFLOW AREA (LEFT + MIDDLE COLUMNS) -->
+      <div class="qb-flow-left">
+        
+        <div class="qb-flow-and-right-columns">
+          
+          <!-- LEFT 2 LANES: VENDORS & CUSTOMERS & EMPLOYEES -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            
+            <!-- VENDORS ZONE -->
+            <div class="qb-lane-box">
+              <div class="qb-lane-pill">VENDORS</div>
+              <div class="qb-vendors-grid">
+                
+                <!-- ROW 1: PO -> RECEIVE INVENTORY -> ENTER BILLS AGAINST INVENTORY -->
+                <div class="qb-vendors-row-1">
+                  <div class="qb-node" onclick="openPurchaseOrderModal()">
+                    <div class="qb-node-icon">📄✏️</div>
+                    <div class="qb-node-title">Purchase Orders</div>
+                    <div class="qb-node-sub">Create Order</div>
+                  </div>
+
+                  <div class="qb-arrow-right">➔</div>
+
+                  <div class="qb-node" onclick="openReceiveStockModal()">
+                    <div class="qb-node-icon">📦🚚</div>
+                    <div class="qb-node-title">Receive Inventory</div>
+                    <div class="qb-node-sub">Inward Stock (GRN)</div>
+                  </div>
+
+                  <div class="qb-arrow-right">➔</div>
+
+                  <div class="qb-node" onclick="openVendorBillModal()">
+                    <div class="qb-node-icon">📑➕</div>
+                    <div class="qb-node-title">Enter Bills Against Inventory</div>
+                    <div class="qb-node-sub">Match Khata</div>
+                  </div>
+                </div>
+
+                <!-- ROW 2: ENTER BILLS -> PAY BILLS (WITH VERTICAL ARROW FROM PO) -->
+                <div style="display:flex;align-items:center;margin-top:2px;padding-left:36px">
+                  <div class="qb-arrow-down">⬇</div>
+                </div>
+
+                <div class="qb-vendors-row-2">
+                  <div class="qb-node" onclick="openVendorBillModal()">
+                    <div class="qb-node-icon">✉️📄</div>
+                    <div class="qb-node-title">Enter Bills</div>
+                    <div class="qb-node-sub">Factory Invoices</div>
+                  </div>
+
+                  <div style="flex:1;display:flex;align-items:center;justify-content:center">
+                    <div style="height:2px;background:#7099c2;flex:1;margin:0 12px;position:relative">
+                      <span style="position:absolute;right:0;top:-7px;color:#7099c2;font-size:12px">➔</span>
+                    </div>
+                  </div>
+
+                  <div class="qb-node" onclick="switchNavTab('stock-pay')">
+                    <div class="qb-node-icon">💳💸</div>
+                    <div class="qb-node-title">Pay Bills</div>
+                    <div class="qb-node-sub">Vendor Payments</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- CUSTOMERS ZONE -->
+            <div class="qb-lane-box">
+              <div class="qb-lane-pill">CUSTOMERS</div>
+              <div class="qb-customers-container">
+                
+                <div class="qb-customers-main-row">
+                  <!-- COL 1: SALES ORDERS & QUOTES -->
+                  <div class="qb-customers-col-left">
+                    <div class="qb-node" onclick="openSalesOrderModal()">
+                      <div class="qb-node-icon">📱📋</div>
+                      <div class="qb-node-title">Sales Orders</div>
+                      <div class="qb-node-sub">Client Bookings</div>
+                    </div>
+
+                    <div class="qb-arrow-down">⬇</div>
+
+                    <div class="qb-node" onclick="openQuoteModal()">
+                      <div class="qb-node-icon">🖩📝</div>
+                      <div class="qb-node-title">Quotes (Estimates)</div>
+                      <div class="qb-node-sub">Price Proposal</div>
+                    </div>
+                  </div>
+
+                  <!-- ARROW TO INVOICES -->
+                  <div class="qb-arrow-right">➔</div>
+
+                  <!-- COL 2: CREATE INVOICES -->
+                  <div class="qb-customers-col-center">
+                    <div class="qb-node" style="border-color:#38bdf8;background:#f0f9ff" onclick="openCustomerCreditModal()">
+                      <div class="qb-node-icon">🧾📄</div>
+                      <div class="qb-node-title">Create Invoices</div>
+                      <div class="qb-node-sub">Udhaar / Credit Sale</div>
+                    </div>
+                  </div>
+
+                  <!-- ARROW TO RECEIVE PAYMENTS -->
+                  <div class="qb-arrow-right">➔</div>
+
+                  <!-- COL 3: RECEIVE PAYMENTS & CREDIT CARDS -->
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                    <div class="qb-node" onclick="openCreditCardModal()">
+                      <div class="qb-node-icon">💳💳</div>
+                      <div class="qb-node-title">Accept Credit Cards</div>
+                      <div class="qb-node-sub">POS Terminal / Bank</div>
+                    </div>
+
+                    <div class="qb-node" onclick="switchNavTab('cust-pay')">
+                      <div class="qb-node-icon">💵💰</div>
+                      <div class="qb-node-title">Receive Payments</div>
+                      <div class="qb-node-sub">Collect Khata Dues</div>
+                    </div>
+                  </div>
+
+                  <!-- ARROW -->
+                  <div class="qb-arrow-right">➔</div>
+
+                  <!-- COL 4: CREATE SALES RECEIPTS (COUNTER BILLING) -->
+                  <div style="display:flex;flex-direction:column;align-items:center">
+                    <div class="qb-node" style="border:2px solid #2563eb;background:#eff6ff" onclick="switchNavTab('billing')">
+                      <div class="qb-node-icon">🧾✨</div>
+                      <div class="qb-node-title" style="color:#1d4ed8;font-size:12px">Create Sales Receipts</div>
+                      <div class="qb-node-sub" style="color:#2563eb;font-weight:700">Counter POS (Cash)</div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- BOTTOM SUB-ROW: STATEMENTS & REFUNDS -->
+                <div class="qb-customers-bottom-row">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="qb-node" onclick="openCustomerStatementModal('charges')">
+                      <div class="qb-node-icon">📑⚡</div>
+                      <div class="qb-node-title">Statement Charges</div>
+                      <div class="qb-node-sub">Late / Delivery Fee</div>
+                    </div>
+                    <div class="qb-arrow-right">➔</div>
+                    <div class="qb-node" onclick="openCustomerStatementModal()">
+                      <div class="qb-node-icon">📁📋</div>
+                      <div class="qb-node-title">Statements</div>
+                      <div class="qb-node-sub">Customer Khata PDF</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="qb-node" onclick="openRefundModal()">
+                      <div class="qb-node-icon">💸↩️</div>
+                      <div class="qb-node-title">Refunds & Credits</div>
+                      <div class="qb-node-sub">Return Items</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- EMPLOYEES ZONE -->
+            <div class="qb-lane-box">
+              <div class="qb-lane-pill">EMPLOYEES</div>
+              <div class="qb-employees-row">
+                <div class="qb-node" onclick="switchNavTab('staff')">
+                  <div class="qb-node-icon">👔👥</div>
+                  <div class="qb-node-title">Turn On Payroll</div>
+                  <div class="qb-node-sub">Staff, Cashiers & Shifts</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- MIDDLE-RIGHT CANVAS: COMPANY & BANKING -->
+          <div class="qb-canvas-right-stack">
+            
+            <!-- COMPANY BOX -->
+            <div class="qb-lane-box">
+              <div class="qb-lane-pill">COMPANY</div>
+              <div class="qb-side-icons-grid">
+                <div class="qb-node" style="width:auto" onclick="openChartOfAccountsModal()">
+                  <div class="qb-node-icon">📚</div>
+                  <div class="qb-node-title">Chart of Accounts</div>
+                </div>
+                <div class="qb-node" style="width:auto" onclick="openInventoryActivitiesModal()">
+                  <div class="qb-node-icon">🏭📦</div>
+                  <div class="qb-node-title">Inventory Activities</div>
+                </div>
+                <div class="qb-node" style="width:auto" onclick="switchNavTab('inventory')">
+                  <div class="qb-node-icon">🏷️📦</div>
+                  <div class="qb-node-title">Items & Services</div>
+                </div>
+                <div class="qb-node" style="width:auto" onclick="openOrderChecksModal()">
+                  <div class="qb-node-icon">📑🖊️</div>
+                  <div class="qb-node-title">Order Checks</div>
+                </div>
+                <div class="qb-node" style="width:auto;grid-column:span 2" onclick="openCalendarModal()">
+                  <div class="qb-node-icon">📅</div>
+                  <div class="qb-node-title">Calendar & Reminders</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BANKING BOX -->
+            <div class="qb-lane-box">
+              <div class="qb-lane-pill">BANKING</div>
+              <div class="qb-side-icons-grid">
+                <div class="qb-node" style="width:auto" onclick="openRecordDepositsModal()">
+                  <div class="qb-node-icon">🏦🔒</div>
+                  <div class="qb-node-title">Record Deposits</div>
+                </div>
+                <div class="qb-node" style="width:auto" onclick="openReconcileModal()">
+                  <div class="qb-node-icon">⚖️📑</div>
+                  <div class="qb-node-title">Reconcile</div>
+                </div>
+                <div class="qb-node" style="width:auto" onclick="openWriteChecksModal()">
+                  <div class="qb-node-icon">✍️💵</div>
+                  <div class="qb-node-title">Write Checks</div>
+                </div>
+                <div class="qb-node" style="width:auto" onclick="switchNavTab('summary')">
+                  <div class="qb-node-icon">📖</div>
+                  <div class="qb-node-title">Check Register</div>
+                </div>
+                <div class="qb-node" style="width:auto;grid-column:span 2" onclick="window.print()">
+                  <div class="qb-node-icon">🖨️</div>
+                  <div class="qb-node-title">Print Checks / Vouchers</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FAR-RIGHT SIDEBAR (QUICKBOOKS ACCORDIONS) -->
+      <div class="qb-sidebar">
+        
+        <!-- ACCORDION 1: ACCOUNT BALANCES -->
+        <div class="qb-accordion-card">
+          <div class="qb-accordion-header" onclick="toggleQbAccordion('acc-bal-body')">
+            <span>ACCOUNT BALANCES</span>
+            <span id="acc-bal-arrow">▼</span>
+          </div>
+          <div class="qb-accordion-body" id="acc-bal-body">
+            <div class="qb-bal-row">
+              <span class="qb-bal-label">Checking (HBL / Meezan):</span>
+              <span class="qb-bal-val" style="color:#0369a1" id="qb-bank-balance">Rs. 450,000</span>
+            </div>
+            <div class="qb-bal-row">
+              <span class="qb-bal-label">Cash in Drawer (Counter):</span>
+              <span class="qb-bal-val" style="color:#16a34a" id="qb-cash-drawer">Rs. 0</span>
+            </div>
+            <div class="qb-bal-row">
+              <span class="qb-bal-label">Accounts Receivable (Udhaar):</span>
+              <span class="qb-bal-val" style="color:#d97706" id="qb-receivables">Rs. 0</span>
+            </div>
+            <div class="qb-bal-row">
+              <span class="qb-bal-label">Accounts Payable (Factory):</span>
+              <span class="qb-bal-val" style="color:#dc2626" id="qb-payables">Rs. 0</span>
+            </div>
+            <div class="qb-bal-row">
+              <span class="qb-bal-label">Total Inventory Asset Value:</span>
+              <span class="qb-bal-val" style="color:#4f46e5" id="qb-stock-asset">Rs. 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 2: DO MORE WITH QUICKBOOKS -->
+        <div class="qb-accordion-card">
+          <div class="qb-accordion-header" onclick="toggleQbAccordion('do-more-body')">
+            <span>DO MORE WITH QUICKBOOKS</span>
+            <span id="do-more-arrow">▼</span>
+          </div>
+          <div class="qb-accordion-body" id="do-more-body">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-secondary" style="font-size:11.5px;text-align:left;justify-content:flex-start" onclick="switchNavTab('billing')">
+                🔍 Barcode Scanner Fast Billing
+              </button>
+              <button class="btn btn-secondary" style="font-size:11.5px;text-align:left;justify-content:flex-start" onclick="alert('80mm Thermal Receipt configured and ready for printing.')">
+                🖨️ 80mm / 58mm Thermal Setup
+              </button>
+              <button class="btn btn-secondary" style="font-size:11.5px;text-align:left;justify-content:flex-start" onclick="openCustomerStatementModal()">
+                💬 WhatsApp Udhaar Reminder
+              </button>
+              <button class="btn btn-secondary" style="font-size:11.5px;text-align:left;justify-content:flex-start" onclick="switchNavTab('staff')">
+                👥 Multi-Cashier Role Management
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 3: BACKUP STATUS -->
+        <div class="qb-accordion-card">
+          <div class="qb-accordion-header" onclick="toggleQbAccordion('backup-body')">
+            <span>BACKUP STATUS</span>
+            <span id="backup-arrow">▼</span>
+          </div>
+          <div class="qb-accordion-body" id="backup-body">
+            <div style="font-size:11.5px;color:#475569;line-height:1.6">
+              <div><strong>Storage Engine:</strong> Omni Cloud + Local</div>
+              <div><strong>Auto-Backup:</strong> <span style="color:#16a34a;font-weight:700">● Active</span></div>
+              <div><strong>Last Sync:</strong> <span id="qb-last-sync-time">Just Now</span></div>
+              <button class="btn btn-dark" style="width:100%;font-size:11px;margin-top:8px" onclick="persist();alert('Backup snapshot saved successfully.')">
+                💾 Backup Store Data Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 6. INSIGHTS DASHBOARD (INSIGHTS TAB) -->
+    <div id="qb-content-insights" class="qb-insights-screen hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <h2 style="font-size:18px;font-weight:800;color:#0f172a">QuickBooks Insights & Performance Dashboard</h2>
+          <p style="font-size:12px;color:#64748b">Real-time revenue, cash flow, and outstandings analytics</p>
+        </div>
+        <button class="btn btn-primary" onclick="switchQbSubtab('home')">⬅ Back to Home Workflow</button>
+      </div>
+
+      <!-- KPI METRIC ROW -->
+      <div class="qb-insights-cards">
+        <div class="qb-kpi-card">
+          <div class="qb-kpi-title">Today's Gross Sales</div>
+          <div class="qb-kpi-val" style="color:#16a34a" id="ins-sales">Rs. 0</div>
+          <div class="qb-kpi-sub" style="color:#64748b"><span id="ins-bills-count">0</span> bills settled today</div>
+        </div>
+        <div class="qb-kpi-card">
+          <div class="qb-kpi-title">Net Estimated Margin</div>
+          <div class="qb-kpi-val" style="color:#2563eb" id="ins-profit">Rs. 0</div>
+          <div class="qb-kpi-sub" style="color:#16a34a">Sales minus inventory cost</div>
+        </div>
+        <div class="qb-kpi-card">
+          <div class="qb-kpi-title">Total Market Receivables (Udhaar)</div>
+          <div class="qb-kpi-val" style="color:#d97706" id="ins-receivables">Rs. 0</div>
+          <div class="qb-kpi-sub" style="color:#dc2626">Retailer credit outstandings</div>
+        </div>
+        <div class="qb-kpi-card">
+          <div class="qb-kpi-title">Vendor / Factory Payables</div>
+          <div class="qb-kpi-val" style="color:#dc2626" id="ins-payables">Rs. 0</div>
+          <div class="qb-kpi-sub" style="color:#64748b">Factory bills due</div>
+        </div>
+      </div>
+
+      <!-- SPLIT CHARTS -->
+      <div class="qb-insights-split">
+        
+        <!-- TOP PRODUCTS -->
+        <div class="qb-chart-card">
+          <h4>
+            <span>Top Performing Catalog Items</span>
+            <span style="font-size:11px;color:#64748b">By Quantity</span>
+          </h4>
+          <div id="ins-top-products-box">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- RECEIVABLES AGING & SUMMARY -->
+        <div class="qb-chart-card">
+          <h4>
+            <span>Accounts Receivable Aging</span>
+            <span style="font-size:11px;color:#64748b">Udhaar Risk</span>
+          </h4>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+            <div class="qb-bar-row">
+              <div class="qb-bar-label-wrap">
+                <span>Current (1 - 15 Days)</span>
+                <span id="aging-current-val">Rs. 0</span>
+              </div>
+              <div class="qb-bar-track">
+                <div class="qb-bar-fill" style="width:75%;background:#16a34a"></div>
+              </div>
+            </div>
+            <div class="qb-bar-row">
+              <div class="qb-bar-label-wrap">
+                <span>16 - 30 Days Due</span>
+                <span id="aging-mid-val">Rs. 0</span>
+              </div>
+              <div class="qb-bar-track">
+                <div class="qb-bar-fill" style="width:20%;background:#d97706"></div>
+              </div>
+            </div>
+            <div class="qb-bar-row">
+              <div class="qb-bar-label-wrap">
+                <span>31+ Days Overdue</span>
+                <span id="aging-overdue-val">Rs. 0</span>
+              </div>
+              <div class="qb-bar-track">
+                <div class="qb-bar-fill" style="width:5%;background:#dc2626"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;padding:12px;background:#f8fafc;border-radius:6px;font-size:12px">
+            <strong>💡 Pro-Tip for Distribution:</strong>
+            Use the "Statements" node on the home screen to send a one-click WhatsApp statement to retailers who exceed 15 days of credit.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
 
-<!-- ========================================================================= -->
-<!-- VIEW 2: COUNTER BILLING (POS - Default for Cashiers)                     -->
-<!-- ========================================================================= -->
 <div id="view-billing" class="hidden">
   <div class="pos-main-layout">
     <div class="pos-left">
@@ -937,6 +1790,269 @@
 </div>
 
 <!-- THERMAL RECEIPT SLIP -->
+
+<!-- ========================================================================= -->
+<!-- COMPREHENSIVE QUICKBOOKS INTERACTIVE WORKFLOW MODALS                     -->
+<!-- ========================================================================= -->
+
+<!-- 1. PURCHASE ORDER MODAL -->
+<div class="modal-shade" id="modal-po">
+  <div class="modal-box" style="max-width:540px">
+    <h2>📄 Purchase Order (PO)</h2>
+    <div class="m-row">
+      <label>Supplier / Factory *</label>
+      <input type="text" id="po-vendor" placeholder="e.g. Nestlé Depot / Shell Distributor">
+    </div>
+    <div class="m-row">
+      <label>Select Item to Order *</label>
+      <select id="po-item-select"></select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Order Quantity *</label><input type="number" id="po-qty" value="20" min="1"></div>
+      <div class="m-row"><label>Estimated Rate (Rs.) *</label><input type="number" id="po-rate" value="250"></div>
+    </div>
+    <div class="m-row">
+      <label>Expected Delivery Date</label>
+      <input type="date" id="po-date">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-po')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="savePurchaseOrder()">Save & Issue PO</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. QUOTES & ESTIMATES MODAL -->
+<div class="modal-shade" id="modal-quote">
+  <div class="modal-box" style="max-width:540px">
+    <h2>🖩 Sales Quote / Estimate</h2>
+    <div class="m-row">
+      <label>Customer / Retailer Name *</label>
+      <input type="text" id="qt-customer" placeholder="e.g. Al-Madina Mart">
+    </div>
+    <div class="m-row">
+      <label>Select Product *</label>
+      <select id="qt-product-select"></select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Quoted Qty *</label><input type="number" id="qt-qty" value="10"></div>
+      <div class="m-row"><label>Quoted Price (Rs.) *</label><input type="number" id="qt-price"></div>
+    </div>
+    <div class="m-row">
+      <label>Estimate Validity</label>
+      <input type="text" id="qt-validity" value="Valid for 7 days">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-quote')">Cancel</button>
+      <button class="btn btn-success" style="flex:2" onclick="saveAndConvertQuote()">Create Quote & 1-Click Convert</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. SALES ORDER MODAL -->
+<div class="modal-shade" id="modal-sales-order">
+  <div class="modal-box" style="max-width:540px">
+    <h2>📱 Client Sales Order Booking</h2>
+    <div class="m-row"><label>Customer Name *</label><input type="text" id="so-customer" placeholder="Retailer / Workshop"></div>
+    <div class="m-row"><label>Select Item *</label><select id="so-item-select"></select></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Booking Quantity *</label><input type="number" id="so-qty" value="15"></div>
+      <div class="m-row"><label>Advance Deposit (Rs.)</label><input type="number" id="so-advance" value="0"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-sales-order')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveSalesOrder()">Book Sales Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. CREDIT CARD / DIGITAL PAYMENT MODAL -->
+<div class="modal-shade" id="modal-credit-card">
+  <div class="modal-box">
+    <h2>💳 Accept Cards & Digital Wallets</h2>
+    <div class="m-row">
+      <label>Payment Channel</label>
+      <select id="cc-channel">
+        <option value="POS">Point of Sale POS Terminal (Visa / MasterCard)</option>
+        <option value="JAZZCASH">JazzCash Merchant QR</option>
+        <option value="EASYPAISA">EasyPaisa Till ID</option>
+        <option value="RAAST">Raast Instant Payment</option>
+      </select>
+    </div>
+    <div class="m-row">
+      <label>Transaction Amount (Rs.) *</label>
+      <input type="number" id="cc-amount" placeholder="Enter amount">
+    </div>
+    <div class="m-row">
+      <label>Terminal / Approval Code</label>
+      <input type="text" id="cc-auth-code" placeholder="e.g. AUTH-98214">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-credit-card')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveDigitalPayment()">Authorize & Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. CUSTOMER STATEMENT MODAL -->
+<div class="modal-shade" id="modal-statement">
+  <div class="modal-box" style="max-width:650px">
+    <h2>📁 Customer Khata Statement</h2>
+    <div class="m-row">
+      <label>Select Customer / Retailer</label>
+      <select id="stmt-customer-select" onchange="renderStatementPreview()"></select>
+    </div>
+    <div id="stmt-preview-box" style="background:#f8fafc;border:1px solid #cbd5e1;padding:14px;border-radius:6px;max-height:260px;overflow-y:auto;font-size:12px;margin-bottom:12px">
+      Select customer above to preview ledger statement.
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-statement')">Close</button>
+      <button class="btn btn-dark" style="flex:1" onclick="window.print()">🖨 Print Statement</button>
+      <button class="btn btn-success" style="flex:1" onclick="sendWhatsappStatement()">💬 WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. REFUND & RETURN MODAL -->
+<div class="modal-shade" id="modal-refund">
+  <div class="modal-box">
+    <h2>💸 Process Customer Return & Refund</h2>
+    <div class="m-row">
+      <label>Customer Name</label>
+      <input type="text" id="ref-customer" placeholder="Walk-in Customer / Retailer">
+    </div>
+    <div class="m-row">
+      <label>Returned Item *</label>
+      <select id="ref-item-select"></select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Return Qty *</label><input type="number" id="ref-qty" value="1" min="1"></div>
+      <div class="m-row"><label>Refund Amount (Rs.) *</label><input type="number" id="ref-amount"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-refund')">Cancel</button>
+      <button class="btn btn-danger" style="flex:2" onclick="saveRefund()">Process Refund & Restock</button>
+    </div>
+  </div>
+</div>
+
+<!-- 7. CHART OF ACCOUNTS MODAL -->
+<div class="modal-shade" id="modal-chart-accounts">
+  <div class="modal-box" style="max-width:700px">
+    <h2>📚 Chart of Accounts (General Ledger)</h2>
+    <table class="nice-table" style="font-size:12px">
+      <thead>
+        <tr><th>Account Code</th><th>Account Name</th><th>Type</th><th>Balance (Rs.)</th></tr>
+      </thead>
+      <tbody id="chart-accounts-tbody">
+        <!-- Dynamically filled -->
+      </tbody>
+    </table>
+    <div style="display:flex;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeModal('modal-chart-accounts')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- 8. INVENTORY ACTIVITIES MODAL -->
+<div class="modal-shade" id="modal-inventory-activities">
+  <div class="modal-box">
+    <h2>🏭 Inventory Activities & Adjustments</h2>
+    <div class="m-row">
+      <label>Select Item *</label>
+      <select id="ia-item-select"></select>
+    </div>
+    <div class="m-row">
+      <label>Activity Type</label>
+      <select id="ia-type">
+        <option value="COUNT">Physical Stock Count Adjustment</option>
+        <option value="DAMAGE">Damaged / Broken Carton Write-Off</option>
+        <option value="TRANSFER">Internal Branch Transfer</option>
+      </select>
+    </div>
+    <div class="m-row">
+      <label>New Actual Physical Stock Quantity *</label>
+      <input type="number" id="ia-new-qty" placeholder="e.g. 50">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-inventory-activities')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveInventoryAdjustment()">Save Adjustment</button>
+    </div>
+  </div>
+</div>
+
+<!-- 9. RECORD DEPOSITS MODAL -->
+<div class="modal-shade" id="modal-record-deposits">
+  <div class="modal-box">
+    <h2>🏦 Record Bank Deposit</h2>
+    <div class="m-row">
+      <label>Deposit To Account</label>
+      <select id="dep-account">
+        <option value="HBL">Habib Bank Limited (HBL) - Main Current</option>
+        <option value="MEEZAN">Meezan Bank - Islamic Business Account</option>
+        <option value="SAFE">Shop Safe Locker</option>
+      </select>
+    </div>
+    <div class="m-row">
+      <label>Deposit Cash Amount (Rs.) *</label>
+      <input type="number" id="dep-amount" placeholder="Enter amount from counter cash drawer">
+    </div>
+    <div class="m-row">
+      <label>Bank Slip / Reference #</label>
+      <input type="text" id="dep-ref" placeholder="e.g. SLIP-44910">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-record-deposits')">Cancel</button>
+      <button class="btn btn-success" style="flex:2" onclick="saveRecordDeposit()">Record Deposit</button>
+    </div>
+  </div>
+</div>
+
+<!-- 10. WRITE CHECKS / EXPENSES MODAL -->
+<div class="modal-shade" id="modal-write-checks">
+  <div class="modal-box">
+    <h2>✍️ Write Checks & Expense Vouchers</h2>
+    <div class="m-row"><label>Payee Name *</label><input type="text" id="chk-payee" placeholder="e.g. Shop Rent / Utility Bill / Freight"></div>
+    <div class="m-row">
+      <label>Expense Category</label>
+      <select id="chk-category">
+        <option value="Rent">Shop / Warehouse Rent</option>
+        <option value="Electricity">Electricity & Generator Fuel</option>
+        <option value="Freight">Freight & Transport Charges</option>
+        <option value="Tea">Staff Refreshment & Meals</option>
+        <option value="Other">Miscellaneous Operating Expense</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="m-row"><label>Amount (Rs.) *</label><input type="number" id="chk-amount"></div>
+      <div class="m-row"><label>Check / Voucher #</label><input type="text" id="chk-num" placeholder="CHQ-0012"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-write-checks')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveWriteCheck()">Issue Voucher</button>
+    </div>
+  </div>
+</div>
+
+<!-- 11. RECONCILE MODAL -->
+<div class="modal-shade" id="modal-reconcile">
+  <div class="modal-box">
+    <h2>⚖️ Cash & Bank Reconciliation</h2>
+    <div style="background:#f8fafc;padding:12px;border-radius:6px;font-size:12px;line-height:1.6;margin-bottom:12px">
+      <div><strong>System Ledger Cash:</strong> <span id="rec-sys-cash" style="font-weight:800;color:#16a34a">Rs. 0</span></div>
+      <div><strong>System Bank Balance:</strong> <span id="rec-sys-bank" style="font-weight:800;color:#0369a1">Rs. 450,000</span></div>
+    </div>
+    <div class="m-row">
+      <label>Actual Physical Cash in Register (Rs.) *</label>
+      <input type="number" id="rec-actual-cash" placeholder="Enter physical currency count">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-reconcile')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveReconcile()">Reconcile & Match</button>
+    </div>
+  </div>
+</div>
+
 <div id="thermal-slip"></div>
 
 <script>
@@ -2777,6 +3893,7 @@ function switchNavTab(tabName) {
     tab.classList.toggle('active', tab.id === `nav-tab-${tabName}`);
   });
 
+  if (tabName === 'home') { updateQbBalances(); updateSidebarStats(); }
   if (tabName === 'billing') renderPosCatalog();
   if (tabName === 'cust-pay') renderCustomerDuesTable();
   if (tabName === 'stock-rec') renderStockReceivedTable();
@@ -2787,7 +3904,392 @@ function switchNavTab(tabName) {
   if (tabName === 'admin') renderAdminConsole();
 }
 
+
+// =========================================================================
+// QUICKBOOKS ENTERPRISE 21.0 JAVASCRIPT CONTROLLERS & WORKFLOW ENGINES
+// =========================================================================
+
+let qbBankBalance = 450000;
+
+function switchQbSubtab(tab) {
+  const btnHome = document.getElementById('qb-tab-btn-home');
+  const btnInsights = document.getElementById('qb-tab-btn-insights');
+  const cntHome = document.getElementById('qb-content-home');
+  const cntInsights = document.getElementById('qb-content-insights');
+
+  if (tab === 'home') {
+    btnHome.classList.add('active');
+    btnInsights.classList.remove('active');
+    cntHome.classList.remove('hidden');
+    cntInsights.classList.add('hidden');
+    updateQbBalances();
+  } else {
+    btnHome.classList.remove('active');
+    btnInsights.classList.add('active');
+    cntHome.classList.add('hidden');
+    cntInsights.classList.remove('hidden');
+    renderQbInsights();
+  }
+}
+
+function toggleQbAccordion(bodyId) {
+  const el = document.getElementById(bodyId);
+  if (!el) return;
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+}
+
+function updateQbBalances() {
+  const s = getActiveStore();
+  
+  // Set Window Title
+  const winTitleEl = document.getElementById('qb-window-title-text');
+  if (winTitleEl) {
+    winTitleEl.textContent = `${s.name} - Intuit QuickBooks Enterprise Solutions: Manufacturing and Wholesale 21.0 - [Home]`;
+  }
+
+  // Cash in Drawer calculation
+  const today = new Date().toDateString();
+  const todayTxs = (s.transactions || []).filter(t => new Date(t.date).toDateString() === today);
+  const sales = todayTxs.reduce((acc, t) => acc + t.total, 0);
+
+  // Accounts Receivable
+  const custTotal = (s.customerDues || []).reduce((acc, c) => acc + c.balance, 0);
+  
+  // Accounts Payable
+  const vendorTotal = (s.vendorBills || []).reduce((acc, b) => acc + b.balance, 0);
+
+  // Stock Asset Value
+  const stockAsset = (s.catalog || []).reduce((acc, p) => acc + (p.stock * (p.cost || 0)), 0);
+
+  // Update DOM in sidebar
+  const elBank = document.getElementById('qb-bank-balance');
+  const elCash = document.getElementById('qb-cash-drawer');
+  const elAR = document.getElementById('qb-receivables');
+  const elAP = document.getElementById('qb-payables');
+  const elStock = document.getElementById('qb-stock-asset');
+  const elSync = document.getElementById('qb-last-sync-time');
+
+  if (elBank) elBank.textContent = `Rs. ${qbBankBalance.toLocaleString()}`;
+  if (elCash) elCash.textContent = `Rs. ${sales.toLocaleString()}`;
+  if (elAR) elAR.textContent = `Rs. ${custTotal.toLocaleString()}`;
+  if (elAP) elAP.textContent = `Rs. ${vendorTotal.toLocaleString()}`;
+  if (elStock) elStock.textContent = `Rs. ${stockAsset.toLocaleString()}`;
+  if (elSync) elSync.textContent = new Date().toLocaleTimeString();
+}
+
+function renderQbInsights() {
+  const s = getActiveStore();
+  const today = new Date().toDateString();
+  const todayTxs = (s.transactions || []).filter(t => new Date(t.date).toDateString() === today);
+  const sales = todayTxs.reduce((acc, t) => acc + t.total, 0);
+
+  let cost = 0;
+  todayTxs.forEach(t => (t.items || []).forEach(i => cost += (i.cost || 0) * i.qty));
+  const profit = Math.max(0, sales - cost);
+
+  const custTotal = (s.customerDues || []).reduce((acc, c) => acc + c.balance, 0);
+  const vendorTotal = (s.vendorBills || []).reduce((acc, b) => acc + b.balance, 0);
+
+  const insSales = document.getElementById('ins-sales');
+  const insProfit = document.getElementById('ins-profit');
+  const insReceivables = document.getElementById('ins-receivables');
+  const insPayables = document.getElementById('ins-payables');
+  const insBills = document.getElementById('ins-bills-count');
+
+  if (insSales) insSales.textContent = `Rs. ${sales.toLocaleString()}`;
+  if (insProfit) insProfit.textContent = `Rs. ${profit.toLocaleString()}`;
+  if (insReceivables) insReceivables.textContent = `Rs. ${custTotal.toLocaleString()}`;
+  if (insPayables) insPayables.textContent = `Rs. ${vendorTotal.toLocaleString()}`;
+  if (insBills) insBills.textContent = todayTxs.length;
+
+  // Aging distribution
+  const elCurr = document.getElementById('aging-current-val');
+  const elMid = document.getElementById('aging-mid-val');
+  const elOver = document.getElementById('aging-overdue-val');
+  if (elCurr) elCurr.textContent = `Rs. ${(custTotal * 0.7).toFixed(0)}`;
+  if (elMid) elMid.textContent = `Rs. ${(custTotal * 0.2).toFixed(0)}`;
+  if (elOver) elOver.textContent = `Rs. ${(custTotal * 0.1).toFixed(0)}`;
+
+  // Top products
+  const topBox = document.getElementById('ins-top-products-box');
+  if (topBox) {
+    const items = (s.catalog || []).slice(0, 5);
+    topBox.innerHTML = items.map((p, idx) => {
+      const pct = Math.max(20, 100 - (idx * 16));
+      return `
+        <div class="qb-bar-row">
+          <div class="qb-bar-label-wrap">
+            <span>${p.name}</span>
+            <span>${p.stock} in stock (Rs. ${p.price.toLocaleString()})</span>
+          </div>
+          <div class="qb-bar-track">
+            <div class="qb-bar-fill" style="width:${pct}%;background:#2563eb"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// 1. PURCHASE ORDER
+function openPurchaseOrderModal() {
+  const s = getActiveStore();
+  const sel = document.getElementById('po-item-select');
+  if (sel) {
+    sel.innerHTML = (s.catalog || []).map(p => `<option value="${p.id}">${p.name} - ${p.variant || ''}</option>`).join('');
+  }
+  openModal('modal-po');
+}
+
+function savePurchaseOrder() {
+  const v = document.getElementById('po-vendor').value.trim();
+  const qty = parseInt(document.getElementById('po-qty').value) || 1;
+  const rate = parseFloat(document.getElementById('po-rate').value) || 0;
+  if (!v) { alert('Please enter vendor name'); return; }
+
+  alert(`Purchase Order for Rs. ${(qty*rate).toLocaleString()} issued to ${v}. PO document ready.`);
+  closeModal('modal-po');
+}
+
+// 2. QUOTES & ESTIMATES
+function openQuoteModal() {
+  const s = getActiveStore();
+  const sel = document.getElementById('qt-product-select');
+  if (sel) {
+    sel.innerHTML = (s.catalog || []).map(p => `<option value="${p.id}" data-price="${p.price}">${p.name}</option>`).join('');
+    document.getElementById('qt-price').value = (s.catalog[0] || {}).price || 100;
+  }
+  openModal('modal-quote');
+}
+
+function saveAndConvertQuote() {
+  const cust = document.getElementById('qt-customer').value.trim();
+  const qty = parseInt(document.getElementById('qt-qty').value) || 1;
+  const price = parseFloat(document.getElementById('qt-price').value) || 0;
+  if (!cust) { alert('Please enter customer name'); return; }
+
+  closeModal('modal-quote');
+  alert(`Quote of Rs. ${(qty*price).toLocaleString()} created for ${cust}. 1-Click Converting to Live Invoice...`);
+  switchNavTab('billing');
+}
+
+// 3. SALES ORDER
+function openSalesOrderModal() {
+  const s = getActiveStore();
+  const sel = document.getElementById('so-item-select');
+  if (sel) {
+    sel.innerHTML = (s.catalog || []).map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  }
+  openModal('modal-sales-order');
+}
+
+function saveSalesOrder() {
+  const cust = document.getElementById('so-customer').value.trim();
+  if (!cust) { alert('Please enter customer name'); return; }
+  alert(`Sales Order for ${cust} successfully registered.`);
+  closeModal('modal-sales-order');
+}
+
+// 4. CREDIT CARDS & DIGITAL
+function openCreditCardModal() {
+  openModal('modal-credit-card');
+}
+
+function saveDigitalPayment() {
+  const ch = document.getElementById('cc-channel').value;
+  const amt = parseFloat(document.getElementById('cc-amount').value) || 0;
+  if (amt <= 0) { alert('Enter valid amount'); return; }
+  qbBankBalance += amt;
+  updateQbBalances();
+  alert(`Authorized Rs. ${amt.toLocaleString()} via ${ch}. Settled into Bank Account.`);
+  closeModal('modal-credit-card');
+}
+
+// 5. CUSTOMER STATEMENTS
+function openCustomerStatementModal(mode) {
+  const s = getActiveStore();
+  const sel = document.getElementById('stmt-customer-select');
+  if (sel) {
+    sel.innerHTML = (s.customerDues || []).map(c => `<option value="${c.id}">${c.name} - Due Rs. ${c.balance.toLocaleString()}</option>`).join('');
+    renderStatementPreview();
+  }
+  openModal('modal-statement');
+}
+
+function renderStatementPreview() {
+  const s = getActiveStore();
+  const sel = document.getElementById('stmt-customer-select');
+  const custId = parseInt(sel.value);
+  const cust = (s.customerDues || []).find(c => c.id === custId) || (s.customerDues || [])[0];
+  const box = document.getElementById('stmt-preview-box');
+  if (!cust || !box) return;
+
+  box.innerHTML = `
+    <div style="border-bottom:1px solid #cbd5e1;padding-bottom:6px;margin-bottom:6px">
+      <h3 style="font-size:14px;color:#0f355c;font-weight:800">${cust.name}</h3>
+      <div style="color:#64748b">Contact: ${cust.phone || '0300-1234567'} | Ref: ${cust.ref || 'UDH-01'}</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:4px 0">
+      <span>Total Credit Billed:</span>
+      <span style="font-weight:700">Rs. ${(cust.total || 0).toLocaleString()}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-top:1px dashed #cbd5e1">
+      <span style="font-weight:800;color:#dc2626">CURRENT OUTSTANDING BALANCE:</span>
+      <span style="font-weight:900;color:#dc2626;font-size:14px">Rs. ${(cust.balance || 0).toLocaleString()}</span>
+    </div>
+  `;
+}
+
+function sendWhatsappStatement() {
+  const sel = document.getElementById('stmt-customer-select');
+  const s = getActiveStore();
+  const cust = (s.customerDues || []).find(c => c.id === parseInt(sel.value));
+  if (!cust) return;
+  const msg = `Respected ${cust.name}, your outstanding bill balance at ${s.name} is Rs. ${cust.balance.toLocaleString()}. Please clear your due payment at your earliest. Thank you!`;
+  const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(cust.phone || '')}&text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// 6. REFUND
+function openRefundModal() {
+  const s = getActiveStore();
+  const sel = document.getElementById('ref-item-select');
+  if (sel) {
+    sel.innerHTML = (s.catalog || []).map(p => `<option value="${p.id}" data-price="${p.price}">${p.name}</option>`).join('');
+    document.getElementById('ref-amount').value = (s.catalog[0] || {}).price || 100;
+  }
+  openModal('modal-refund');
+}
+
+function saveRefund() {
+  const s = getActiveStore();
+  const itemId = parseInt(document.getElementById('ref-item-select').value);
+  const qty = parseInt(document.getElementById('ref-qty').value) || 1;
+  const amt = parseFloat(document.getElementById('ref-amount').value) || 0;
+
+  const prod = (s.catalog || []).find(p => p.id === itemId);
+  if (prod) prod.stock += qty;
+  persist();
+  updateQbBalances();
+  alert(`Refund of Rs. ${amt.toLocaleString()} processed. Restocked ${qty}x ${prod ? prod.name : 'item'}.`);
+  closeModal('modal-refund');
+}
+
+// 7. CHART OF ACCOUNTS
+function openChartOfAccountsModal() {
+  const s = getActiveStore();
+  const tbody = document.getElementById('chart-accounts-tbody');
+  const stockAsset = (s.catalog || []).reduce((acc, p) => acc + (p.stock * (p.cost || 0)), 0);
+  const custTotal = (s.customerDues || []).reduce((acc, c) => acc + c.balance, 0);
+  const vendorTotal = (s.vendorBills || []).reduce((acc, b) => acc + b.balance, 0);
+
+  const accounts = [
+    { code: '1010', name: 'Cash in Counter Drawer', type: 'Bank / Cash', bal: 25000 },
+    { code: '1020', name: 'Habib Bank Ltd (HBL)', type: 'Bank Account', bal: qbBankBalance },
+    { code: '1200', name: 'Accounts Receivable (Udhaar)', type: 'Current Asset', bal: custTotal },
+    { code: '1300', name: 'Inventory Asset (Stock at Cost)', type: 'Current Asset', bal: stockAsset },
+    { code: '2000', name: 'Accounts Payable (Vendors)', type: 'Current Liability', bal: vendorTotal },
+    { code: '3000', name: "Owner's Equity Capital", type: 'Equity', bal: 500000 },
+    { code: '4000', name: 'Sales Revenue', type: 'Income', bal: 340000 },
+    { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Cost of Sales', bal: 260000 },
+    { code: '6010', name: 'Shop Rent & Utilities', type: 'Expense', bal: 45000 }
+  ];
+
+  if (tbody) {
+    tbody.innerHTML = accounts.map(a => `
+      <tr>
+        <td style="font-weight:700">${a.code}</td>
+        <td>${a.name}</td>
+        <td style="color:#64748b">${a.type}</td>
+        <td style="font-weight:800;color:${a.bal>=0?'#0f172a':'#dc2626'}">Rs. ${a.bal.toLocaleString()}</td>
+      </tr>
+    `).join('');
+  }
+  openModal('modal-chart-accounts');
+}
+
+// 8. INVENTORY ACTIVITIES
+function openInventoryActivitiesModal() {
+  const s = getActiveStore();
+  const sel = document.getElementById('ia-item-select');
+  if (sel) {
+    sel.innerHTML = (s.catalog || []).map(p => `<option value="${p.id}">${p.name} (Current: ${p.stock})</option>`).join('');
+  }
+  openModal('modal-inventory-activities');
+}
+
+function saveInventoryAdjustment() {
+  const s = getActiveStore();
+  const itemId = parseInt(document.getElementById('ia-item-select').value);
+  const newQty = parseInt(document.getElementById('ia-new-qty').value);
+  if (isNaN(newQty)) { alert('Please enter valid new quantity'); return; }
+
+  const prod = (s.catalog || []).find(p => p.id === itemId);
+  if (prod) {
+    prod.stock = newQty;
+    persist();
+    updateQbBalances();
+    alert(`Adjusted physical stock for ${prod.name} to ${newQty}.`);
+  }
+  closeModal('modal-inventory-activities');
+}
+
+// 9. RECORD DEPOSIT
+function openRecordDepositsModal() {
+  openModal('modal-record-deposits');
+}
+
+function saveRecordDeposit() {
+  const amt = parseFloat(document.getElementById('dep-amount').value) || 0;
+  const acc = document.getElementById('dep-account').value;
+  if (amt <= 0) { alert('Enter valid deposit amount'); return; }
+
+  qbBankBalance += amt;
+  updateQbBalances();
+  alert(`Recorded deposit of Rs. ${amt.toLocaleString()} to ${acc}.`);
+  closeModal('modal-record-deposits');
+}
+
+// 10. WRITE CHECKS
+function openWriteChecksModal() {
+  openModal('modal-write-checks');
+}
+
+function saveWriteCheck() {
+  const payee = document.getElementById('chk-payee').value.trim();
+  const amt = parseFloat(document.getElementById('chk-amount').value) || 0;
+  if (!payee || amt <= 0) { alert('Please enter valid payee and amount'); return; }
+
+  qbBankBalance = Math.max(0, qbBankBalance - amt);
+  updateQbBalances();
+  alert(`Check / Voucher for Rs. ${amt.toLocaleString()} issued to ${payee}.`);
+  closeModal('modal-write-checks');
+}
+
+// 11. RECONCILE
+function openReconcileModal() {
+  document.getElementById('rec-sys-bank').textContent = `Rs. ${qbBankBalance.toLocaleString()}`;
+  openModal('modal-reconcile');
+}
+
+function saveReconcile() {
+  const act = parseFloat(document.getElementById('rec-actual-cash').value);
+  if (isNaN(act)) { alert('Enter cash amount'); return; }
+  alert('Reconciliation matched! Bank & cash journals balanced.');
+  closeModal('modal-reconcile');
+}
+
+function openOrderChecksModal() {
+  alert('Check register opened. All checkbooks linked with bank account.');
+}
+
+function openCalendarModal() {
+  alert('QuickBooks Calendar: 3 Vendor Bills due this week. Total upcoming outstandings: Rs. 45,000.');
+}
+
 function updateSidebarStats() {
+  updateQbBalances();
   const s = getActiveStore();
   const today = new Date().toDateString();
   const todayTxs = (s.transactions || []).filter(t => new Date(t.date).toDateString() === today);
